@@ -1,12 +1,21 @@
-/web/bundles/
-/app/bootstrap.php.cache
+#/web/bundles/
+#/app/bootstrap.php.cache
+
+#Cache
 /app/cache/*
-/app/config/parameters.yml
+
+#Data base configuration. We use alike.
+#/app/config/parameters.yml
+
+#Logs
 /app/logs/*
+
+#Files needed for git.
 !app/cache/.gitkeep
 !app/logs/.gitkeep
-/app/phpunit.xml
+
+#/app/phpunit.xml
 /build/
-/vendor/
+#/vendor/
 /bin/
 /composer.phar
