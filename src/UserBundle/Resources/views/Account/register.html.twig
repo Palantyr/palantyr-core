@@ -1,0 +1,10 @@
+{# UserBundle/Resources/views/Account/register.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{{ form(form) }}
+</br>
+<form action="{{ path('app_index') }}">
+	<input type="submit" value="Return">
+</form>
+{% endblock %}

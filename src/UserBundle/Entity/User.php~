@@ -1,0 +1,62 @@
+<?php
+//UserBundle\Entity\User.php
+namespace UserBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+class User implements UserInterface, \Serializable
+{
+    private $id;
+    private $username;
+    private $real_name;
+    private $real_surname;
+    private $email;
+    private $password;
+	private $registration_date;
+	private $last_login;
+	
+	
+	public function getRoles() {
+		return array('ROLE_USER');
+	}
+	
+	public function getPassword() {
+		return $this->password;
+	}
+	
+	public function getSalt() {
+		// you *may* need a real salt depending on your encoder
+		// see section on salt below
+		return null;
+	}
+	
+	public function getUsername() {
+		return $this->username;
+	}
+	
+	public function eraseCredentials() {}
+	
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+        ) = unserialize($serialized);
+    }
+}

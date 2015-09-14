@@ -1,0 +1,30 @@
+# src/GameSessionBundle/Resources/config/doctrine/GameSession.orm.yml
+GameSessionBundle\Entity\GameSession:
+    type: entity
+    repositoryClass: GameSessionBundle\Entity\GameSessionRepository
+    table: game_session
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 30
+        owner_user:
+            type: integer
+        pass: 
+            type: string
+            length: 30
+        start_date:
+            type: datetime
+        rol_game:
+            type: integer
+        language:
+            type: integer
+        standard_view:
+            type: integer
+        comments:
+            type: text
+            length: 200
+            nullable: TRUE

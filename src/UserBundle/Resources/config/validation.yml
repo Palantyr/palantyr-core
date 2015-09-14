@@ -1,0 +1,66 @@
+# UserBundle/Resources/config/validation.yml
+UserBundle\Entity\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
+            fields: email
+            message: "(E) El correo ya está en uso, inserte uno nuevo."
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
+            fields: username
+            message: "(E) El nombre de usuario ya está en uso."
+    properties:
+        id:
+            - IsNull: ~
+        username:
+            - NotBlank: ~
+            - Length:
+                min: 5
+                max: 30
+                minMessage: "El nombre de usuario must be at least {{ limit }} characters long"
+                maxMessage: "El nombre de usuario cannot be longer than {{ limit }} characters"
+        real_name:
+            - NotBlank: ~
+            - Length:
+                min: 1
+                max: 30
+                minMessage: "Debe rellenar su nombre must be at least {{ limit }} characters long"
+                maxMessage: "Su nombre cannot be longer than {{ limit }} characters"
+        real_surname:
+            - NotBlank: ~
+            - Length:
+                min: 1
+                max: 60
+                minMessage: "Debe rellenar sus apellidos must be at least {{ limit }} characters long"
+                maxMessage: "Sus apellidos cannot be longer than {{ limit }} characters"
+        email:
+            - NotBlank: ~
+            - Email:
+                message: The email "{{ value }}" is not a valid email.
+                checkMX: true
+            - Length:
+                min: 1
+                max: 60
+                minMessage: "Debe rellenar su correo electrónico must be at least {{ limit }} characters long"
+                maxMessage: "Su correo electrónico cannot be longer than {{ limit }} characters"
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 5
+                max: 30
+                minMessage: "La contraseña de la sesión must be at least {{ limit }} characters long"
+                maxMessage: "La contraseña de la sesión cannot be longer than {{ limit }} characters"   
+        registration_date:
+            - IsNull: ~
+        last_login:
+            - IsNull: ~
+            
+UserBundle\Form\Model\Registration:
+    properties:
+        user:
+            - Type:
+                type: UserBundle\Entity\User
+                message: "The value {{ value }} is not a valid {{ type }}."
+            - Valid: ~
+        termsAccepted:
+            - NotBlank: ~
+            - 'True':
+                message: Debes aceptar los términos y condiciones

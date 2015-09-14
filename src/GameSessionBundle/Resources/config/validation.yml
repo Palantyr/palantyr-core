@@ -1,0 +1,33 @@
+# GameSessionBundle/Resources/config/validation.yml
+GameSessionBundle\Entity\GameSesion:
+    properties:
+        id:
+            - IsNull: ~
+        name:
+            - NotBlank: ~
+            - Length:
+                min: 5
+                max: 30
+                minMessage: "El nombre de la sesión must be at least {{ limit }} characters long"
+                maxMessage: "El nombre de la sesión cannot be longer than {{ limit }} characters"
+        owner_user:
+            - IsNull: ~
+        pass:
+            - NotBlank: ~
+            - Length:
+                min: 5
+                max: 30
+                minMessage: "La contraseña de la sesión must be at least {{ limit }} characters long"
+                maxMessage: "La contraseña de la sesión cannot be longer than {{ limit }} characters"   
+        start_date:
+            - IsNull: ~         
+        rol_game:
+            - NotBlank: ~
+        language:
+            - NotBlank: ~
+        standard_view:
+            - NotBlank: ~
+        comments:
+            - Length:
+                max: 200
+                maxMessage: "El comentario de la sesión cannot be longer than {{ limit }} characters"  

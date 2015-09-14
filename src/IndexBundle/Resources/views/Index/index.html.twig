@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Welcome to Palantir project,
+    {% if app.user == true %}
+    	{{ app.user.username }}
+	{% endif %}
+    </h1>
+    
+    <br>
+    
+    {% if app.user == false %}
+        <form action="{{ path('account_register') }}">
+			<input type="submit" value="Register">
+		</form>
+		
+	    <br>
+	    
+	    <form action="{{ path('login') }}">
+			<input type="submit" value="Login">
+		</form>
+	{% else %}
+    	<form action="{{ path('logout') }}">
+			<input type="submit" value="Logout">
+		</form>
+	{% endif %}
+	
+    <br>
+    
+    <form action="{{ path('game_session_homepage') }}">
+		<input type="submit" value="Game">
+	</form>
+{% endblock %}
