@@ -2,4 +2,4 @@ _assetic:
     resource: .
     type: assetic
 _app:
-    resource: /home/jj/Palantir/app/config/routing_dev.yml
+    resource: 'C:\Users\Miguel\Dropbox\DocumentosDeAsignaturas\PFC\Integracion\app/config/routing_dev.yml'

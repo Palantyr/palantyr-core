@@ -603,3 +603,17 @@ eaafb0,127.0.0.1,GET,http://palantir.local/app_dev.php/game,1441825984,,200
 4082bc,127.0.0.1,GET,http://palantir.local/app_dev.php/game,1442239560,,302
 ae1a9b,127.0.0.1,GET,http://palantir.local/app_dev.php/login,1442239560,,200
 05e95d,127.0.0.1,GET,http://palantir.local/app_dev.php/login,1442239561,,200
+178f7b,127.0.0.1,GET,http://localhost:8000/reglas,1443437577,,200
+84cfb4,127.0.0.1,GET,http://localhost:8000/reglas,1443437669,,200
+f3fc21,127.0.0.1,GET,http://localhost:8000/reglas,1443437696,,200
+699ae7,127.0.0.1,GET,http://localhost:8000/game,1443437766,,302
+8eb381,127.0.0.1,GET,http://localhost:8000/reglas,1443438013,,200
+b2a52f,127.0.0.1,GET,http://localhost:8000/reglas,1443438129,,200
+5f6062,127.0.0.1,GET,http://localhost:8000/reglas,1443438259,185d01,200
+185d01,127.0.0.1,POST,http://localhost:8000/reglas,1443438259,,500
+dd5201,127.0.0.1,GET,http://localhost:8000/reglas,1443438389,c66742,200
+c66742,127.0.0.1,POST,http://localhost:8000/reglas,1443438389,,500
+a33aa3,127.0.0.1,GET,http://localhost:8000/reglas,1443438544,eb3906,200
+eb3906,127.0.0.1,POST,http://localhost:8000/reglas,1443438544,,500
+502078,127.0.0.1,POST,http://localhost:8000/reglas,1443438605,,200
+cbc484,127.0.0.1,POST,http://localhost:8000/reglas,1443438664,,200
