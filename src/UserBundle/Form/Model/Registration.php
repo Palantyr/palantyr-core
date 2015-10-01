@@ -4,13 +4,15 @@ namespace UserBundle\Form\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-use UserBundle\Entity\User;
+//use UserBundle\Entity\User;
 
+//Sin uso ahora mismo.
 class Registration
 {
-	private $user;
-	private $termsAccepted;
+	//private $user;
+	protected $terms_accepted;
 
+	/*
 	public function setUser(User $user)
 	{
 		$this->user = $user;
@@ -20,14 +22,15 @@ class Registration
 	{
 		return $this->user;
 	}
-
+	*/
+	
 	public function getTermsAccepted()
 	{
-		return $this->termsAccepted;
+		return $this->terms_accepted;
 	}
 
-	public function setTermsAccepted($termsAccepted)
+	public function setTermsAccepted($terms_accepted)
 	{
-		$this->termsAccepted = (bool) $termsAccepted;
+		$this->terms_accepted = (bool) $terms_accepted;
 	}
 }

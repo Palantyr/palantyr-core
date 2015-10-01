@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+//Sin uso ahora mismo
 class UserType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)

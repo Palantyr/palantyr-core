@@ -2,97 +2,30 @@
 //UserBundle\Entity\User.php
 namespace UserBundle\Entity;
 
+use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements UserInterface, \Serializable
+class User extends BaseUser
 {
-    private $id;
-    private $username;
-    private $real_name;
-    private $real_surname;
-    private $email;
-    private $password;
-	private $registration_date;
-	private $last_login;
+	protected $id;
+	protected $real_name;
+	protected $real_surname;
+	protected $terms_accepted;
 	
-	
-	public function getRoles() {
-		return array('ROLE_USER');
+	public function __construct() 
+	{
+		parent::__construct();
+		// your own logic
 	}
 	
-	public function getPassword() {
-		return $this->password;
+	public function getId() 
+	{
+		return $this->id;
 	}
 	
-	public function getSalt() {
-		// you *may* need a real salt depending on your encoder
-		// see section on salt below
-		return null;
-	}
-	
-	public function getUsername() {
-		return $this->username;
-	}
-	
-	public function eraseCredentials() {}
-	
-    public function serialize()
+    public function setRealName($real_name)
     {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
-    }
-
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-        ) = unserialize($serialized);
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Set real_name
-     *
-     * @param string $realName
-     * @return User
-     */
-    public function setRealName($realName)
-    {
-        $this->real_name = $realName;
-
+        $this->real_name = $real_name;
         return $this;
     }
 
@@ -112,10 +45,9 @@ class User implements UserInterface, \Serializable
      * @param string $realSurname
      * @return User
      */
-    public function setRealSurname($realSurname)
+    public function setRealSurname($real_surname)
     {
-        $this->real_surname = $realSurname;
-
+        $this->real_surname = $real_surname;
         return $this;
     }
 
@@ -128,86 +60,16 @@ class User implements UserInterface, \Serializable
     {
         return $this->real_surname;
     }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return User
-     */
-    public function setEmail($email)
+    
+    public function getTermsAccepted()
     {
-        $this->email = $email;
-
-        return $this;
+    	return $this->terms_accepted;
     }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
+    
+    public function setTermsAccepted($terms_accepted)
     {
-        return $this->email;
+    	$this->terms_accepted = (bool) $terms_accepted;
     }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Set registration_date
-     *
-     * @param \DateTime $registrationDate
-     * @return User
-     */
-    public function setRegistrationDate($registrationDate)
-    {
-        $this->registration_date = $registrationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get registration_date
-     *
-     * @return \DateTime 
-     */
-    public function getRegistrationDate()
-    {
-        return $this->registration_date;
-    }
-
-    /**
-     * Set last_login
-     *
-     * @param \DateTime $lastLogin
-     * @return User
-     */
-    public function setLastLogin($lastLogin)
-    {
-        $this->last_login = $lastLogin;
-
-        return $this;
-    }
-
-    /**
-     * Get last_login
-     *
-     * @return \DateTime 
-     */
-    public function getLastLogin()
-    {
-        return $this->last_login;
-    }
+    
 }
+

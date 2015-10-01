@@ -10,17 +10,17 @@
     <br>
     
     {% if app.user == false %}
-        <form action="{{ path('account_register') }}">
+        <form action="{{ path('fos_user_registration_register') }}">
 			<input type="submit" value="Register">
 		</form>
 		
 	    <br>
 	    
-	    <form action="{{ path('login') }}">
+	    <form action="{{ path('fos_user_security_login') }}">
 			<input type="submit" value="Login">
 		</form>
 	{% else %}
-    	<form action="{{ path('logout') }}">
+    	<form action="{{ path('fos_user_security_logout') }}">
 			<input type="submit" value="Logout">
 		</form>
 	{% endif %}
