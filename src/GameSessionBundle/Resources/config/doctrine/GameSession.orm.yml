@@ -10,20 +10,20 @@ GameSessionBundle\Entity\GameSession:
     fields:
         name:
             type: string
-            length: 30
+            length: 255
         owner_user:
             type: integer
         pass: 
             type: string
-            length: 30
+            length: 4096
         start_date:
             type: datetime
         rol_game:
             type: integer
         language:
             type: integer
-        standard_view:
-            type: integer
+        #standard_view:
+            #type: integer
         comments:
             type: text
             length: 200

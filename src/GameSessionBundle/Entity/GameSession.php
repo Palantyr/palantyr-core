@@ -13,7 +13,6 @@ class GameSession
 	private $start_date;
 	private $rol_game;
 	private $language;
-	private $standard_view;
 	private $comments;
 	
 
@@ -163,29 +162,6 @@ class GameSession
     public function getLanguage()
     {
         return $this->language;
-    }
-
-    /**
-     * Set standard_view
-     *
-     * @param integer $standardView
-     * @return GameSession
-     */
-    public function setStandardView($standardView)
-    {
-        $this->standard_view = $standardView;
-
-        return $this;
-    }
-
-    /**
-     * Get standard_view
-     *
-     * @return integer 
-     */
-    public function getStandardView()
-    {
-        return $this->standard_view;
     }
 
     /**
