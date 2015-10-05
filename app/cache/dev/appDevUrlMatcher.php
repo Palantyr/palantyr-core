@@ -127,6 +127,11 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        // app_index_homepage
+        if ($pathinfo === '/reglas') {
+            return array (  '_controller' => 'RulesBundle\\Controller\\RulesController::indexAction',  '_route' => 'app_index_homepage',);
+        }
+
         if (0 === strpos($pathinfo, '/game')) {
             // game_session_homepage
             if ($pathinfo === '/game') {

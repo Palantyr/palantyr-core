@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new IndexBundle\IndexBundle(),
             new UserBundle\UserBundle(),
             new GameSessionBundle\GameSessionBundle(),
+            new RulesBundle\RulesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
