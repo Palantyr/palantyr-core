@@ -1,5 +1,0 @@
-_assetic:
-    resource: .
-    type: assetic
-_app:
-    resource: 'C:\Users\Miguel\Dropbox\DocumentosDeAsignaturas\PFC\Integracion\app/config/routing_dev.yml'
