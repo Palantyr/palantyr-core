@@ -13,3 +13,8 @@ join_session:
 game_sessions:
     path:     /game/sessions
     defaults: { _controller: GameSessionBundle:Main:gameSessions }
+    
+administration_game_session_homepage:
+    path: /game/administration
+    defaults: { _controller: GameSessionBundle:Administration:index }
+    

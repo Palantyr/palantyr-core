@@ -12,10 +12,10 @@ GameSessionBundle\Entity\GameSesion:
                 maxMessage: "El nombre de la sesión cannot be longer than {{ limit }} characters"
         owner_user:
             - IsNull: ~
-        pass:
+        password:
             - NotBlank: ~
             - Length:
-                min: 5
+                min: 6
                 max: 30
                 minMessage: "La contraseña de la sesión must be at least {{ limit }} characters long"
                 maxMessage: "La contraseña de la sesión cannot be longer than {{ limit }} characters"   

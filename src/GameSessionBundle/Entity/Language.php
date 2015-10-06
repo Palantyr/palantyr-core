@@ -9,6 +9,8 @@ class Language
 	private $id;
 	private $name;
 
+	function __construct() {}
+	
 	/**
 	 * Get id
 	 *

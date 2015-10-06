@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Administration games index</h1>
+</br>
+
+{{ petition_text }}
+
+{{ form_start(form, {'method': 'POST'}) }}
+
+{{ form_widget(form.add_all_to_test) }}
+</br></br>&nbsp;&nbsp;
+{{ form_widget(form.add_languages) }}
+</br></br>&nbsp;&nbsp; 
+{{ form_widget(form.add_rol_games) }}
+</br></br></br>
+{{ form_widget(form.delete_all_to_test) }}
+</br></br>&nbsp;&nbsp;
+{{ form_widget(form.delete_languages) }}
+</br></br>&nbsp;&nbsp;
+{{ form_widget(form.delete_rol_games) }}
+</br></br></br> 
+{{ form_widget(form.delete_game_sessions) }}
+{{ form_end(form) }}
+{# render(controller('GameSessionBundle:Administration:prueba')) #}
+
+</br></br></br>
+<form action="{{ path('game_session_homepage') }}">
+	<input type="submit" value="Return">
+</form>
+{% endblock %}

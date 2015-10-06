@@ -3,6 +3,14 @@
 {% block body %}
 <h1>Game index</h1>
 </br>
+{% if app.user and is_granted('ROLE_SUPER_ADMIN') %}
+    <form action="{{ path('administration_game_session_homepage') }}">
+		<input type="submit" value="Administration">
+	</form>
+</br>
+{% endif %}
+
+
 <form action="{{ path('create_game_session') }}">
 	<input type="submit" value="Create Game Sesion">
 </form>

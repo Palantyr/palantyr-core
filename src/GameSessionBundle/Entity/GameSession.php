@@ -9,7 +9,7 @@ class GameSession
 	private $id;
 	private $name;
 	private $owner_user;
-	private $pass;
+	private $password;
 	private $start_date;
 	private $rol_game;
 	private $language;
@@ -73,26 +73,26 @@ class GameSession
     }
 
     /**
-     * Set pass
+     * Set password
      *
-     * @param string $pass
+     * @param string $password
      * @return GameSession
      */
-    public function setPass($pass)
+    public function setPassword($password)
     {
-        $this->pass = $pass;
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * Get pass
+     * Get password
      *
      * @return string 
      */
-    public function getPass()
+    public function getPassword()
     {
-        return $this->pass;
+        return $this->password;
     }
 
     /**

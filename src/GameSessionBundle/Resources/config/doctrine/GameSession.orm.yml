@@ -13,7 +13,7 @@ GameSessionBundle\Entity\GameSession:
             length: 255
         owner_user:
             type: integer
-        pass: 
+        password: 
             type: string
             length: 4096
         start_date:

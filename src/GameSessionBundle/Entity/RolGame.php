@@ -10,6 +10,7 @@ class RolGame
 	private $name;
 	private $active;
 
+	function __construct() {}
 
 	/**
 	 * Get id

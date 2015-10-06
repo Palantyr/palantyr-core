@@ -31,7 +31,7 @@ class MainController extends Controller
     
     	$form = $this->createFormBuilder($game_session)
     	->add('name', 'text')
-    	->add('pass', 'password')
+    	->add('password', 'password')
     	->add('rol_game', 'entity', array(
     		'required'    => true,
     		'placeholder' => 'Choose the rol game',
@@ -80,10 +80,6 @@ class MainController extends Controller
     }
 
     public function gameSessionsAction(\Symfony\Component\HttpFoundation\Request $request) {
-    	
-    	$game_sessions_with_owner = $this->getDoctrine()
-    	->getRepository('GameSessionBundle:GameSession')
-    	->findActiveGameSessionsWithOwner();
     	
     	$game_sessions_actives = $this->getDoctrine()
     	->getRepository('GameSessionBundle:GameSession')

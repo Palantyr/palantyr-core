@@ -39,30 +39,23 @@ class GameSessionRepository extends EntityRepository
 			return null;
 		}
 	}
-	
-	public function findActiveGameSessionsWithOwner()
+	/*
+	public function addElementsTest()
 	{
 		$query = $this->getEntityManager()
 		->createQuery(
-				'SELECT gameSession AS array_gameSession, user.username 
-				FROM GameSessionBundle:GameSession gameSession, UserBundle:User user
-				WHERE gameSession.owner_user = user.id'
+				'INSERT INTO GameSessionBundle:GameSession gameSession'
 		);
+		INSERT INTO table_name (column1,column2,column3,...)
+		VALUES (value1,value2,value3,...);
 		
-		/*$query = $this->getEntityManager()
-		 ->createQuery(
-		 'SELECT gameSession.id, gameSession.name, gameSession.owner_user, gameSession.start_date,
-		 gameSession.rol_game, gameSession.language, gameSession.standard_view, gameSession.comments,
-		 user.username 
-		 FROM GameSessionBundle:GameSession gameSession, UserBundle:User user
-		 WHERE gameSession.owner_user = user.id'
-		 );*/
-			
+		INSERT INTO `palantir_db`.`language` (`id`, `name`) VALUES ('3', 'France');
+		INSERT INTO `palantir_db`.`language` (`id`, `name`) VALUES ('4', 'Germany');
 		try {
 			return $query->getResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {
 			return null;
 		}		
 	}
-
+	*/
 }
