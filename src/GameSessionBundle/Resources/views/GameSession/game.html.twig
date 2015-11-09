@@ -1,7 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-Hello to GAME
 
-{{ game_session.getName() }}
+	Welcome to {{ game_session.getName() }}, {{ app.user.username }}.
+	
+	</br></br></br>
+	
+	<div id="chat">
+		<textarea id="written-text" rows="5" readonly style="overflow-y: scroll;"></textarea>
+		</br>
+		<textarea id="new-text" rows="2">Writte here.</textarea>
+		<button id="send-button">Send</button>
+	</div>
+
+	{{ ws_client() }}
+	
+{% endblock %}
+
+
+{% block javascripts %}
+
+{% javascripts 
+	'../app/Resources/public/js/*'
+	'@GameSessionBundle/Resources/public/js/*' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+<script>
+	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
+	var websocket = WS.connect(_WS_URI);
+	websocket.on("socket/connect", function(session){
+		
+	    //session.call("sample/sum", {"term1": 2, "term2": 5}).then(
+	    //        function(result)
+	    //        {
+	    //            console.log("RPC Valid!", result);
+	    //        },
+	    //        function(error, desc)
+	    //        {
+	    //            console.log("RPC Error", error, desc);
+	    //        }
+	    //);
+		//session.unsubscribe("acme/channel");
+
+	    session.subscribe("gameSession/chat", function(uri, payload){
+	        //console.log("Connecting to the chat session of game was successful: ", payload.msg);
+	        if (payload.text.msg)
+	        	addTextToChat(payload);
+	    });
+		$( "#send-button" ).click(function() {
+			var newText = $( "#new-text" ).val();
+			session.publish("gameSession/chat", {msg: newText});
+		});
+	});
+	websocket.on("socket/disconnect", function(error){
+	    //error provides us with some insight into the disconnection: error.reason and error.code
+	    console.log("Disconnected for " + error.reason + " with code " + error.code);
+	});
+
+	function addTextToChat(payload){ 
+        //addTextChat(payload.date);
+        //addTextChat(payload.msg.name_sender);
+        //addTextChat(payload.text.msg);
+		$( "#written-text" ).append("&#10;");
+		$( "#written-text" ).append(payload.date);
+		$( "#written-text" ).append(" - ");
+		$( "#written-text" ).append(payload.text.msg); 
+	}
+</script>
+
 {% endblock %}

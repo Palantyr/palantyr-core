@@ -1,7 +1,7 @@
 # This file is auto-generated during the composer install
 parameters:
     database_host: 127.0.0.1
-    database_port: null
+    database_port: 3306
     database_name: palantir_db
     database_user: root
     database_password: Password
@@ -10,3 +10,6 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    gos_web_socket.port: 8080
+    gos_web_socket.host: 127.0.0.1

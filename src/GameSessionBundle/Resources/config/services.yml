@@ -2,3 +2,18 @@ services:
 #    game_session.example:
 #        class: GameSessionBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+#    acme_hello.topic_sample_service:
+#        class: GameSessionBundle\Topic\AcmeTopic
+#        tags:
+#            - { name: gos_web_socket.topic }
+            
+    game_session.chat_topic:
+        class: GameSessionBundle\Topic\ChatTopic
+        tags:
+            - { name: gos_web_socket.topic }
+
+#    acme_hello.rpc_sample_service:
+#        class: GameSessionBundle\Rpc\AcmeRpc
+#        tags:
+#            - { name: gos_web_socket.rpc }

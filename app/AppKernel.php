@@ -21,6 +21,8 @@ class AppKernel extends Kernel
             new IndexBundle\IndexBundle(),
             new UserBundle\UserBundle(),
             new GameSessionBundle\GameSessionBundle(),
+        	new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
+        	new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
             new RulesBundle\RulesBundle(),
         );
 

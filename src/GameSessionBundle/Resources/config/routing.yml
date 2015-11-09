@@ -15,6 +15,6 @@ game_sessions:
     defaults: { _controller: GameSessionBundle:Main:gameSessions }
     
 administration_game_session_homepage:
-    path: /game/administration
+    path:     /game/administration
     defaults: { _controller: GameSessionBundle:Administration:index }
     

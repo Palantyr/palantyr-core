@@ -40,7 +40,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles: [ GameSessionBundle ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -88,3 +88,12 @@ fos_user:
         form:
             type: user_registration
             validation_groups: [ My_registration, Registration, Default ]
+            
+# Web Socket Configuration
+gos_web_socket:
+    server:
+        port: "%gos_web_socket.port%"        #The port the socket server will listen on
+        host: "%gos_web_socket.host%"   #The host ip to bind to
+        router:
+            resources:
+                - @GameSessionBundle/Resources/config/pubsub/routing.yml
