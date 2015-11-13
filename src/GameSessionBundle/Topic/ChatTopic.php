@@ -1,11 +1,26 @@
 <?php
 namespace GameSessionBundle\Topic;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
+use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+//use Gos\Bundle\WebSocketBundle\Client\ClientStorageInterface;
+//use Gos\Bundle\WebSocketBundle\Client\WebSocketUserTrait;
+//use Doctrine\ORM\Mapping as ORM;
+
 class ChatTopic implements TopicInterface
 {
+	protected $clientManipulator;
+	
+	/**
+	 * @param ClientManipulatorInterface $clientManipulator
+	 */
+	public function __construct(ClientManipulatorInterface $clientManipulator)
+	{
+		$this->clientManipulator = $clientManipulator;
+	}
+	
     /**
      * This will receive any Subscription requests for this topic.
      *
@@ -53,9 +68,10 @@ class ChatTopic implements TopicInterface
             
 		$date = new \DateTime();
 		$date = $date->format('H:i:s');
-		
+		//var_dump($this->clientManipulator->getClient($connection));
+		//var_dump($this->tokenStorage->getToken()->getUser());
         $topic->broadcast([
-        	//'name_sender' => $this->getUser()->getUsername(),
+        	'name_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
             'text' => $event,
         	'date' => $date,
         ]);

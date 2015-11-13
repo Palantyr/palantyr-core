@@ -19,7 +19,10 @@
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "^1.3",
-        "gos/web-socket-bundle": "^1.6"
+        "gos/web-socket-bundle": "^1.6",
+        "doctrine/doctrine-cache-bundle": "^1.2",
+        "snc/redis-bundle": "^1.1",
+        "predis/predis": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

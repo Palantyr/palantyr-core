@@ -18,4 +18,5 @@
 /build/
 /bin/
 /composer.phar
+#/vendor/
 /vendor/

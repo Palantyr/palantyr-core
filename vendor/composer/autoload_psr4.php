@@ -22,6 +22,7 @@ return array(
     'React\\Socket\\' => array($vendorDir . '/react/socket/src'),
     'React\\EventLoop\\' => array($vendorDir . '/react/event-loop'),
     'Ratchet\\' => array($vendorDir . '/gos/ratchet/src/Ratchet'),
+    'Predis\\' => array($vendorDir . '/predis/predis/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Incenteev\\ParameterHandler\\' => array($vendorDir . '/incenteev/composer-parameter-handler'),
     'Gos\\Component\\WebSocketClient\\' => array($vendorDir . '/gos/websocket-client'),

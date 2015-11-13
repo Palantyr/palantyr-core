@@ -29,6 +29,7 @@
 <script>
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
 	var websocket = WS.connect(_WS_URI);
+	var chatFirstConnection = true;
 	websocket.on("socket/connect", function(session){
 		
 	    //session.call("sample/sum", {"term1": 2, "term2": 5}).then(
@@ -42,16 +43,24 @@
 	    //        }
 	    //);
 		//session.unsubscribe("acme/channel");
+		
+		session.subscribe("gameSession/chat", function(uri, payload){
+			//console.log("Connecting to the chat session of game was successful: ", payload.msg);
+			if (chatFirstConnection == true) {
+				
+				chatFirstConnection = false;
+			}
+			else {
+				addTextToChat(payload);
+			}
+		});
 
-	    session.subscribe("gameSession/chat", function(uri, payload){
-	        //console.log("Connecting to the chat session of game was successful: ", payload.msg);
-	        if (payload.text.msg)
-	        	addTextToChat(payload);
-	    });
+	    
 		$( "#send-button" ).click(function() {
 			var newText = $( "#new-text" ).val();
 			session.publish("gameSession/chat", {msg: newText});
 		});
+		
 	});
 	websocket.on("socket/disconnect", function(error){
 	    //error provides us with some insight into the disconnection: error.reason and error.code
@@ -62,10 +71,12 @@
         //addTextChat(payload.date);
         //addTextChat(payload.msg.name_sender);
         //addTextChat(payload.text.msg);
-		$( "#written-text" ).append("&#10;");
 		$( "#written-text" ).append(payload.date);
-		$( "#written-text" ).append(" - ");
-		$( "#written-text" ).append(payload.text.msg); 
+		$( "#written-text" ).append("-");
+		$( "#written-text" ).append(payload.name_sender);
+		$( "#written-text" ).append(": ");
+		$( "#written-text" ).append(payload.text.msg);
+		$( "#written-text" ).append("&#10;");
 	}
 </script>
 
