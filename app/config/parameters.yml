@@ -10,6 +10,3 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: ThisTokenIsNotSoSecretChangeIt
-
-    gos_web_socket.port: 8080
-    gos_web_socket.host: 127.0.0.1

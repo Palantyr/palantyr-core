@@ -32,7 +32,16 @@ class ChatTopic implements TopicInterface
     public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
         //this will broadcast the message to ALL subscribers of this topic.
-        $topic->broadcast(['msg' => $connection->resourceId . " has joined " . $topic->getId()]);
+        //$topic->broadcast(['msg' => $connection->resourceId . " has joined " . $topic->getId()]);
+        
+    	$date = new \DateTime();
+    	$date = $date->format('H:i:s');
+    	
+    	$topic->broadcast([
+    			'name_sender' => null,
+    			'text' => $this->clientManipulator->getClient($connection)->getUsername()." is online.",
+    			'date' => $date,
+    	]);
     }
     /**
      * This will receive any UnSubscription requests for this topic.
@@ -44,8 +53,14 @@ class ChatTopic implements TopicInterface
      */
     public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
-        //this will broadcast the message to ALL subscribers of this topic.
-        $topic->broadcast(['msg' => $connection->resourceId . " has left " . $topic->getId()]);
+    	$date = new \DateTime();
+    	$date = $date->format('H:i:s');
+    	
+    	$topic->broadcast([
+    			'name_sender' => null,
+    			'text' => $this->clientManipulator->getClient($connection)->getUsername()." is offline.",
+    			'date' => $date,
+    	]);
     }
     /**
      * This will receive any Publish requests for this topic.
@@ -70,9 +85,10 @@ class ChatTopic implements TopicInterface
 		$date = $date->format('H:i:s');
 		//var_dump($this->clientManipulator->getClient($connection));
 		//var_dump($this->tokenStorage->getToken()->getUser());
+
         $topic->broadcast([
         	'name_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
-            'text' => $event,
+            'text' => $event["msg"],
         	'date' => $date,
         ]);
     }

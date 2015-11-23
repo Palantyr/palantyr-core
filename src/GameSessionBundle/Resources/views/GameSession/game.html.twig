@@ -3,7 +3,7 @@
 {% block body %}
 
 	Welcome to {{ game_session.getName() }}, {{ app.user.username }}.
-	
+
 	</br></br></br>
 	
 	<div id="chat">
@@ -29,9 +29,13 @@
 <script>
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
 	var websocket = WS.connect(_WS_URI);
-	var chatFirstConnection = true;
+	//var chatFirstConnection = true;
+
+	var room = {{ game_session.getId() }};
+	var route_chat = "gameSession/chat/";
+	route_chat = route_chat.concat(room);
 	websocket.on("socket/connect", function(session){
-		
+
 	    //session.call("sample/sum", {"term1": 2, "term2": 5}).then(
 	    //        function(result)
 	    //        {
@@ -43,14 +47,9 @@
 	    //        }
 	    //);
 		//session.unsubscribe("acme/channel");
-		
-		session.subscribe("gameSession/chat", function(uri, payload){
-			//console.log("Connecting to the chat session of game was successful: ", payload.msg);
-			if (chatFirstConnection == true) {
-				
-				chatFirstConnection = false;
-			}
-			else {
+
+		session.subscribe(route_chat, function(uri, payload){
+			if (payload.text != null) {
 				addTextToChat(payload);
 			}
 		});
@@ -58,25 +57,32 @@
 	    
 		$( "#send-button" ).click(function() {
 			var newText = $( "#new-text" ).val();
-			session.publish("gameSession/chat", {msg: newText});
+			session.publish(route_chat, {msg: newText});
 		});
 		
 	});
 	websocket.on("socket/disconnect", function(error){
-	    //error provides us with some insight into the disconnection: error.reason and error.code
-	    console.log("Disconnected for " + error.reason + " with code " + error.code);
+	    $( "#written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
+	    $( "#written-text" ).append("&#10;");
 	});
 
-	function addTextToChat(payload){ 
-        //addTextChat(payload.date);
-        //addTextChat(payload.msg.name_sender);
-        //addTextChat(payload.text.msg);
-		$( "#written-text" ).append(payload.date);
-		$( "#written-text" ).append("-");
-		$( "#written-text" ).append(payload.name_sender);
-		$( "#written-text" ).append(": ");
-		$( "#written-text" ).append(payload.text.msg);
-		$( "#written-text" ).append("&#10;");
+	function addTextToChat(payload){
+
+		if (payload.name_sender != null) {
+			$( "#written-text" ).append(payload.date);
+			$( "#written-text" ).append("-");
+			$( "#written-text" ).append(payload.name_sender);
+			$( "#written-text" ).append(": ");
+			$( "#written-text" ).append(payload.text);
+			$( "#written-text" ).append("&#10;");
+		}
+		else {
+			$( "#written-text" ).append(payload.date);
+			$( "#written-text" ).append(": ");
+			$( "#written-text" ).append(payload.text);
+			$( "#written-text" ).append("&#10;");
+			$( "#written-text" ).append("&#10;");
+		}
 	}
 </script>
 

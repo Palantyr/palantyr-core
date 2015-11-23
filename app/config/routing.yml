@@ -18,9 +18,14 @@ app_index:
     path:     /
     defaults: { _controller: "AppBundle:Default:index" }
     
-#fos_user:
-    #resource: "@FOSUserBundle/Resources/config/routing/all.xml"
-    
+#Game Session login
+#game_session_login:
+    #pattern:   /session/game_session_login
+    #defaults:  { _controller: GameSessionBundle:Security:login }
+
+#game_session_login_check:
+    #pattern:   /session/game_session_login_check
+    #{ _controller: GameSessionBundle:Security:login_check }
 
 #In order to use the built-in email functionality (confirmation of the account, 
 #resetting of the password), you must activate and configure the SwiftmailerBundle.

@@ -1,0 +1,3 @@
+parameters:
+    gos_web_socket.port: 1337
+    gos_web_socket.host: 127.0.0.1

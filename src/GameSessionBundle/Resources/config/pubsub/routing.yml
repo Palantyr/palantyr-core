@@ -12,6 +12,9 @@
 #            pattern: "[a-z_]+"
             
 game_session_chat:
-    channel: gameSession/chat
+    channel: gameSession/chat/{room}
     handler:
         callback: 'chat.topic' #related to the getName() of your topic
+    requirements:
+        room:
+            pattern: "^(0|[1-9][0-9]*)$"

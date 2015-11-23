@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: my_parameters.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -90,31 +91,11 @@ fos_user:
         form:
             type: user_registration
             validation_groups: [ My_registration, Registration, Default ]
-
-# Doctrine Cache
-#doctrine_cache:
-#    providers:
-#        redis_cache:
-#            redis:
-#                host: 127.0.0.1
-#                port: 6379
-#                database: 3
-#        websocket_cache_client:
-#            type: redis
-#            alias: gos_web_socket.client_storage.driver.redis
-
-# Redis
-#snc_redis: #No se usa actualmente
-#    clients:
-#        default:
-#            type: predis
-#            alias: default
-#            dsn: redis://127.0.0.53
-             
+          
 # Web Socket Configuration
 gos_web_socket:
     server:
-        port: "%gos_web_socket.port%"        #The port the socket server will listen on
+        port: "%gos_web_socket.port%"   #The port the socket server will listen on
         host: "%gos_web_socket.host%"   #The host ip to bind to
         router:
             resources:

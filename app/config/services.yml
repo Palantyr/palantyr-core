@@ -18,6 +18,4 @@ services:
 
     session.handler.pdo:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        #public: false
         arguments: [@pdo, {lock_mode: 0}]
-            
