@@ -39,6 +39,27 @@ class GameSessionRepository extends EntityRepository
 			return null;
 		}
 	}
+	
+	public function findCompleteGameSessionById($id)
+	{
+		$query = $this->getEntityManager()
+		->createQuery(
+				'SELECT gameSession AS array_gameSession, user.username AS user_username,
+					rolGame.name AS rolGame_name, language.name AS language_name
+				FROM GameSessionBundle:GameSession gameSession, UserBundle:User user,
+					GameSessionBundle:RolGame rolGame, GameSessionBundle:Language language
+				WHERE gameSession.owner_user = user.id
+					AND gameSession.rol_game = rolGame.id
+					AND gameSession.language = language.id
+					AND gameSession.id = '.$id.''
+				);
+			
+		try {
+			return $query->getResult();
+		} catch (\Doctrine\ORM\NoResultException $e) {
+			return null;
+		}
+	}
 	/*
 	public function addElementsTest()
 	{

@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 
-class SecurityController extends Controller
+class SecurityController extends Controller //Sin usar
 {
 	public function loginAction(Request $request)
 	{

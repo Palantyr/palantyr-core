@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use GameSessionBundle\Entity\GameSession;
 use GameSessionBundle\Entity\RolGame;
-use Symfony\Component\BrowserKit\Response;
+use GameSessionBundle\Entity\PasswordGameSession;
 
 class MainController extends Controller
 {
@@ -69,24 +69,85 @@ class MainController extends Controller
     	));
     }
     
-    public function joinSessionAction($session_id) {
+    public function renderSessionAction($session_id) 
+    {
     	$game_session = $this->getDoctrine()
-        ->getRepository('GameSessionBundle:GameSession')
-        ->find($session_id);
+    	->getRepository('GameSessionBundle:GameSession')
+    	->find($session_id);
     	
     	return $this->render('GameSessionBundle:GameSession:game.html.twig', array(
     			'game_session' => $game_session
     	));
     }
-
-    public function gameSessionsAction(\Symfony\Component\HttpFoundation\Request $request) {
+    
+    public function joinSessionAction(Request $request, $session_id) 
+    {
+    	$session = $request->getSession();
+    	//var_dump($session_id);var_dump($session->get('game_sessions'));die();
+    	if (!$session->get('game_sessions') || array_key_exists($session_id, $session->get('game_sessions')) != true) {
+    		$be_authorized = false;
+    	}
+    	else {
+    		//var_dump($session->get('game_sessions')[$session_id]);die();
+    		$be_authorized = $session->get('game_sessions')[$session_id];
+    		//var_dump($be_authorized);die();
+    	}
     	
+    	if ($be_authorized != true) {
+    		return self::loginAction($request, $session_id);
+    	}
+    	else {
+			return self::renderSessionAction($session_id);
+    	}
+    }
+
+    public function loginAction(Request $request, $session_id)
+    {
+    	$game_session = $this->getDoctrine()
+    		->getRepository('GameSessionBundle:GameSession')
+    		->findCompleteGameSessionById($session_id);
+
+    	$password_game_session = new PasswordGameSession();
+    	$form = $this->createFormBuilder($password_game_session)
+    		->add('password', 'password')
+    		->add('Start', 'submit')
+    		->getForm();
+    			 
+    	$form->handleRequest($request);
+    	
+    	if ($form->isValid()) {
+    		if ($form->getData()->getPassword() != $game_session[0]['array_gameSession']->getPassword()) {
+    			/*
+    			$this->get('session')->getFlashBag()->add(
+    				'bad_login',
+    				'Password incorrect'
+    			);
+    			*/
+    			return $this->redirect($this->generateUrl('game_sessions'));
+    		}
+    		
+    		else {
+    			$session = $request->getSession();
+    			$session_game_sessions = $session->get('game_sessions');
+    			$session_game_sessions[$session_id] = true;
+    			$session->set('game_sessions', $session_game_sessions);
+    			//return self::joinSessionAction($request, $session_id);
+    			//return $this->redirect($this->generateUrl('join_session', $session_id));
+				return self::renderSessionAction($session_id);
+    		}
+    	}
+
+    	return $this->render('GameSessionBundle:Security:login_game.html.twig', array(
+    		'form' => $form->createView(), 'game_session_array' => $game_session
+    	));
+    }
+    
+    public function gameSessionsAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
     	$game_sessions_actives = $this->getDoctrine()
     	->getRepository('GameSessionBundle:GameSession')
     	->findActiveGameSessions();
     	
-    	
-    	//var_dump($game_sessions_actives); die();
     	return $this->render('GameSessionBundle:GameSession:game_list.html.twig', array(
     			'game_sessions_actives' => $game_sessions_actives
     	));
