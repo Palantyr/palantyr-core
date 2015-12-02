@@ -12,6 +12,12 @@
 		<textarea id="new-text" rows="2">Writte here.</textarea>
 		<button id="send-button">Send</button>
 	</div>
+	
+	<div id="{{ app.user.username }}_data">
+		<div id="import_character_sheet">
+			<button id="request_character_sheet_button">Import Character</button>
+		</div>
+	</div>
 
 	{{ ws_client() }}
 	
@@ -27,13 +33,15 @@
 {% endjavascripts %}
 
 <script>
+	//Global Variables from Twig 
+	var user_username = "{{ app.user.username }}";
+	//END Global Variables from Twig 
+	
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
 	var websocket = WS.connect(_WS_URI);
 	//var chatFirstConnection = true;
 
-	var room = {{ game_session.getId() }};
-	var route_chat = "gameSession/chat/";
-	route_chat = route_chat.concat(room);
+	var room = "{{ game_session.getId() }}";
 	websocket.on("socket/connect", function(session){
 
 	    //session.call("sample/sum", {"term1": 2, "term2": 5}).then(
@@ -48,40 +56,133 @@
 	    //);
 		//session.unsubscribe("acme/channel");
 
+		var route_chat = "gameSession/chat/";
+		route_chat = route_chat.concat(room);
 		session.subscribe(route_chat, function(uri, payload){
 			if (payload.text != null) {
 				addTextToChat(payload);
 			}
 		});
 
-	    
-		$( "#send-button" ).click(function() {
+		$( "#chat #send-button" ).click(function() {
 			var newText = $( "#new-text" ).val();
 			session.publish(route_chat, {msg: newText});
 		});
+
+		
+		var route_import_character_sheet = "gameSession/import_character_sheet/";
+		route_import_character_sheet = route_import_character_sheet.concat(room);
+		session.subscribe(route_import_character_sheet, function(uri, payload){
+			var character_sheets = JSON.parse(payload.character_sheets);
+			printRequestCharacterSheets(character_sheets);
+		});
+
+		$( "#import_character_sheet #request_character_sheet_button" ).click(function() {
+			var import_character_sheet_option = 0;
+			session.publish(route_import_character_sheet, {option: import_character_sheet_option});
+		});	
 		
 	});
 	websocket.on("socket/disconnect", function(error){
-	    $( "#written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
-	    $( "#written-text" ).append("&#10;");
-	});
+	    $( "#chat #written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
+	    $( "#chat #written-text" ).append("&#10;");
+	}); //END WEBSOCKET
 
+	function printRequestCharacterSheets(character_sheets) {
+		
+		if (Object.keys(character_sheets).length >= 1) {
+			for (var cont_character_sheets = 0; 
+				cont_character_sheets < Object.keys(character_sheets).length; 
+				cont_character_sheets++) {
+
+				printRequestCharacterSheet(character_sheets[cont_character_sheets]);
+			}
+		}
+		else {
+			alert("You haven't any character sheet");
+		}
+	}
+
+	function printRequestCharacterSheet(character_sheet) {
+		var character_sheet_id = character_sheet[0][0].value;
+		var character_sheet_temporal_id = character_sheet_id.concat("_provisional");
+		
+		$( "#"+user_username+"_data" ).append( 
+				"<div id="+character_sheet_temporal_id+"></div>" );
+		
+		for (var cont_sections = 0; 
+			cont_sections < Object.keys(character_sheet).length; 
+			cont_sections++) {
+			
+			if (character_sheet[cont_sections]['id'] == "sheet_settings") {
+				
+				$( "#"+character_sheet_temporal_id ).append( 
+					"<div id='sheet_settings' style='display: none;'></div>" );
+		
+				for (var cont_settings_sections = 0; 
+					cont_settings_sections < Object.keys(character_sheet[cont_sections]).length - 1; 
+					cont_settings_sections++) { //Less id
+
+					$( "#"+character_sheet_temporal_id+" > #sheet_settings" ).append( 
+						"<span id="+character_sheet[cont_sections][cont_settings_sections].id+">"
+						+character_sheet[cont_sections][cont_settings_sections].value+"</span>" );
+				}
+			}
+
+			else {
+				switch (character_sheet[cont_sections].type) {
+				case "group":
+					typeGroupOfCharacterSheet(character_sheet[cont_sections], character_sheet_temporal_id);
+					break;
+				}
+			}
+		}
+	}
+
+	function typeGroupOfCharacterSheet(group, father_div_identification) {
+		$( "#"+father_div_identification ).append( 
+			"<div id="+group.id+"></div>" );
+		if(group.name) {
+			$( "#"+father_div_identification+" > #"+group.id ).append( 
+				"<span id='name'>"+group.name+"</span>" );
+		}
+		
+		for (var cont_group_sections = 0; 
+			cont_group_sections < Object.keys(group).length - 3; 
+			cont_group_sections++) {
+			
+			if (group[cont_group_sections].type == "group") {
+				typeGroupOfCharacterSheet(group[cont_group_sections], group.id);
+			}
+			
+			else if (group[cont_group_sections].type == "field") {
+				typeFieldOfCharacterSheet(group[cont_group_sections], group.id);
+			}
+		}
+	}
+
+	function typeFieldOfCharacterSheet(field, father_div_identification){
+		$( "#"+father_div_identification ).append( 
+				"<div id="+field.id+"><span id='name'>"+field.name+
+				"</span><span id='value'>"+field.value+"</span></div>" );
+	}
+	
 	function addTextToChat(payload){
 
 		if (payload.name_sender != null) {
-			$( "#written-text" ).append(payload.date);
-			$( "#written-text" ).append("-");
-			$( "#written-text" ).append(payload.name_sender);
-			$( "#written-text" ).append(": ");
-			$( "#written-text" ).append(payload.text);
-			$( "#written-text" ).append("&#10;");
+			$( "#chat #written-text" ).append(payload.date);
+			$( "#chat #written-text" ).append("-");
+			$( "#chat #written-text" ).append(payload.name_sender);
+			$( "#chat #written-text" ).append(": ");
+			$( "#chat #written-text" ).append(payload.text);
+			$( "#chat #written-text" ).append("&#10;");
 		}
 		else {
-			$( "#written-text" ).append(payload.date);
-			$( "#written-text" ).append(": ");
-			$( "#written-text" ).append(payload.text);
-			$( "#written-text" ).append("&#10;");
-			$( "#written-text" ).append("&#10;");
+			$( "#chat #written-text" ).append(payload.date);
+			$( "#chat #written-text" ).append(": ");
+			$( "#chat #written-text" ).append(payload.text);
+			$( "#chat #written-text" ).append("&#10;");
+			$( "#chat #written-text" ).append("&#10;");
 		}
 	}
 </script>
