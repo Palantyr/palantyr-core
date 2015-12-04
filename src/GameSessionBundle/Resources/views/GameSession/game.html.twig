@@ -15,7 +15,7 @@
 	
 	<div id="{{ app.user.username }}_data">
 		<div id="import_character_sheet">
-			<button id="request_character_sheet_button">Import Character</button>
+			<button id="request_character_sheet_button">Request character sheets</button>
 		</div>
 	</div>
 
@@ -73,14 +73,36 @@
 		var route_import_character_sheet = "gameSession/import_character_sheet/";
 		route_import_character_sheet = route_import_character_sheet.concat(room);
 		session.subscribe(route_import_character_sheet, function(uri, payload){
-			var character_sheets = JSON.parse(payload.character_sheets);
-			printRequestCharacterSheets(character_sheets);
+			switch(payload.option) {
+			case 0:
+				var character_sheets = JSON.parse(payload.character_sheets);
+				printRequestCharacterSheets(character_sheets);
+				break;
+
+			case 1:
+				var character_sheet = JSON.parse(payload.character_sheet);
+				printImportCharacterSheet(character_sheet);
+				break;
+			}
 		});
 
-		$( "#import_character_sheet #request_character_sheet_button" ).click(function() {
+		//Request character sheets
+		$( "#import_character_sheet > #request_character_sheet_button" ).click(function() {
 			var import_character_sheet_option = 0;
 			session.publish(route_import_character_sheet, {option: import_character_sheet_option});
-		});	
+		});
+
+		//Import character sheet
+		$( "#import_character_sheet_button" ).click(function() {
+			var import_character_sheet_option = 1;
+			session.publish(route_import_character_sheet, {option: import_character_sheet_option});
+		});
+
+		$("#"+user_username+"_data").on("click", "#import_character_sheet_button", function() {
+			var import_character_sheet_option = 1;
+			session.publish(route_import_character_sheet, {option: import_character_sheet_option, character_sheet_id: $(this).val()});
+			$( "#"+$(this).val()+"_provisional" ).remove();
+		});
 		
 	});
 	websocket.on("socket/disconnect", function(error){
@@ -89,13 +111,12 @@
 	}); //END WEBSOCKET
 
 	function printRequestCharacterSheets(character_sheets) {
-		
-		if (Object.keys(character_sheets).length >= 1) {
-			for (var cont_character_sheets = 0; 
-				cont_character_sheets < Object.keys(character_sheets).length; 
-				cont_character_sheets++) {
+		if (character_sheets != null) { //Object.keys(character_sheets).length >= 1
+			for (var count_character_sheets = 0; 
+				count_character_sheets < Object.keys(character_sheets).length; 
+				count_character_sheets++) {
 
-				printRequestCharacterSheet(character_sheets[cont_character_sheets]);
+				printRequestCharacterSheet(character_sheets[count_character_sheets]);
 			}
 		}
 		else {
@@ -110,33 +131,35 @@
 		$( "#"+user_username+"_data" ).append( 
 				"<div id="+character_sheet_temporal_id+"></div>" );
 		
-		for (var cont_sections = 0; 
-			cont_sections < Object.keys(character_sheet).length; 
-			cont_sections++) {
+		for (var count_sections = 0; 
+			count_sections < Object.keys(character_sheet).length; 
+			count_sections++) {
 			
-			if (character_sheet[cont_sections]['id'] == "sheet_settings") {
+			if (character_sheet[count_sections]['id'] == "sheet_settings") {
 				
 				$( "#"+character_sheet_temporal_id ).append( 
 					"<div id='sheet_settings' style='display: none;'></div>" );
 		
-				for (var cont_settings_sections = 0; 
-					cont_settings_sections < Object.keys(character_sheet[cont_sections]).length - 1; 
-					cont_settings_sections++) { //Less id
+				for (var count_settings_sections = 0; 
+					count_settings_sections < Object.keys(character_sheet[count_sections]).length - 1; 
+					count_settings_sections++) { //Less id
 
 					$( "#"+character_sheet_temporal_id+" > #sheet_settings" ).append( 
-						"<span id="+character_sheet[cont_sections][cont_settings_sections].id+">"
-						+character_sheet[cont_sections][cont_settings_sections].value+"</span>" );
+						"<span id="+character_sheet[count_sections][count_settings_sections].id+">"
+						+character_sheet[count_sections][count_settings_sections].value+"</span>" );
 				}
 			}
 
 			else {
-				switch (character_sheet[cont_sections].type) {
+				switch (character_sheet[count_sections].type) {
 				case "group":
-					typeGroupOfCharacterSheet(character_sheet[cont_sections], character_sheet_temporal_id);
+					typeGroupOfCharacterSheet(character_sheet[count_sections], character_sheet_temporal_id);
 					break;
 				}
 			}
 		}
+		$( "#"+character_sheet_temporal_id ).append(
+			"<button id='import_character_sheet_button' value='"+character_sheet_id+"'>Import Character</button>" );
 	}
 
 	function typeGroupOfCharacterSheet(group, father_div_identification) {
@@ -147,16 +170,16 @@
 				"<span id='name'>"+group.name+"</span>" );
 		}
 		
-		for (var cont_group_sections = 0; 
-			cont_group_sections < Object.keys(group).length - 3; 
-			cont_group_sections++) {
+		for (var count_group_sections = 0; 
+			count_group_sections < Object.keys(group).length - 3; 
+			count_group_sections++) {
 			
-			if (group[cont_group_sections].type == "group") {
-				typeGroupOfCharacterSheet(group[cont_group_sections], group.id);
+			if (group[count_group_sections].type == "group") {
+				typeGroupOfCharacterSheet(group[count_group_sections], group.id);
 			}
 			
-			else if (group[cont_group_sections].type == "field") {
-				typeFieldOfCharacterSheet(group[cont_group_sections], group.id);
+			else if (group[count_group_sections].type == "field") {
+				typeFieldOfCharacterSheet(group[count_group_sections], group.id);
 			}
 		}
 	}
