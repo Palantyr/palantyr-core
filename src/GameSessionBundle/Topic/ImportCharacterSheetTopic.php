@@ -9,6 +9,8 @@ use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 class ImportCharacterSheetTopic implements TopicInterface
 {
 	protected $clientManipulator;
+	
+	public $character_sheets_in_game = array();
 
 	/**
 	 * @param ClientManipulatorInterface $clientManipulator
@@ -28,19 +30,10 @@ class ImportCharacterSheetTopic implements TopicInterface
 	 */
 	public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-		//this will broadcast the message to ALL subscribers of this topic.
-		//$topic->broadcast(['msg' => $connection->resourceId . " has joined " . $topic->getId()]);
-
-		/*
-		$date = new \DateTime();
-		$date = $date->format('H:i:s');
-		 
-		$topic->broadcast([
-				'name_sender' => null,
-				'text' => $this->clientManipulator->getClient($connection)->getUsername()." is online.",
-				'date' => $date,
-		]);
-		*/
+		if (!empty($this->character_sheets_in_game)) {
+			$character_sheets_in_game_json = json_encode($this->character_sheets_in_game);
+			$connection->event($topic->getId(), ['option' => "only_view", 'character_sheets_in_game' => $character_sheets_in_game_json]);
+		}
 	}
 	/**
 	 * This will receive any UnSubscription requests for this topic.
@@ -52,16 +45,7 @@ class ImportCharacterSheetTopic implements TopicInterface
 	 */
 	public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-		/*
-		$date = new \DateTime();
-		$date = $date->format('H:i:s');
-		 
-		$topic->broadcast([
-				'name_sender' => null,
-				'text' => $this->clientManipulator->getClient($connection)->getUsername()." is offline.",
-				'date' => $date,
-		]);
-		*/
+		
 	}
 	/**
 	 * This will receive any Publish requests for this topic.
@@ -81,42 +65,28 @@ class ImportCharacterSheetTopic implements TopicInterface
 		 if ( == "acme/channel/shout")
 		 	//shout something to all subs.
 		 	*/
-		var_dump("GET ID");
-		var_dump($topic->getId());
-		var_dump("END GET ID");
 		
 		//Add security check
 		//$request->getAttributes()->get('room');
 		
 		switch ($event['option']) {
-			case 0: //Request Character Sheet
+			//case 0: onSuscribe
+			case "request": //Request Character Sheet
 				$character_sheets = self::getCharacterSheets($this->clientManipulator->getClient($connection)->getId());
 				$character_sheets_json = json_encode($character_sheets);
 				$connection->event($topic->getId(), ['option' => $event['option'], 'character_sheets' => $character_sheets_json]);
 				break;
-			case 1:
+			case "import": //Import Characer Sheet
 				$character_sheet = self::getCharacterSheet($event['character_sheet_id']);
 				$character_sheet_json = json_encode($character_sheet);
 				$topic->broadcast([
-						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 						'option' => $event['option'],
+						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 						'character_sheet' => $character_sheet_json
 				]);
+				$this->character_sheets_in_game[] = $character_sheet;
 				break;
 		}
-		
-		 /*
-		 $date = new \DateTime();
-		 $date = $date->format('H:i:s');
-		 //var_dump($this->clientManipulator->getClient($connection));
-		 //var_dump($this->tokenStorage->getToken()->getUser());
-
-		 $topic->broadcast([
-		 		'name_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
-		 		'text' => $event["msg"],
-		 		'date' => $date,
-		 ]);
-		 */
 	}
 	
 	public function getCharacterSheets ($user_id) {
@@ -130,38 +100,16 @@ class ImportCharacterSheetTopic implements TopicInterface
 	public function  getCharacterSheet ($character_sheet_id) {
 		if ($character_sheet_id == 0) {
 			return array(
-					'0' => array(
-							'id' => "sheet_settings",
-							'0' => array(
-									'id' => "sheet_id",
-									'value' => "0"
-							),
-							'1' => array(
-									'id' => "sheet_template_version",
-									'value' => "1"
-							),
-							'2' => array(
-									'id' => "sheet_version",
-									'value' => "1"
-							),
-							'3' => array(
-									'id' => "sheet_name",
-									'value' => "My first vampire"
-							),
-							'4' => array(
-									'id' => "rol_game",
-									'value' => "Vampire 20"
-							),
-							'5' => array(
-									'id' => "rol_game_version",
-									'value' => "1"
-							),
-							'6' => array(
-									'id' => "user_username",
-									'value' => "Jaime"
-							)
+					'sheet_settings' => array(
+							'sheet_id' => "0",
+							'sheet_template_version' => "1",
+							'sheet_version' => "1",
+							'sheet_name' => "My first vampire",
+							'rol_game' => "Vampire 20",
+							'rol_game_version' => "1",
+							'user_username' => "Jaime"
 					),
-					'1' => array(
+					'0' => array(
 							'id' => "basic_info",
 							'name' => null,
 							'type' => "group",
@@ -220,7 +168,7 @@ class ImportCharacterSheetTopic implements TopicInterface
 									'value' => "Kupala"
 							),
 					),
-					'2' => array(
+					'1' => array(
 							'id' => "atributtes",
 							'name' => "Atributtes",
 							'type' => "group",
@@ -294,7 +242,7 @@ class ImportCharacterSheetTopic implements TopicInterface
 									)
 							)
 					),
-					'3' => array(
+					'2' => array(
 							'id' => "abilities",
 							'name' => "Abilities",
 							'type' => "group",

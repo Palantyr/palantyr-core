@@ -19,6 +19,12 @@ services:
         tags:
             - { name: gos_web_socket.topic }
         arguments: [ @gos_web_socket.websocket.client_manipulator ]
+        
+    game_session.conection_topic:
+        class: GameSessionBundle\Topic\ConectionTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments: [ @gos_web_socket.websocket.client_manipulator ]
 
 #    acme_hello.rpc_sample_service:
 #        class: GameSessionBundle\Rpc\AcmeRpc

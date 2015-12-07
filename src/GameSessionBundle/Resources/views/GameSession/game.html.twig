@@ -13,11 +13,14 @@
 		<button id="send-button">Send</button>
 	</div>
 	
-	<div id="{{ app.user.username }}_data">
+	<!-- div my_data -->
+	<div id="{{ app.user.username }}">
 		<div id="import_character_sheet">
 			<button id="request_character_sheet_button">Request character sheets</button>
 		</div>
 	</div>
+	
+	<div id="other_users_conected"></div>
 
 	{{ ws_client() }}
 	
@@ -44,6 +47,27 @@
 	var room = "{{ game_session.getId() }}";
 	websocket.on("socket/connect", function(session){
 
+		// WEBSOCKET CONECTION
+		var route_conection = "gameSession/conection/";
+		route_conection = route_conection.concat(room);
+		session.subscribe(route_conection, function(uri, payload){
+			switch(payload.option) {
+			case 0:
+				var other_users_conected = JSON.parse(payload.other_users_conected);
+				addAllUsers(other_users_conected);
+				break;
+
+			case 1:
+				addUser(payload.user_username);
+				break;
+
+			case 2:
+				deleteUser(payload.user_username);
+				break;
+			}
+		});
+		// WEBSOCKET CONECTION
+		
 	    //session.call("sample/sum", {"term1": 2, "term2": 5}).then(
 	    //        function(result)
 	    //        {
@@ -56,6 +80,7 @@
 	    //);
 		//session.unsubscribe("acme/channel");
 
+		// WEBSOCKET CHAT
 		var route_chat = "gameSession/chat/";
 		route_chat = route_chat.concat(room);
 		session.subscribe(route_chat, function(uri, payload){
@@ -68,98 +93,163 @@
 			var newText = $( "#new-text" ).val();
 			session.publish(route_chat, {msg: newText});
 		});
-
+		// WEBSOCKET CHAT
 		
+		// WEBSOCKET IMPORT CHARACTER SHEET
 		var route_import_character_sheet = "gameSession/import_character_sheet/";
 		route_import_character_sheet = route_import_character_sheet.concat(room);
 		session.subscribe(route_import_character_sheet, function(uri, payload){
 			switch(payload.option) {
-			case 0:
+			case "only_view":
+				var character_sheets_in_game = JSON.parse(payload.character_sheets_in_game);
+				printCharacterSheets(character_sheets_in_game, "only_view");
+				break;
+			case "request":
 				var character_sheets = JSON.parse(payload.character_sheets);
-				printRequestCharacterSheets(character_sheets);
+				printCharacterSheets(character_sheets, "request");
 				break;
 
-			case 1:
+			case "import":
 				var character_sheet = JSON.parse(payload.character_sheet);
-				printImportCharacterSheet(character_sheet);
+				if (payload.username_sender == user_username) {
+					printCharacterSheet(character_sheet, "import");
+				}
+				else {
+					printCharacterSheet(character_sheet, "only_view");
+				}
 				break;
 			}
 		});
 
 		//Request character sheets
-		$( "#import_character_sheet > #request_character_sheet_button" ).click(function() {
-			var import_character_sheet_option = 0;
+		$( "#"+user_username+" > #import_character_sheet > #request_character_sheet_button" ).click(function() {
+			var import_character_sheet_option = "request";
 			session.publish(route_import_character_sheet, {option: import_character_sheet_option});
 		});
 
 		//Import character sheet
-		$( "#import_character_sheet_button" ).click(function() {
-			var import_character_sheet_option = 1;
-			session.publish(route_import_character_sheet, {option: import_character_sheet_option});
+		$( "#"+user_username ).on("click", "#import_character_sheet_button", function() {
+			var import_character_sheet_option = "import";
+			var sheet_id = $(this).parent().children('#sheet_settings').children('#sheet_id').text();
+			session.publish(route_import_character_sheet, {
+				option: import_character_sheet_option, 
+				character_sheet_id: sheet_id});
+			$( "#"+sheet_id+"_provisional" ).remove();
 		});
-
-		$("#"+user_username+"_data").on("click", "#import_character_sheet_button", function() {
-			var import_character_sheet_option = 1;
-			session.publish(route_import_character_sheet, {option: import_character_sheet_option, character_sheet_id: $(this).val()});
-			$( "#"+$(this).val()+"_provisional" ).remove();
-		});
-		
+		// WEBSOCKET IMPORT CHARACTER SHEET
 	});
 	websocket.on("socket/disconnect", function(error){
 	    $( "#chat #written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
 	    $( "#chat #written-text" ).append("&#10;");
 	}); //END WEBSOCKET
 
-	function printRequestCharacterSheets(character_sheets) {
+	// CONECTION
+	function addAllUsers(other_users_conected) {
+		for (var count_users = 0; 
+			count_users < other_users_conected.length; 
+			count_users++) {
+
+			addUser(other_users_conected[count_users]);
+		}
+	}
+
+	function addUser(user_username) {
+		$( "#other_users_conected" ).append("<div id="+user_username+"></div> ");
+	}
+
+	function deleteUser(user_username) {
+		$( "#other_users_conected > #"+user_username ).remove();
+	}
+	// CONECTION
+	
+	// IMPORT CHARACTER SHEET
+	function printCharacterSheets(character_sheets, option){
+
 		if (character_sheets != null) { //Object.keys(character_sheets).length >= 1
 			for (var count_character_sheets = 0; 
 				count_character_sheets < Object.keys(character_sheets).length; 
 				count_character_sheets++) {
 
-				printRequestCharacterSheet(character_sheets[count_character_sheets]);
+				printCharacterSheet(character_sheets[count_character_sheets], option);
 			}
 		}
 		else {
-			alert("You haven't any character sheet");
+			switch(option) {
+			case "request":
+				alert("You haven't any character sheet");
+				break;
+			case "import":
+				alert("printCharacterSheets option=import FAIL");
+				break;
+			case "only_view":
+				alert("printCharacterSheets option=only_view FAIL");
+				break;
+			}
 		}
 	}
 
-	function printRequestCharacterSheet(character_sheet) {
-		var character_sheet_id = character_sheet[0][0].value;
-		var character_sheet_temporal_id = character_sheet_id.concat("_provisional");
+	function printCharacterSheet(character_sheet, option) {
+		//alert(JSON.stringify(character_sheet));
+		var character_sheet_id = character_sheet['sheet_settings']['sheet_id'];
+		var character_sheet_user_username = character_sheet['sheet_settings']['user_username'];
+		var sheet_destination;
 		
-		$( "#"+user_username+"_data" ).append( 
-				"<div id="+character_sheet_temporal_id+"></div>" );
+		switch(option) {
+		case "request":
+			character_sheet_id = character_sheet_id.concat("_provisional");
+			sheet_destination = user_username;
+			break;
+		case "import":
+			sheet_destination = user_username;
+			break;
+		case "only_view":
+			sheet_destination = "other_users_conected > #"+character_sheet_user_username;
+			break;
+		}
+		
+		$( "#"+sheet_destination ).append( 
+				"<div id="+character_sheet_id+"></div>" );
 		
 		for (var count_sections = 0; 
 			count_sections < Object.keys(character_sheet).length; 
 			count_sections++) {
-			
-			if (character_sheet[count_sections]['id'] == "sheet_settings") {
-				
-				$( "#"+character_sheet_temporal_id ).append( 
-					"<div id='sheet_settings' style='display: none;'></div>" );
-		
-				for (var count_settings_sections = 0; 
-					count_settings_sections < Object.keys(character_sheet[count_sections]).length - 1; 
-					count_settings_sections++) { //Less id
 
-					$( "#"+character_sheet_temporal_id+" > #sheet_settings" ).append( 
-						"<span id="+character_sheet[count_sections][count_settings_sections].id+">"
-						+character_sheet[count_sections][count_settings_sections].value+"</span>" );
+			if (Object.keys(character_sheet)[count_sections] == "sheet_settings") {
+				$( "#"+character_sheet_id ).append( 
+					"<div id='sheet_settings' style='display: none;'></div>" );
+
+				for (var count_settings_sections = 0; 
+					count_settings_sections < Object.keys(character_sheet['sheet_settings']).length; 
+					count_settings_sections++) {
+
+					var actual_key = Object.keys(character_sheet['sheet_settings'])[count_settings_sections];
+					$( "#"+character_sheet_id+" > #sheet_settings" ).append( 
+						"<span id="+actual_key+">"
+						+character_sheet['sheet_settings'][actual_key]+"</span>" );
 				}
 			}
 
-			else {
+			else { 
 				switch (character_sheet[count_sections].type) {
 				case "group":
-					typeGroupOfCharacterSheet(character_sheet[count_sections], character_sheet_temporal_id);
+					typeGroupOfCharacterSheet(character_sheet[count_sections], character_sheet_id);
 					break;
 				}
 			}
 		}
-		$( "#"+character_sheet_temporal_id ).append(
-			"<button id='import_character_sheet_button' value='"+character_sheet_id+"'>Import Character</button>" );
+		if (option == "request") {
+			$( "#"+character_sheet_id ).append(
+					"<button id='import_character_sheet_button' value='"+character_sheet_id+"'>Import Character</button>" );
+
+			//Pending to develop
+			$( "#"+character_sheet_id ).append(
+					"<button id='request_character_sheet_cancel_button' value='"+character_sheet_id+"'>Cancel</button>" );
+		}
+		else if (option == "import") {
+			//Pending to develop
+			$( "#"+character_sheet_id ).append(
+					"<button id='import_character_sheet_delete_button' value='"+character_sheet_id+"'>Delete</button>" );
+		}	
 	}
 
 	function typeGroupOfCharacterSheet(group, father_div_identification) {
@@ -171,7 +261,7 @@
 		}
 		
 		for (var count_group_sections = 0; 
-			count_group_sections < Object.keys(group).length - 3; 
+			count_group_sections < Object.keys(group).length - 3; //Less id, name and type
 			count_group_sections++) {
 			
 			if (group[count_group_sections].type == "group") {
@@ -189,6 +279,18 @@
 				"<div id="+field.id+"><span id='name'>"+field.name+
 				"</span><span id='value'>"+field.value+"</span></div>" );
 	}
+
+	//})[id*="td_"] to id of character sheet
+	$( "#"+user_username ).on("click", "div > #atributtes > div > div", function() {
+		alert( $(this).attr("id") );
+		alert( $(this).children( "#value" ).text() );
+	});
+
+	$( "#"+user_username ).on("click", "div > #abilities > div > div", function() {
+		alert( $(this).attr("id") );
+		alert( $(this).children( "#value" ).text() );
+	});
+	//IMPORT CHARACTER SHEET
 	
 	function addTextToChat(payload){
 

@@ -26,3 +26,11 @@ game_session_import_character_sheet:
     requirements:
         room:
             pattern: "^(0|[1-9][0-9]*)$"
+            
+game_session_conection:
+    channel: gameSession/conection/{room}
+    handler:
+        callback: 'conection.topic' #related to the getName() of your topic
+    requirements:
+        room:
+            pattern: "^(0|[1-9][0-9]*)$"
