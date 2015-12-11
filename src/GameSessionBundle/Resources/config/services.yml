@@ -12,13 +12,19 @@ services:
         class: GameSessionBundle\Topic\ChatTopic
         tags:
             - { name: gos_web_socket.topic }
-        arguments: [ @gos_web_socket.websocket.client_manipulator ] #@gos_web_socket.client_storage
+        arguments: [ @gos_web_socket.router.wamp, @gos_web_socket.websocket.client_manipulator ] #@gos_web_socket.client_storage
 
     game_session.import_character_sheet_topic:
         class: GameSessionBundle\Topic\ImportCharacterSheetTopic
         tags:
             - { name: gos_web_socket.topic }
         arguments: [ @gos_web_socket.websocket.client_manipulator ]
+        
+    game_session.functionality_character_sheet_topic:
+        class: GameSessionBundle\Topic\FunctionalityCharacterSheetTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments: [ @gos_web_socket.router.wamp, @gos_web_socket.websocket.client_manipulator ]
         
     game_session.conection_topic:
         class: GameSessionBundle\Topic\ConectionTopic

@@ -42,7 +42,6 @@
 	<buildpathentry kind="src" path="vendor/evenement/evenement/src"/>
 	<buildpathentry kind="src" path="vendor/gos/pnctl-event-loop-emitter/src"/>
 	<buildpathentry kind="src" path="vendor/composer"/>
-	<buildpathentry kind="src" path="vendor/doctrine/common/lib"/>
 	<buildpathentry kind="src" path="vendor/sensio/framework-extra-bundle"/>
 	<buildpathentry kind="src" path="vendor/gos/ratchet-stack/src"/>
 	<buildpathentry kind="src" path="vendor/doctrine/doctrine-bundle"/>
@@ -51,4 +50,5 @@
 	<buildpathentry kind="src" path="vendor/guzzle/parser"/>
 	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib"/>
 	<buildpathentry kind="src" path="vendor/kriswallsmith/assetic/src"/>
+	<buildpathentry kind="src" path="vendor/doctrine/common/lib/Doctrine/Common"/>
 </buildpath>

@@ -69,11 +69,16 @@ class MainController extends Controller
     	));
     }
     
-    public function renderSessionAction($session_id) 
+    public function renderSessionAction(Request $request, $session_id) 
     {
     	$game_session = $this->getDoctrine()
     	->getRepository('GameSessionBundle:GameSession')
     	->find($session_id);
+
+    	$session = $request->getSession();
+    	$session_game_sessions = $session->get('game_sessions');
+    	$session_game_sessions[$session_id] = false;
+    	$session->set('game_sessions', $session_game_sessions);
     	
     	return $this->render('GameSessionBundle:GameSession:game.html.twig', array(
     			'game_session' => $game_session
@@ -97,7 +102,7 @@ class MainController extends Controller
     		return self::loginAction($request, $session_id);
     	}
     	else {
-			return self::renderSessionAction($session_id);
+			return self::renderSessionAction($request, $session_id);
     	}
     }
 
@@ -131,12 +136,10 @@ class MainController extends Controller
     			$session_game_sessions = $session->get('game_sessions');
     			$session_game_sessions[$session_id] = true;
     			$session->set('game_sessions', $session_game_sessions);
-    			//return self::joinSessionAction($request, $session_id);
-    			//return $this->redirect($this->generateUrl('join_session', $session_id));
-				return self::renderSessionAction($session_id);
+				return self::renderSessionAction($request, $session_id);
     		}
     	}
-
+    	
     	return $this->render('GameSessionBundle:Security:login_game.html.twig', array(
     		'form' => $form->createView(), 'game_session_array' => $game_session
     	));

@@ -2,8 +2,10 @@
 
 {% block body %}
 
-	Welcome to {{ game_session.getName() }}, {{ app.user.username }}.
-
+	Welcome to {{ game_session.getName() }}, {{ app.user.username }}. 
+	<form action="{{ path('game_sessions') }}">
+		<input type="submit" value="Exit">
+	</form>
 	</br></br></br>
 	
 	<div id="chat">
@@ -104,6 +106,7 @@
 				var character_sheets_in_game = JSON.parse(payload.character_sheets_in_game);
 				printCharacterSheets(character_sheets_in_game, "only_view");
 				break;
+				
 			case "request":
 				var character_sheets = JSON.parse(payload.character_sheets);
 				printCharacterSheets(character_sheets, "request");
@@ -130,13 +133,65 @@
 		//Import character sheet
 		$( "#"+user_username ).on("click", "#import_character_sheet_button", function() {
 			var import_character_sheet_option = "import";
-			var sheet_id = $(this).parent().children('#sheet_settings').children('#sheet_id').text();
+			var character_sheet_id = $(this).parent().children("#character_sheet_settings").children("#character_sheet_id").text();
+
 			session.publish(route_import_character_sheet, {
 				option: import_character_sheet_option, 
-				character_sheet_id: sheet_id});
-			$( "#"+sheet_id+"_provisional" ).remove();
+				character_sheet_id: character_sheet_id});
+			$( "#"+user_username+" #"+character_sheet_id+"_provisional" ).remove();
 		});
 		// WEBSOCKET IMPORT CHARACTER SHEET
+
+		// WEBSOCKET FUNCTIONALITY CHARACTER SHEET
+		var route_functionality_character_sheet = "gameSession/functionality_character_sheet/";
+		route_functionality_character_sheet = route_functionality_character_sheet.concat(room);
+		session.subscribe(route_functionality_character_sheet, function(uri, payload){
+			switch(payload.option) {
+			case "individual":
+				alert("FUNCTIONALITY CHARACTER SHEET case individual");
+				break;
+			}
+		});
+
+		$( "#"+user_username ).on("click", "#individual_functionality_panel > #individual_functionality_panel_throw_button", function() {
+
+			var elements = $("#individual_functionality_panel > div").toArray();
+			var throwing = [];
+			for (var count_elements = 0;
+					count_elements < elements.length; 
+					count_elements++) {
+				//alert(JSON.stringify(elements[count_elements].id));
+				switch (elements[count_elements].id) {
+				case "result_type":
+					var sub_element = { 
+						    result_type: {type: $("#individual_functionality_panel > #"+elements[count_elements].id+" #type").text(),
+							    			name: $("#individual_functionality_panel > #"+elements[count_elements].id+" #name").text(),
+							    			value: $("#individual_functionality_panel > #"+elements[count_elements].id+" #value").val()}
+						};
+					throwing.push(sub_element);
+					break;
+
+				default:
+					var sub_element = {};
+					sub_element[elements[count_elements].id] = {
+							value: $("#individual_functionality_panel > #"+elements[count_elements].id+" #value").val()
+					}
+					throwing.push(sub_element);
+					break;
+				}
+			}
+
+			var sheet_id = {sheet_id: individual_functionality_actual_character_sheet_id}
+			throwing.push(sheet_id);
+			var throwing_json = JSON.stringify(throwing);
+
+			var functionality_character_sheet_option = "individual";
+			session.publish(route_functionality_character_sheet, {
+				option: functionality_character_sheet_option, 
+				throwing: throwing_json
+			});
+		});
+		// WEBSOCKET FUNCTIONALITY CHARACTER SHEET		
 	});
 	websocket.on("socket/disconnect", function(error){
 	    $( "#chat #written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
@@ -190,8 +245,8 @@
 
 	function printCharacterSheet(character_sheet, option) {
 		//alert(JSON.stringify(character_sheet));
-		var character_sheet_id = character_sheet['sheet_settings']['sheet_id'];
-		var character_sheet_user_username = character_sheet['sheet_settings']['user_username'];
+		var character_sheet_id = character_sheet['character_sheet_settings']['character_sheet_id'];
+		var character_sheet_user_username = character_sheet['character_sheet_settings']['user_username'];
 		var sheet_destination;
 		
 		switch(option) {
@@ -214,18 +269,18 @@
 			count_sections < Object.keys(character_sheet).length; 
 			count_sections++) {
 
-			if (Object.keys(character_sheet)[count_sections] == "sheet_settings") {
+			if (Object.keys(character_sheet)[count_sections] == "character_sheet_settings") {
 				$( "#"+character_sheet_id ).append( 
-					"<div id='sheet_settings' style='display: none;'></div>" );
+					"<div id='character_sheet_settings' style='display: none;'></div>" );
 
 				for (var count_settings_sections = 0; 
-					count_settings_sections < Object.keys(character_sheet['sheet_settings']).length; 
+					count_settings_sections < Object.keys(character_sheet['character_sheet_settings']).length; 
 					count_settings_sections++) {
 
-					var actual_key = Object.keys(character_sheet['sheet_settings'])[count_settings_sections];
-					$( "#"+character_sheet_id+" > #sheet_settings" ).append( 
+					var actual_key = Object.keys(character_sheet['character_sheet_settings'])[count_settings_sections];
+					$( "#"+character_sheet_id+" > #character_sheet_settings" ).append( 
 						"<span id="+actual_key+">"
-						+character_sheet['sheet_settings'][actual_key]+"</span>" );
+						+character_sheet['character_sheet_settings'][actual_key]+"</span>" );
 				}
 			}
 
@@ -279,19 +334,82 @@
 				"<div id="+field.id+"><span id='name'>"+field.name+
 				"</span><span id='value'>"+field.value+"</span></div>" );
 	}
+	//IMPORT CHARACTER SHEET
+	
+	//FUNCTIONALITY
+	var individual_functionality_started = false;
+	var individual_functionality_last_element = false;
+	var individual_functionality_actual_character_sheet_id = false;
+	function vampireFunctionality (element) {
+		if (individual_functionality_started == false) {
+			generateIndividualFunctionalityPanel();
+			$( "#individual_functionality_panel" ).append("<div id="+element.id+"><span id='name'>"+
+					element.name+"</span><input id='value' type='number' value="+
+					element.value_list.value+"></input></div>");
+			
+			$( "#individual_functionality_panel" ).append("<div id='result_type'><span id='type' style='display:none'>"+
+					element.result_type.type+"</span><span id='name'>"+
+					element.result_type.name+"</span><input id='value' type='number' value="+
+					element.result_type.value+"></input></div>");
+
+			$( "#individual_functionality_panel" ).append("<button id='individual_functionality_panel_add_button'>Add</button>");
+			$( "#individual_functionality_panel" ).append("<button id='individual_functionality_panel_throw_button'>Throw</button");
+			$( "#individual_functionality_panel" ).append("<button id='individual_functionality_panel_cancel_button'>Cancel</button");
+
+			individual_functionality_started = true;
+			individual_functionality_actual_character_sheet_id = element.character_sheet_id;
+			individual_functionality_last_element = element.id;
+		}
+		else {
+			$( "#individual_functionality_panel > #"+individual_functionality_last_element ).after("<div id="+element.id+"><span id='name'>"+
+					element.name+"</span><input id='value' type='number' value="+
+					element.value_list.value+"></input></div>");
+
+			individual_functionality_last_element = element.id;
+		}
+	}
+
+	function generateIndividualFunctionalityPanel() {
+		$( "#"+user_username ).append("<div id='individual_functionality_panel'></div>");
+	}
 
 	//})[id*="td_"] to id of character sheet
 	$( "#"+user_username ).on("click", "div > #atributtes > div > div", function() {
-		alert( $(this).attr("id") );
-		alert( $(this).children( "#value" ).text() );
+		var character_sheet_id = getCharacterSheetId($(this));
+		if(character_sheet_id) {
+			if(individual_functionality_actual_character_sheet_id == false || 
+					individual_functionality_actual_character_sheet_id == character_sheet_id) {
+				var element = { 
+					    id: $(this).attr("id"),
+					    name: $(this).children( "#name" ).text(),
+					    character_sheet_id: character_sheet_id,
+					    value_list: {value: $(this).children( "#value" ).text()},
+					    result_type: {type: "number_of_successes", name: "Difficulty", value: "6"}
+					};
+				vampireFunctionality(element);
+			}
+		}
 	});
 
 	$( "#"+user_username ).on("click", "div > #abilities > div > div", function() {
-		alert( $(this).attr("id") );
-		alert( $(this).children( "#value" ).text() );
+		var character_sheet_id = getCharacterSheetId($(this));
+		if(character_sheet_id) {
+			if(individual_functionality_actual_character_sheet_id == false || 
+					individual_functionality_actual_character_sheet_id == character_sheet_id) {
+				var element = { 
+					    id: $(this).attr("id"),
+					    name: $(this).children( "#name" ).text(),
+					    character_sheet_id: character_sheet_id,
+					    value_list: {value: $(this).children( "#value" ).text()},
+					    result_type: {type: "number_of_successes", name: "Difficulty", value: "6"}
+					};
+				vampireFunctionality(element);
+			}
+		}
 	});
-	//IMPORT CHARACTER SHEET
+	//FUNCTIONALITY
 	
+	//CHAT
 	function addTextToChat(payload){
 
 		if (payload.name_sender != null) {
@@ -310,6 +428,24 @@
 			$( "#chat #written-text" ).append("&#10;");
 		}
 	}
+	//CHAT
+	
+	//OTHER
+	function getCharacterSheetId(element) {
+		var is_only_number = /^\d+$/;
+		
+		if (element.parent().attr("id") == user_username ||
+				element.parent().attr("id") == "other_users_conected") {
+			return false;
+		}
+		else if (is_only_number.test(element.parent().attr("id"))) {
+			return element.parent().attr("id");
+		}
+		else {
+			return getCharacterSheetId(element.parent());
+		}
+	}
+	//OTHER
 </script>
 
 {% endblock %}

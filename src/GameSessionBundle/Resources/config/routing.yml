@@ -5,11 +5,11 @@ game_session_homepage:
 create_game_session:
     path:     /game/createGameSesion
     defaults: { _controller: GameSessionBundle:Main:createGameSession }
-    
+
 join_session:
     path:     /game/session/{session_id}
     defaults: { _controller: GameSessionBundle:Main:joinSession }
-    
+
 game_sessions:
     path:     /game/sessions
     defaults: { _controller: GameSessionBundle:Main:gameSessions }
@@ -17,4 +17,3 @@ game_sessions:
 administration_game_session_homepage:
     path:     /game/administration
     defaults: { _controller: GameSessionBundle:Administration:index }
-    

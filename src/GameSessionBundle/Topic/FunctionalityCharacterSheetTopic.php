@@ -5,18 +5,20 @@ use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+use Gos\Bundle\WebSocketBundle\Router\WampRouter;
 
-class ConectionTopic implements TopicInterface
+class FunctionalityCharacterSheetTopic implements TopicInterface
 {
+	protected $wampRouter;
 	protected $clientManipulator;
 
-	public $users_conected = array();
-	
 	/**
+	 * @param WampRouter                 $wampRouter
 	 * @param ClientManipulatorInterface $clientManipulator
 	 */
-	public function __construct(ClientManipulatorInterface $clientManipulator)
+	public function __construct(WampRouter $wampRouter, ClientManipulatorInterface $clientManipulator)
 	{
+		$this->wampRouter = $wampRouter;
 		$this->clientManipulator = $clientManipulator;
 	}
 
@@ -30,19 +32,6 @@ class ConectionTopic implements TopicInterface
 	 */
 	public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-		if (!empty($this->users_conected)) {
-			$users_conected_json = json_encode($this->users_conected);
-			$connection->event($topic->getId(), ['option' => 0, 'other_users_conected' => $users_conected_json]);
-			var_dump("CONECTION");
-			var_dump($users_conected_json);
-			var_dump("CONECTION");
-		}
-		$this->users_conected[] = $this->clientManipulator->getClient($connection)->getUsername();
-		$topic->broadcast([
-				'option' => 1,
-				'user_username' => $this->clientManipulator->getClient($connection)->getUsername()],
-				array($connection->WAMP->sessionId)
-		);
 	}
 	/**
 	 * This will receive any UnSubscription requests for this topic.
@@ -54,13 +43,6 @@ class ConectionTopic implements TopicInterface
 	 */
 	public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-		$this->users_conected = array_diff($this->users_conected, array($this->clientManipulator->getClient($connection)->getUsername()));
-		$topic->broadcast([
-				'option' => 2,
-				'user_username' => $this->clientManipulator->getClient($connection)->getUsername()],
-				array($connection->WAMP->sessionId)
-		);
-		$connection->close();
 	}
 	/**
 	 * This will receive any Publish requests for this topic.
@@ -80,14 +62,40 @@ class ConectionTopic implements TopicInterface
 		 if ( == "acme/channel/shout")
 		 	//shout something to all subs.
 		 	*/
+		switch ($event['option']) {
+			case "individual":
+				$throwing = json_decode($event['throwing']);
+// 				$result = getIndividualResult($throwing);
+// 				$connection->event($this->wampRouter->generate('game_session_chat'), ['room' => '1']);
+				$room = $request->getAttributes()->get('room');
+				//var_dump($room);
+				var_dump($this->wampRouter->generate('game_session_chat', ["room" => $room]), ['msg' => 'notification']);
+				$connection->event($this->wampRouter->generate('game_session_chat', ["room" => $room]), ['msg' => 'notification']);
+
+// 				$connection->event($this->wampRouter->generate('game_session_chat', ['room' => $room]), ['msg' => 'notification']);
+// 				$connection->send($this->wampRouter->generate('game_session_chat', ['room' => '1']), "message");
+
+// 				$connection->event($this->wampRouter->generate('target_topic_route_name'), 'message'');
+
+// 				$topic->broadcast([
+// 						'option' => $event['option'],
+// 						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+// 						'character_sheet' => $result
+// 				]);
+				break;
+		}
+// 		var_dump("EVENTO");
+// 		var_dump($event);
+// 		var_dump(json_decode($event['throwing']));
+// 		var_dump("EVENTO");
 	}
-	
+
 	/**
 	 * Like RPC is will use to prefix the channel
 	 * @return string
 	 */
 	public function getName()
 	{
-		return 'conection.topic';
+		return 'functionality_character_sheet.topic';
 	}
 }

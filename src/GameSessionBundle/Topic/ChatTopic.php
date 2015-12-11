@@ -5,19 +5,20 @@ use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
-//use Gos\Bundle\WebSocketBundle\Client\ClientStorageInterface;
-//use Gos\Bundle\WebSocketBundle\Client\WebSocketUserTrait;
-//use Doctrine\ORM\Mapping as ORM;
+use Gos\Bundle\WebSocketBundle\Router\WampRouter;
 
 class ChatTopic implements TopicInterface
 {
+	protected $wampRouter;
 	protected $clientManipulator;
 	
 	/**
+	 * @param WampRouter                 $wampRouter
 	 * @param ClientManipulatorInterface $clientManipulator
 	 */
-	public function __construct(ClientManipulatorInterface $clientManipulator)
+	public function __construct(WampRouter $wampRouter, ClientManipulatorInterface $clientManipulator)
 	{
+		$this->wampRouter = $wampRouter;
 		$this->clientManipulator = $clientManipulator;
 	}
 	
@@ -80,6 +81,12 @@ class ChatTopic implements TopicInterface
             if ($topic->getId() == "acme/channel/shout")
                //shout something to all subs.
         */
+            var_dump($request->getAttributes(), $event);
+            $a = $this->wampRouter->getContext();
+            var_dump($a);
+            var_dump($request->getAttributes());
+            var_dump($event);
+            var_dump("CHAT");
             
 		$date = new \DateTime();
 		$date = $date->format('H:i:s');

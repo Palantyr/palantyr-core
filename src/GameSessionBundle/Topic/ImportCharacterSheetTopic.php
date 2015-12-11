@@ -70,7 +70,6 @@ class ImportCharacterSheetTopic implements TopicInterface
 		//$request->getAttributes()->get('room');
 		
 		switch ($event['option']) {
-			//case 0: onSuscribe
 			case "request": //Request Character Sheet
 				$character_sheets = self::getCharacterSheets($this->clientManipulator->getClient($connection)->getId());
 				$character_sheets_json = json_encode($character_sheets);
@@ -97,14 +96,14 @@ class ImportCharacterSheetTopic implements TopicInterface
 		}
 	}
 	
-	public function  getCharacterSheet ($character_sheet_id) {
+	public function getCharacterSheet ($character_sheet_id) {
 		if ($character_sheet_id == 0) {
 			return array(
-					'sheet_settings' => array(
-							'sheet_id' => "0",
-							'sheet_template_version' => "1",
-							'sheet_version' => "1",
-							'sheet_name' => "My first vampire",
+					'character_sheet_settings' => array(
+							'character_sheet_id' => "0",
+							'character_sheet_template_version' => "1",
+							'character_sheet_version' => "1",
+							'character_sheet_name' => "My first vampire",
 							'rol_game' => "Vampire 20",
 							'rol_game_version' => "1",
 							'user_username' => "Jaime"
@@ -274,7 +273,7 @@ class ImportCharacterSheetTopic implements TopicInterface
 									'name' => "Skills",
 									'type' => "group",
 									'0' => array(
-											'id' => "animal ken",
+											'id' => "animal_ken",
 											'name' => "Animal Ken",
 											'type' => "field",
 											'value' => "0"
@@ -304,7 +303,7 @@ class ImportCharacterSheetTopic implements TopicInterface
 									),
 									'1' => array(
 											'id' => "computer",
-											'name' => "computer",
+											'name' => "Computer",
 											'type' => "field",
 											'value' => "4"
 									),
@@ -318,6 +317,90 @@ class ImportCharacterSheetTopic implements TopicInterface
 					)
 			);
 		}
+	}
+	
+
+	function getVampireFunctionality () {
+		return array(
+				'0' => array(
+						'id' => "strength",
+						'name' => "Strenght",
+						'character_sheet_id' => "0",
+						'value_list' => array(
+								'value' => "value"
+						),
+						'result_type' => array(
+								'type' => "number_of_successes",
+								'name' => "Difficulty",
+								'value' => 6
+						)
+				),
+				'1' => array(
+						'id' => "dexterity",
+						'name' => "Dexterity",
+						'character_sheet_id' => "0",
+						'value_list' => array(
+								'value' => "value"
+						),
+						'result_type' => array(
+								'type' => "number_of_successes",
+								'name' => "Difficulty",
+								'value' => 6
+						)
+				),
+				'2' => array(
+						'id' => "stamina",
+						'name' => "Stamina",
+						'character_sheet_id' => "0",
+						'value_list' => array(
+								'value' => "value"
+						),
+						'result_type' => array(
+								'type' => "number_of_successes",
+								'name' => "Difficulty",
+								'value' => 6
+						)
+				),
+				'3' => array(
+						'id' => "acting",
+						'name' => "Acting",
+						'character_sheet_id' => "0",
+						'value_list' => array(
+								'value' => "value"
+						),
+						'result_type' => array(
+								'type' => "number_of_successes",
+								'name' => "Difficulty",
+								'value' => 6
+						)
+				),
+				'4' => array(
+						'id' => "alertness",
+						'name' => "Alertness",
+						'character_sheet_id' => "0",
+						'value_list' => array(
+								'value' => "value"
+						),
+						'result_type' => array(
+								'type' => "number_of_successes",
+								'name' => "Difficulty",
+								'value' => 6
+						)
+				),
+				'5' => array(
+						'id' => "athletics",
+						'name' => "Athletics",
+						'character_sheet_id' => "0",
+						'value_list' => array(
+								'value' => "value"
+						),
+						'result_type' => array(
+								'type' => "number_of_successes",
+								'name' => "Difficulty",
+								'value' => 6
+						)
+				)
+		);
 	}
 	
 	/**
