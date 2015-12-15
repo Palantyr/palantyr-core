@@ -11,6 +11,14 @@
 #        method:
 #            pattern: "[a-z_]+"
 
+game_session_topic:
+    channel: gameSession/{room}
+    handler:
+        callback: 'game_session.topic' #related to the getName() of your topic
+    requirements:
+        room:
+            pattern: "^(0|[1-9][0-9]*)$"
+
 game_session_conection:
     channel: gameSession/conection/{room}
     handler:

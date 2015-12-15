@@ -7,7 +7,13 @@ services:
 #        class: GameSessionBundle\Topic\AcmeTopic
 #        tags:
 #            - { name: gos_web_socket.topic }
-            
+
+    game_session.topic:
+        class: GameSessionBundle\Topic\GameSessionTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments: [ @gos_web_socket.websocket.client_manipulator ] #@gos_web_socket.client_storage
+ 
     game_session.chat_topic:
         class: GameSessionBundle\Topic\ChatTopic
         tags:
