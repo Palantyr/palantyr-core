@@ -18,35 +18,3 @@ game_session_topic:
     requirements:
         room:
             pattern: "^(0|[1-9][0-9]*)$"
-
-game_session_conection:
-    channel: gameSession/conection/{room}
-    handler:
-        callback: 'conection.topic' #related to the getName() of your topic
-    requirements:
-        room:
-            pattern: "^(0|[1-9][0-9]*)$"
-     
-game_session_chat:
-    channel: gameSession/chat/{room}
-    handler:
-        callback: 'chat.topic' #related to the getName() of your topic
-    requirements:
-        room:
-            pattern: "^(0|[1-9][0-9]*)$"
-            
-game_session_import_character_sheet:
-    channel: gameSession/import_character_sheet/{room}
-    handler:
-        callback: 'import_character_sheet.topic' #related to the getName() of your topic
-    requirements:
-        room:
-            pattern: "^(0|[1-9][0-9]*)$"
-            
-game_session_functionality_character_sheet:
-    channel: gameSession/functionality_character_sheet/{room}
-    handler:
-        callback: 'functionality_character_sheet.topic' #related to the getName() of your topic
-    requirements:
-        room:
-            pattern: "^(0|[1-9][0-9]*)$"
