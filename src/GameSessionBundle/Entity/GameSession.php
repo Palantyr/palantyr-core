@@ -2,8 +2,6 @@
 //GameSessionBundle\Entity\GameSesion.php
 namespace GameSessionBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 class GameSession 
 {
 	private $id;

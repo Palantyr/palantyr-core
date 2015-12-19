@@ -74,6 +74,10 @@ class MainController extends Controller
     	$game_session = $this->getDoctrine()
     	->getRepository('GameSessionBundle:GameSession')
     	->find($session_id);
+    	
+    	$rol_game = $this->getDoctrine()
+    	->getRepository('GameSessionBundle:RolGame')
+    	->find($game_session->getRolGame());
 
     	$session = $request->getSession();
     	$session_game_sessions = $session->get('game_sessions');
@@ -81,7 +85,7 @@ class MainController extends Controller
     	$session->set('game_sessions', $session_game_sessions);
     	
     	return $this->render('GameSessionBundle:GameSession:game.html.twig', array(
-    			'game_session' => $game_session
+    			'game_session' => $game_session, 'rol_game' => $rol_game
     	));
     }
     

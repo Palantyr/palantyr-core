@@ -34,6 +34,11 @@ class GameSessionTopic implements TopicInterface
 		self::onSuscribeConnection($connection, $topic, $request);
 		self::onSuscribeChat($connection, $topic, $request);
 		self::onSuscribeImportCharacterSheet($connection, $topic, $request);
+		
+
+// 			var_dump("USERS");
+// 			var_dump($this->users_conected);
+// 			var_dump("USERS");
 	}
 	/**
 	 * This will receive any UnSubscription requests for this topic.
@@ -45,9 +50,9 @@ class GameSessionTopic implements TopicInterface
 	 */
 	public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-		self::onUnSubscribeConnection($connection, $topic, $request);
-		self::onUnSubscribeChat($connection, $topic, $request);
 		self::onUnSubscribeImportCharacterSheet($connection, $topic, $request);
+		self::onUnSubscribeChat($connection, $topic, $request);
+		self::onUnSubscribeConnection($connection, $topic, $request);
 	}
 	/**
 	 * This will receive any Publish requests for this topic.
@@ -86,15 +91,20 @@ class GameSessionTopic implements TopicInterface
 	
 // 	CONNECTION
 	private function onSuscribeConnection (ConnectionInterface $connection, Topic $topic, WampRequest $request) {
+		$room = $request->getAttributes()->get('room');
 		
-		if (!empty($this->users_conected)) {
-			$users_conected_json = json_encode($this->users_conected);
+		if (self::isFirstToConnecteInRoom($room)) {
+			$this->users_conected[$room] = array();
+		}
+		
+		if (!empty($this->users_conected[$room])) {
+			$users_conected_json = json_encode($this->users_conected[$room]);
 			$connection->event($topic->getId(), [
 					'section' => "connection",
 					'option' => "add_all_users", 
 					'other_users_conected' => $users_conected_json]);
 		}
-		$this->users_conected[] = $this->clientManipulator->getClient($connection)->getUsername();
+		$this->users_conected[$room][] = $this->clientManipulator->getClient($connection)->getUsername();
 		$topic->broadcast([
 				'section' => "connection",
 				'option' => "add_new_user",
@@ -104,13 +114,20 @@ class GameSessionTopic implements TopicInterface
 	}
 	
 	private function onUnSubscribeConnection (ConnectionInterface $connection, Topic $topic, WampRequest $request) {
-		$this->users_conected = array_diff($this->users_conected, array($this->clientManipulator->getClient($connection)->getUsername()));
-		$topic->broadcast([
-				'section' => "connection",
-				'option' => "delete_disconnected_user",
-				'user_username' => $this->clientManipulator->getClient($connection)->getUsername()],
-				array($connection->WAMP->sessionId)
-				);
+		$room = $request->getAttributes()->get('room');
+		
+		if(self::isLastToDisconnecteInRoom($room)) {
+			unset($this->users_conected[$room]);
+		}
+		else {
+			$this->users_conected[$room] = array_diff($this->users_conected[$room], array($this->clientManipulator->getClient($connection)->getUsername()));
+			$topic->broadcast([
+					'section' => "connection",
+					'option' => "delete_disconnected_user",
+					'user_username' => $this->clientManipulator->getClient($connection)->getUsername()],
+					array($connection->WAMP->sessionId)
+					);
+		}
 		$connection->close();
 	}
 // 	CONNECTION
@@ -141,7 +158,6 @@ class GameSessionTopic implements TopicInterface
 	}
 	
 	private function onPublishChat (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
-
 			$date = new \DateTime();
 			$date = $date->format('H:i:s');
 	
@@ -156,8 +172,16 @@ class GameSessionTopic implements TopicInterface
 	
 // 	IMPORT CHARACTER SHEET
 	private function onSuscribeImportCharacterSheet (ConnectionInterface $connection, Topic $topic, WampRequest $request) {
-		if (!empty($this->character_sheets_in_game)) {
-			$character_sheets_in_game_json = json_encode($this->character_sheets_in_game);
+		$room = $request->getAttributes()->get('room');
+		
+		if (self::isFirstToConnecteInRoom($room)) {
+			$this->character_sheets_in_game[$room] = array();
+		}
+// 		var_dump("FIRST USER BEFORE IMPORT");
+// 		var_dump($this->character_sheets_in_game);
+// 		var_dump("FIRST USER BEFORE IMPORT");
+		if (!empty($this->character_sheets_in_game[$room])) {
+			$character_sheets_in_game_json = json_encode($this->character_sheets_in_game[$room]);
 			$connection->event($topic->getId(), [
 					'section' => "import_character_sheet",
 					'option' => "only_view",
@@ -167,10 +191,11 @@ class GameSessionTopic implements TopicInterface
 	}
 	
 	private function onPublishImportCharacterSheet (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
+		$room = $request->getAttributes()->get('room');
 		
 		switch ($event['option']) {
 			case "request": //Request Character Sheet
-				$character_sheets = self::getCharacterSheets($this->clientManipulator->getClient($connection)->getId());
+				$character_sheets = self::getCharacterSheets($room, $this->clientManipulator->getClient($connection)->getId());
 				$character_sheets_json = json_encode($character_sheets);
 				$connection->event($topic->getId(), [
 						'section' => "import_character_sheet",
@@ -188,14 +213,14 @@ class GameSessionTopic implements TopicInterface
 						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 						'character_sheet' => $character_sheet_json
 				]);
-				$this->character_sheets_in_game[] = $character_sheet;
+				$this->character_sheets_in_game[$room][] = $character_sheet;
 				break;
 				
 			case "delete":
 				$character_sheet_id = $event['character_sheet_id'];
-				if (self::isCharacterSheetInGame($character_sheet_id)) {
+				if (self::isCharacterSheetInGame($room, $character_sheet_id)) {
 
-					self::deleteCharacterSheetInGame($character_sheet_id);
+					self::deleteCharacterSheetInGame($room, $character_sheet_id);
 					
 					$connection->event($topic->getId(), [
 							'section' => "import_character_sheet",
@@ -218,15 +243,14 @@ class GameSessionTopic implements TopicInterface
 		}
 	}
 	
-	private function isCharacterSheetInGame ($character_sheet_id) {
-
-		if (!empty($this->character_sheets_in_game)) {
+	private function isCharacterSheetInGame ($room, $character_sheet_id) {
+		if (!empty($this->character_sheets_in_game[$room])) {
 
 			for ($count_character_sheets_in_game = 0;
-			$count_character_sheets_in_game < count($this->character_sheets_in_game);
+			$count_character_sheets_in_game < count($this->character_sheets_in_game[$room]);
 			$count_character_sheets_in_game++) {
 
-				if (self::getCharacterSheetId($this->character_sheets_in_game[$count_character_sheets_in_game]) 
+				if (self::getCharacterSheetId($this->character_sheets_in_game[$room][$count_character_sheets_in_game]) 
 					== $character_sheet_id) {
 
 					return true;
@@ -236,19 +260,18 @@ class GameSessionTopic implements TopicInterface
 		return false;
 	}
 	
-	private function deleteCharacterSheetInGame ($character_sheet_id) {
-	
-		if (!empty($this->character_sheets_in_game)) {
+	private function deleteCharacterSheetInGame ($room, $character_sheet_id) {		
+		if (!empty($this->character_sheets_in_game[$room])) {
 	
 			for ($count_character_sheets_in_game = 0;
-			$count_character_sheets_in_game < count($this->character_sheets_in_game);
+			$count_character_sheets_in_game < count($this->character_sheets_in_game[$room]);
 			$count_character_sheets_in_game++) {
 	
-				if ($this->getCharacterSheetId($this->character_sheets_in_game[$count_character_sheets_in_game])
+				if ($this->getCharacterSheetId($this->character_sheets_in_game[$room][$count_character_sheets_in_game])
 					== $character_sheet_id) {
 
-					unset($this->character_sheets_in_game[$count_character_sheets_in_game]);
-					$this->character_sheets_in_game = array_values($this->character_sheets_in_game);
+					unset($this->character_sheets_in_game[$room][$count_character_sheets_in_game]);
+					$this->character_sheets_in_game[$room] = array_values($this->character_sheets_in_game[$room]);
 					return true;
 				}
 			}
@@ -257,23 +280,29 @@ class GameSessionTopic implements TopicInterface
 	}
 	
 	private function onUnSubscribeImportCharacterSheet (ConnectionInterface $connection, Topic $topic, WampRequest $request) {
+		$room = $request->getAttributes()->get('room');
 		
-		if (!empty($this->character_sheets_in_game)) {
-			$user_username = $this->clientManipulator->getClient($connection)->getUsername();
-			for ($count_character_sheets_in_game = 0;
-				$count_character_sheets_in_game < count($this->character_sheets_in_game);
+		if(self::isLastToDisconnecteInRoom($room)) {
+			unset($this->character_sheets_in_game[$room]);
+		}
+		else {
+			if (!empty($this->character_sheets_in_game[$room])) {
+				$user_username = $this->clientManipulator->getClient($connection)->getUsername();
+				for ($count_character_sheets_in_game = 0;
+				$count_character_sheets_in_game < count($this->character_sheets_in_game[$room]);
 				$count_character_sheets_in_game++) {
-					
-				if (self::getUserUsernameFromCharacterSheet($this->character_sheets_in_game[$count_character_sheets_in_game])
-					== $user_username) {
 						
-						self::deleteCharacterSheetInGame(self::getCharacterSheetId($this->character_sheets_in_game[$count_character_sheets_in_game]));
+					if (self::getCharacterSheetUserUsername($this->character_sheets_in_game[$room][$count_character_sheets_in_game])
+							== $user_username) {
+			
+								self::deleteCharacterSheetInGame($room, self::getCharacterSheetId($this->character_sheets_in_game[$room][$count_character_sheets_in_game]));
+							}
 				}
 			}
 		}
 	}
 	
-	private function getCharacterSheets ($user_id) {
+	private function getCharacterSheets ($room, $user_id) {
 		$character_sheets_stored = array();
 		$character_sheets_to_send = array();
 		
@@ -296,7 +325,7 @@ class GameSessionTopic implements TopicInterface
 				$count_character_sheets_stored < count($character_sheets_stored);
 				$count_character_sheets_stored++) {
 				
-				if (!self::isCharacterSheetInGame(self::getCharacterSheetId($character_sheets_stored[$count_character_sheets_stored]))) {
+				if (!self::isCharacterSheetInGame($room, self::getCharacterSheetId($character_sheets_stored[$count_character_sheets_stored]))) {
 					$character_sheets_to_send[] = $character_sheets_stored[$count_character_sheets_stored];
 				}
 			}
@@ -312,7 +341,7 @@ class GameSessionTopic implements TopicInterface
 		return $character_sheet['character_sheet_settings']['character_sheet_id'];
 	}
 	
-	private function getUserUsernameFromCharacterSheet ($character_sheet) {
+	private function getCharacterSheetUserUsername ($character_sheet) {
 		return $character_sheet['character_sheet_settings']['user_username'];
 	}
 	
@@ -1776,6 +1805,22 @@ class GameSessionTopic implements TopicInterface
 	}
 // 	FUNCTIONALITY CHARACTER SHEET
 
+	
+// 	OTHER
+	private function isFirstToConnecteInRoom($room) {
+		if(empty($this->users_conected[$room])) {
+			return true;
+		}
+		return false;
+	}
+	
+	private function isLastToDisconnecteInRoom($room) {
+		if(count($this->users_conected[$room]) > 1) {
+			return false;
+		}
+		return true;
+	}
+// 	OTHER
 	/**
 	 * Like RPC is will use to prefix the channel
 	 * @return string

@@ -34,11 +34,23 @@
 
 {% javascripts 
 	'../app/Resources/public/js/*'
-	'@GameSessionBundle/Resources/public/js/*' %}
+	'@GameSessionBundle/Resources/public/js/jquery-2.1.4.js' %}
     <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
+{# {% set rol_game_route = "@GameSessionBundle/Resources/public/js/#{rol_game.getName()}.js" %}#}
+{# {{ rol_game_route }}#}
+{# <script src="{{ asset(""~ rol_game_route ~ ".js" ) }}" type="text/javascript"></script>#}
+
+{# {% javascripts #}
+{# 	"@GameSessionBundle/Resources/public/js/{rol_game_route}.js" %}#}
+{#     <script src="{{ asset_url }}"></script>#}
+{# {% endjavascripts %}#}
+
+
+
 <script>
+var rol_game_name = "{{ rol_game.getName() }}";
 // 	GLOBAL VARIABLES FROM TWIG 
 	var user_username = "{{ app.user.username }}";
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
@@ -269,9 +281,13 @@
 
 				printCharacterSheet(character_sheets[count_character_sheets], option);
 			}
-			$("#"+user_username+" > #import_character_sheet > #request_character_sheet_button").remove();
-			$( "#"+user_username+" > #import_character_sheet" ).prepend(
-					"<button id='request_character_sheet_cancel_button'>Cancel</button>" );
+			switch(option) {
+			case "request":
+				$("#"+user_username+" > #import_character_sheet > #request_character_sheet_button").remove();
+				$( "#"+user_username+" > #import_character_sheet" ).prepend(
+						"<button id='request_character_sheet_cancel_button'>Cancel</button>" );
+				break;
+			}
 		}
 		else {
 			switch(option) {
