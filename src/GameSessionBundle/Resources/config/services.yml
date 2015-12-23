@@ -12,8 +12,10 @@ services:
         class: GameSessionBundle\Topic\GameSessionTopic
         tags:
             - { name: gos_web_socket.topic }
-        arguments: [ @gos_web_socket.websocket.client_manipulator ] #@gos_web_socket.client_storage
-
+        arguments: 
+            - @gos_web_socket.websocket.client_manipulator
+            - @doctrine.orm.entity_manager
+#           - @gos_web_socket.client_storage
 #    acme_hello.rpc_sample_service:
 #        class: GameSessionBundle\Rpc\AcmeRpc
 #        tags:

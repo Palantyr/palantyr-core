@@ -1,5 +1,5 @@
 <?php
-//GameSessionBundle\Entity\GameSesion.php
+//GameSessionBundle\Entity\GameSession.php
 namespace GameSessionBundle\Entity;
 
 class GameSession 

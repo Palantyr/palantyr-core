@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h3>Sorry, you're connected to the game session</h3>
+
+</br></br>
+
+<form action="{{ path('game_sessions') }}">
+	<input type="submit" value="Cancel">
+</form>
+{% endblock %}

@@ -209,6 +209,9 @@ var rol_game_name = "{{ rol_game.getName() }}";
 		case "delete_disconnected_user":
 			deleteUser(payload.user_username);
 			break;
+		case "already_connected":
+			alreadyConnected();
+			break;
 		}
 	}
 		
@@ -224,6 +227,11 @@ var rol_game_name = "{{ rol_game.getName() }}";
 
 	function deleteUser(user_username) {
 		$( "#other_users_conected > #"+user_username ).remove();
+	}
+
+	function alreadyConnected() {
+		$('body').empty();
+		$('body').append("<div><p>It is necessary to log into the game session.</p></div>");
 	}
 // 	CONNECTION
 	

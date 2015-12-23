@@ -5,10 +5,15 @@ use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+use Ratchet\MessageComponentInterface;
+use Doctrine\Bundle\DoctrineBundle\ManagerConfigurator;
+use Doctrine;
+use Doctrine\ORM\EntityManager;
 
 class GameSessionTopic implements TopicInterface
 {
 	protected $clientManipulator;
+	protected $em;
 
 	public $users_conected = array();
 	public $character_sheets_in_game = array();
@@ -16,9 +21,10 @@ class GameSessionTopic implements TopicInterface
 	/**
 	 * @param ClientManipulatorInterface $clientManipulator
 	 */
-	public function __construct(ClientManipulatorInterface $clientManipulator)
+	public function __construct(ClientManipulatorInterface $clientManipulator, EntityManager $em)
 	{
 		$this->clientManipulator = $clientManipulator;
+		$this->em = $em;
 	}
 
 	/**
@@ -31,6 +37,7 @@ class GameSessionTopic implements TopicInterface
 	 */
 	public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
+		self::onSuscribeConectionSecurity($connection, $topic, $request);
 		self::onSuscribeConnection($connection, $topic, $request);
 		self::onSuscribeChat($connection, $topic, $request);
 		self::onSuscribeImportCharacterSheet($connection, $topic, $request);
@@ -53,6 +60,7 @@ class GameSessionTopic implements TopicInterface
 		self::onUnSubscribeImportCharacterSheet($connection, $topic, $request);
 		self::onUnSubscribeChat($connection, $topic, $request);
 		self::onUnSubscribeConnection($connection, $topic, $request);
+		self::onUnSubscribeConnectionSecurity($connection, $topic, $request);
 	}
 	/**
 	 * This will receive any Publish requests for this topic.
@@ -129,6 +137,49 @@ class GameSessionTopic implements TopicInterface
 					);
 		}
 		$connection->close();
+	}
+	
+	private function onSuscribeConectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request) {
+		
+		$game_session_id = $request->getAttributes()->get('room');
+		$user_id = $this->clientManipulator->getClient($connection)->getId();
+		
+		$user_game_session_assotiation = $this->em->getRepository('GameSessionBundle:UserGameSessionAssociation')
+			->findByUserAndGameSession($user_id, $game_session_id);
+		$this->em->refresh($user_game_session_assotiation);
+
+		$allow_access = false;
+		$conected = false;
+		if ($user_game_session_assotiation) {
+			$allow_access = $user_game_session_assotiation->getAllowAccess();
+			$conected = $user_game_session_assotiation->getConected();
+		}
+		
+		if ($allow_access === false || $conected === true) {
+			$connection->event($topic->getId(), [
+					'section' => "connection",
+					'option' => "already_connected"]);
+			$connection->close();
+		}
+		else if ($allow_access === true) {
+			$user_game_session_assotiation->setAllowAccess(false);
+			$user_game_session_assotiation->setConected(true);
+			$this->em->persist($user_game_session_assotiation);
+			$this->em->flush();
+		}
+	}
+	
+	private function onUnSubscribeConnectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request) {
+
+		$game_session_id = $request->getAttributes()->get('room');
+		$user_id = $this->clientManipulator->getClient($connection)->getId();
+	
+		$user_game_session_assotiation = $this->em->getRepository('GameSessionBundle:UserGameSessionAssociation')
+			->findByUserAndGameSession($user_id, $game_session_id);
+			
+		$user_game_session_assotiation->setConected(false);
+		$this->em->persist($user_game_session_assotiation);
+		$this->em->flush();
 	}
 // 	CONNECTION
 	

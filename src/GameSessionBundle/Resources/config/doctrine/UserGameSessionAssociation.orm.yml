@@ -1,0 +1,18 @@
+# src/GameSessionBundle/Resources/config/doctrine/UserGameSessionAssociation.orm.yml
+GameSessionBundle\Entity\UserGameSessionAssociation:
+    type: entity
+    repositoryClass: GameSessionBundle\Entity\UserGameSessionAssociationRepository
+    table: user_game_session_association
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        user_id:
+            type: integer
+        game_session_id:
+            type: integer
+        allow_access: 
+            type: boolean
+        conected:
+            type: boolean

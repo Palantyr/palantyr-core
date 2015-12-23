@@ -6,9 +6,17 @@ create_game_session:
     path:     /game/createGameSesion
     defaults: { _controller: GameSessionBundle:Main:createGameSession }
 
-join_session:
-    path:     /game/session/{session_id}
-    defaults: { _controller: GameSessionBundle:Main:joinSession }
+join_game_session:
+    path:     /game/session/{game_session_id}
+    defaults: { _controller: GameSessionBundle:Main:joinGameSession }
+    
+login_game_session:
+    path:     /game/session/login/{game_session_id}
+    defaults: { _controller: GameSessionBundle:Main:loginGameSession }
+    
+login_game_session_rejected:
+    path:     /game/session/login/rejected/{game_session_id}
+    defaults: { _controller: GameSessionBundle:Main:loginGameSessionRejected }
 
 game_sessions:
     path:     /game/sessions

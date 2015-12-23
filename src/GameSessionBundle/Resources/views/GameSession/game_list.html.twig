@@ -26,7 +26,7 @@
 		<td>{{ game_session_actives['user_username'] }}</td>
 		<td>{{ game_session_actives['language_name'] }}</td>
 		<td>
-			<form action="{{ path('join_session', {'session_id': game_session_actives['array_gameSession'].getId()}) }}">
+			<form action="{{ path('join_game_session', {'game_session_id': game_session_actives['array_gameSession'].getId()}) }}">
 	    		<input type="submit" value="Join">
 			</form>	
 		</td>
