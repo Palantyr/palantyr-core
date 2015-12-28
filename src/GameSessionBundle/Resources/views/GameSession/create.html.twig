@@ -1,27 +1,69 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+ <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+{% endblock %}
+
 {% block body %}
-<h1>Create Game Sesion</h1>
+<div class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		{# Brand and toggle get grouped for better mobile display #}
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Create Game Sesion</a>
+		</div>
+
+		{# Collect the nav links, forms, and other content for toggling #}
+		<div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
+			{{ knp_menu_render('IndexBundle:MenuBuilder:mainMenu', {'currentClass': 'active', 'template': 'IndexBundle:Menu:knp_menu.html.twig'}) }}
+			{{ knp_menu_render('IndexBundle:MenuBuilder:userMenu', {'currentClass': 'active', 'template': 'IndexBundle:Menu:knp_menu.html.twig'}) }}
+		</div>
+	</div>
+</div>
+  
+<div class="content" style="margin-top: 60px;">
+	<h1>Create Game Sesion</h1>
+	
+	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_create_game_session', 'novalidate': 'novalidate'} }) }}
+		{{ form_row(form.name) }}
+		{{ form_row(form.password) }}
+		{{ form_row(form.rol_game) }}
+		{{ form_row(form.language) }}
+		{{ form_row(form.comments) }}
+	{{ form_end(form) }}
+	
+	</br></br>
+	
+	<form action="{{ path('game_session_homepage') }}">
+		<input type="submit" value="Cancel">
+	</form>
+</div>	 
+	
+{% endblock %}
 
 
-{{ form_start(form, {'method': 'POST'}) }}
+{% block javascripts %}
 
-{{ form_row(form.name) }}
-</br>
-{{ form_row(form.password) }}
-</br>
-{{ form_row(form.rol_game) }}
-</br>
-{{ form_row(form.language) }}
-</br>
-{{ form_row(form.comments) }}
-</br>
-{{ form_row(form.Start) }}
-{{ form_end(form) }}
+{% stylesheets '%kernel.root_dir%/../vendor/twitter/bootstrap/less/bootstrap.less' %}
 
-</br></br>
+{% endstylesheets %}
 
-<form action="{{ path('game_session_homepage') }}">
-	<input type="submit" value="Cancel">
-</form>
+{% javascripts 
+	'../vendor/components/jquery/jquery.js' 
+	'@GameSessionBundle/Resources/public/js/* '%}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script src="{{ asset('js/bootstrap.js') }}"></script>
+
+<script>
+	$( "#form_create_game_session #form_actions_cancel" ).click(function(){
+		path('game_session_homepage')
+	});
+</script>
+
 {% endblock %}

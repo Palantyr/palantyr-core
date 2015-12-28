@@ -30,7 +30,7 @@ class MainController extends Controller
     {
     	$game_session = new GameSession();
     	$game_session->setName("Epic Game");
-    
+    	
     	$form = $this->createFormBuilder($game_session)
     	->add('name', 'text')
     	->add('password', 'password')
@@ -54,7 +54,11 @@ class MainController extends Controller
 			))
     	->add('comments', 'textarea', array(
         	'required' => false))
-    	->add('Start', 'submit')
+    	->add('actions', 'form_actions', [
+    			'buttons' => [
+    					'save' => ['type' => 'submit', 'options' => ['label' => 'Start']],
+    			]
+    	])
     	->getForm();
     	
     	$form->handleRequest($request);

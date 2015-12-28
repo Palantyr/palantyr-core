@@ -23,6 +23,8 @@ class AppKernel extends Kernel
             new GameSessionBundle\GameSessionBundle(),
         	new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
         	new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
+        	new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+        	new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new RulesBundle\RulesBundle(),
         );
 

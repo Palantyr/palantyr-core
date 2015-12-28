@@ -1,5 +1,5 @@
 # GameSessionBundle/Resources/config/validation.yml
-GameSessionBundle\Entity\GameSesion:
+GameSessionBundle\Entity\GameSession:
     properties:
         id:
             - IsNull: ~
@@ -25,15 +25,13 @@ GameSessionBundle\Entity\GameSesion:
             - NotBlank: ~
         language:
             - NotBlank: ~
-        standard_view:
-            - NotBlank: ~
         comments:
             - Length:
                 max: 200
                 maxMessage: "El comentario de la sesión cannot be longer than {{ limit }} characters"
                 
 
-GameSessionBundle\Entity\PasswordGameSesion:
+GameSessionBundle\Entity\PasswordGameSession:
     properties:
         password:
             - NotBlank: ~

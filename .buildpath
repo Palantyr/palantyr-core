@@ -20,8 +20,10 @@
 	<buildpathentry kind="src" path="vendor/doctrine/doctrine-cache-bundle"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs"/>
 	<buildpathentry kind="src" path="vendor/jdorn/sql-formatter/lib"/>
+	<buildpathentry kind="src" path="vendor/knplabs/knp-menu/src/Knp/Menu"/>
 	<buildpathentry kind="src" path="src"/>
 	<buildpathentry kind="src" path="vendor/gos/websocket-client"/>
+	<buildpathentry excluding="lib/" kind="src" path="vendor/oyejorge/less.php"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/Resources/stubs"/>
 	<buildpathentry kind="src" path="vendor/incenteev/composer-parameter-handler"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/ProxyManager"/>
@@ -33,12 +35,14 @@
 	<buildpathentry kind="src" path="vendor/sensio/distribution-bundle"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/Twig"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/Swiftmailer"/>
+	<buildpathentry kind="src" path="vendor/oyejorge/less.php/lib"/>
 	<buildpathentry kind="src" path="vendor/friendsofsymfony/user-bundle"/>
 	<buildpathentry kind="src" path="vendor/monolog/monolog/src/Monolog"/>
 	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib"/>
 	<buildpathentry kind="src" path="vendor/symfony/monolog-bundle"/>
 	<buildpathentry kind="src" path="vendor/twig/twig/lib"/>
 	<buildpathentry kind="src" path="vendor/swiftmailer/swiftmailer/lib"/>
+	<buildpathentry kind="src" path="vendor/braincrafted/bootstrap-bundle"/>
 	<buildpathentry kind="src" path="vendor/evenement/evenement/src"/>
 	<buildpathentry kind="src" path="vendor/gos/pnctl-event-loop-emitter/src"/>
 	<buildpathentry kind="src" path="vendor/composer"/>
@@ -51,4 +55,5 @@
 	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib"/>
 	<buildpathentry kind="src" path="vendor/kriswallsmith/assetic/src"/>
 	<buildpathentry kind="src" path="vendor/doctrine/common/lib/Doctrine/Common"/>
+	<buildpathentry kind="src" path="vendor/knplabs/knp-menu-bundle"/>
 </buildpath>

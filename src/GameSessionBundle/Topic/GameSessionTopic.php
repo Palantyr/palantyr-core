@@ -146,7 +146,10 @@ class GameSessionTopic implements TopicInterface
 		
 		$user_game_session_assotiation = $this->em->getRepository('GameSessionBundle:UserGameSessionAssociation')
 			->findByUserAndGameSession($user_id, $game_session_id);
-		$this->em->refresh($user_game_session_assotiation);
+		
+		if ($this->em->refresh($user_game_session_assotiation) != null) {
+			$this->em->refresh($user_game_session_assotiation);
+		}
 
 		$allow_access = false;
 		$conected = false;

@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use GameSessionBundle\Entity\RolGame;
 use GameSessionBundle\Entity\Language;
 use GameSessionBundle\Entity\GameSession;
-use Symfony\Component\BrowserKit\Response;
-use FOS\UserBundle\Model\UserManager as UserManager;
 use FOS\UserBundle\Util\UserManipulator as UserManipulator;
 
 
@@ -36,34 +34,39 @@ class AdministrationController extends Controller
     		->add('delete_languages', 'submit', array('label' => 'Delete Languages'))
     		->add('delete_rol_games', 'submit', array('label' => 'Delete Rol Games'))
     		->add('delete_game_sessions', 'submit', array('label' => 'Delete Game Sessions'))
+    		->add('delete_user_game_sessions_association', 'submit', array('label' => 'Delete User Game Sessions Association'))
     		->getForm();
     	
     	$form->handleRequest($request);
     	
     	$petition_text = "";
+    	
     	if ($form->isValid()) {
     	   	if ($form->get('add_all_to_test')->isClicked()) {
-    	   		$this->addLanguages();
-    	   		$this->addRolGames();
+    	   		self::addLanguages();
+    	   		self::addRolGames();
     		}
     		elseif ($form->get('add_languages')->isClicked()) {
-				$this->addLanguages();
+				self::addLanguages();
     		}
     		elseif ($form->get('add_rol_games')->isClicked()) {
-				$this->addRolGames();
+				self::addRolGames();
     		}
     		elseif ($form->get('delete_all_to_test')->isClicked()) {
-    			$this->deleteLanguages();
-    			$this->deleteRolGames();
+    			self::deleteLanguages();
+    			self::deleteRolGames();
     		}
     		elseif ($form->get('delete_languages')->isClicked()) {
-    			 $this->deleteLanguages();
+    			 self::deleteLanguages();
     		}
     		elseif ($form->get('delete_rol_games')->isClicked()) {
-    			 $this->deleteRolGames();
+    			 self::deleteRolGames();
     		}
     		elseif ($form->get('delete_game_sessions')->isClicked()) {
-    			$this->deleteGameSessions();
+    			self::deleteGameSessions();
+    		}
+    		elseif ($form->get('delete_user_game_sessions_association')->isClicked()) {
+    			self::deleteUserGameSessionAssociation();
     		}
     		$petition_text = "Operation completed successfully";
     	}
@@ -136,6 +139,20 @@ class AdministrationController extends Controller
     	$game_sessions_count = count($game_sessions);
     	for ($i = 0 ; $i < $game_sessions_count ; $i++) {
     		$em->remove($game_sessions[$i]);
+    	}
+    	$em->flush();
+    }
+    
+    public function deleteUserGameSessionAssociation () {
+    	$em = $this->getDoctrine()->getEntityManager();
+    	
+    	$user_game_session_association = $this->getDoctrine()
+    	->getRepository('GameSessionBundle:UserGameSessionAssociation')
+    	->findAll();
+    	
+    	$user_game_session_association_count = count($user_game_session_association);
+    	for ($i = 0 ; $i < $user_game_session_association_count ; $i++) {
+    		$em->remove($user_game_session_association[$i]);
     	}
     	$em->flush();
     }
