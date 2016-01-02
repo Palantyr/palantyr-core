@@ -2,10 +2,6 @@
 // UserBundle/Form/Model/Registration.php
 namespace UserBundle\Form\Model;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
-//use UserBundle\Entity\User;
-
 //Sin uso ahora mismo.
 class Registration
 {

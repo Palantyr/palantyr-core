@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Palantir{% endblock %}
+
 {% block body %}
 
     <h1>Welcome to Palantir project,
@@ -7,39 +9,12 @@
     	{{ app.user.username }}
 	{% endif %}
     </h1>
-    
-    <br>
-    
-    {% if app.user == false %}
-        <form action="{{ path('fos_user_registration_register') }}">
-			<input type="submit" value="Register">
-		</form>
-		
-	    <br>
-	    
-	    <form action="{{ path('fos_user_security_login') }}">
-			<input type="submit" value="Login">
-		</form>
-	{% else %}
-    	<form action="{{ path('fos_user_security_logout') }}">
-			<input type="submit" value="Logout">
-		</form>
-	{% endif %}
-	
-    <br>
-    
-    <form action="{{ path('game_session_homepage') }}">
-		<input type="submit" value="Game">
-	</form>
 {% endblock %}
 
 {% block javascripts %}
 
-{% javascripts 
-	'../vendor/components/jquery/jquery.js' 
-	'@GameSessionBundle/Resources/public/js/* '%}
-    <script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-<script src="{{ asset('js/bootstrap.js') }}"></script>
+	{% javascripts '@GameSessionBundle/Resources/public/js/* '%}
+	    <script src="{{ asset_url }}"></script>
+	{% endjavascripts %}
 
 {% endblock %}

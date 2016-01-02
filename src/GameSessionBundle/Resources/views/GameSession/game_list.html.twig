@@ -1,53 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Games Sessions</h1>
-
-</br>
-
-<form action="{{ path('game_session_homepage') }}">
-	<input type="submit" value="Return">
-</form>
-
-</br>
-
-<table>
-	<tr>
-		<td>Name Game</td>
-		<td>Rol Game</td>
-		<td>Master</td>
-		<td>Language</td>
-		<td>Access</td>
-	</tr>
-{% for game_session_actives in game_sessions_actives %}
-    <tr>
-		<td>{{ game_session_actives['array_gameSession'].getName() }}</td>
-		<td>{{ game_session_actives['rolGame_name'] }}</td>
-		<td>{{ game_session_actives['user_username'] }}</td>
-		<td>{{ game_session_actives['language_name'] }}</td>
-		<td>
-			<form action="{{ path('join_game_session', {'game_session_id': game_session_actives['array_gameSession'].getId()}) }}">
-	    		<input type="submit" value="Join">
-			</form>	
-		</td>
-    </tr>
-{% endfor %}
-</table>
-
-
-{# 
-{% for game_session_with_owner in game_sessions_with_owner %}
-	<li>{{ game_session_with_owner['array_gameSession'].getName() }} &nbsp;
-		{{ game_session_with_owner['array_gameSession'].getRolGame() }} &nbsp;
-		{{ game_session_with_owner['username'] }} &nbsp;
-		<form action="{{ path('join_session', {'session_id': game_session_with_owner['array_gameSession'].getId()}) }}">
-    		<input type="submit" value="Join">
-		</form>	
-	</li>
+	<h1>Games Sessions</h1>
 	
 	</br>
-{% endfor %}
-#}
-
+	
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Name Game</th>
+					<th>Rol Game</th>
+					<th>Gamemaster</th>
+					<th>Language</th>
+					<th>Access</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for game_session_actives in game_sessions_actives %}
+				    <tr>
+						<td>{{ game_session_actives['array_gameSession'].getName() }}</td>
+						<td>{{ game_session_actives['rolGame_name'] }}</td>
+						<td>{{ game_session_actives['user_username'] }}</td>
+						<td>{{ game_session_actives['language_name'] }}</td>
+						<td>
+							<form action="{{ path('join_game_session', {'game_session_id': game_session_actives['array_gameSession'].getId()}) }}">
+					    		<input type="submit" value="Join">
+							</form>	
+						</td>
+				    </tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
 {% endblock %}

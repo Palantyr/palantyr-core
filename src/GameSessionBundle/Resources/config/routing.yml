@@ -1,7 +1,3 @@
-game_session_homepage:
-    path:     /game
-    defaults: { _controller: GameSessionBundle:Main:index }
-
 create_game_session:
     path:     /game/createGameSesion
     defaults: { _controller: GameSessionBundle:Main:createGameSession }

@@ -11,12 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use GameSessionBundle\Entity\UserGameSessionAssociation;
 
 class MainController extends Controller
-{
-    public function indexAction()
-    {
-        return $this->render('GameSessionBundle:GameSession:main_menu.html.twig');
-    }
-    
+{ 
     public function addGameSession($game_session) 
     {
     	$game_session->setOwnerUser($this->getUser()->getId());
