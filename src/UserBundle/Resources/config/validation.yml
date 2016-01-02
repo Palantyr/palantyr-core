@@ -1,75 +1,91 @@
 # UserBundle/Resources/config/validation.yml
 UserBundle\Entity\User:
-    #constraints:
-        #- Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
-            #fields: email
-            #message: "(E) El correo ya está en uso, inserte uno nuevo."
-        #- Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
-            #fields: username
-            #message: "(E) El nombre de usuario ya está en uso."
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
+            fields: email
+            message: "The email is already in use"
+            groups: [My_registration, My_profile]
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
+            fields: username
+            message: "The username is already in use"
+            groups: [My_registration, My_profile]
     properties:
         id:
             - IsNull: ~
-        #username:
-            #- NotBlank: ~
-            #- Length:
-                #min: 5
-                #max: 30
-                #minMessage: "El nombre de usuario must be at least {{ limit }} characters long"
-                #maxMessage: "El nombre de usuario cannot be longer than {{ limit }} characters"
-                #groups: [My_registration]
+        username:
+            - NotBlank:
+                message: Username should not be blank
+                groups: [My_registration]
+            - Length:
+                min: 5
+                max: 30
+                minMessage: "Username must be at least {{ limit }} characters long"
+                maxMessage: "Username cannot be longer than {{ limit }} characters"
+                groups: [My_registration, My_profile]
         real_name:
-            - NotBlank: ~
+            - NotBlank:
+                message: Real name should not be blank
+                groups: [My_registration, My_profile]
             - Length:
                 min: 2
                 max: 255
-                minMessage: "Debe rellenar su nombre must be at least {{ limit }} characters long"
-                maxMessage: "Su nombre cannot be longer than {{ limit }} characters"
-                groups: [My_registration]
+                minMessage: "Real name must be at least {{ limit }} characters long"
+                maxMessage: "Real name cannot be longer than {{ limit }} characters"
+                groups: [My_registration, My_profile]
         real_surname:
-            - NotBlank: ~
+            - NotBlank:
+                message: Real surname should not be blank
+                groups: [My_registration, My_profile]
             - Length:
                 min: 2
                 max: 255
-                minMessage: "Debe rellenar sus apellidos must be at least {{ limit }} characters long"
-                maxMessage: "Sus apellidos cannot be longer than {{ limit }} characters"
-                groups: [My_registration]
-        #email:
-            #- NotBlank: ~
-            #- Email:
-                #message: The email "{{ value }}" is not a valid email.
-                #checkMX: true
-            #- Length:
-                #min: 1
-                #max: 60
-                #minMessage: "Debe rellenar su correo electrónico must be at least {{ limit }} characters long"
-                #maxMessage: "Su correo electrónico cannot be longer than {{ limit }} characters"
-        plainPassword:
-            - NotBlank: ~
+                minMessage: "Real surname must be at least {{ limit }} characters long"
+                maxMessage: "Real surname cannot be longer than {{ limit }} characters"
+                groups: [My_registration, My_profile]
+        email:
+            - NotBlank:
+                message: Email should not be blank
+                groups: [My_registration, My_profile]
+            - Email:
+                message: The email "{{ value }}" is not a valid email.
+                checkMX: true
+                groups: [My_registration, My_profile]
             - Length:
-                min: 6
+                min: 4
+                max: 60
+                minMessage: "Email must be at least {{ limit }} characters long"
+                maxMessage: "Email cannot be longer than {{ limit }} characters"
+                groups: [My_registration, My_profile]
+        plainPassword:
+            - NotBlank:
+                message: Password Should not be blank
+                groups: [My_registration]
+            - Length:
+                min: 6 
                 max: 4096
-                minMessage: "Your password must be at least {{ limit }} characters long"
-                maxMessage: "La contraseña de la sesión cannot be longer than {{ limit }} characters"
-                groups: [My_registration]   
+                minMessage: "Password must be at least {{ limit }} characters long"
+                maxMessage: "Password cannot be longer than {{ limit }} characters"
+                groups: [My_profile, My_registration]
+            - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
+                message: Wrong value for your current password
+                groups: [My_profile]
         #registration_date:
             #- IsNull: ~
         #last_login:
             #- IsNull: ~
         terms_accepted:
-            - NotBlank: ~
             - IsTrue:
-                message: Debes aceptar los términos y condiciones
+                message: You must agree to the terms and conditions to register
                 groups: [My_registration]
             
-UserBundle\Form\Model\Registration:
-    properties:
-        user:
-            - Type:
-                type: UserBundle\Entity\User
-                message: "The value {{ value }} is not a valid {{ type }}."
-            - Valid: ~
-        terms_accepted:
-            - NotBlank: ~
-            - 'True':
-                message: Debes aceptar los términos y condiciones
+#UserBundle\Form\Model\Registration:
+#    properties:
+#        user:
+#            - Type:
+#                type: UserBundle\Entity\User
+#                message: "The value {{ value }} is not a valid {{ type }}."
+#            - Valid: ~
+#        terms_accepted:
+#            - NotBlank: ~
+#            - 'True':
+#                message: Debes aceptar los términos y condiciones

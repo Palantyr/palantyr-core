@@ -36,7 +36,7 @@ class MenuBuilder extends ContainerAware
 		$menu->addChild('User', array('label' => 'Hi '.$user->getUsername().''))
 			->setAttribute('dropdown', true)
 			->setAttribute('icon', 'fa fa-user');
-		$menu['User']->addChild('Edit profile', array('route' => 'app_index'))
+		$menu['User']->addChild('View profile', array('route' => 'fos_user_profile_show'))
 			->setAttribute('icon', 'fa fa-edit');
 		$menu['User']->addChild('Logout', array('route' => 'fos_user_security_logout'))
 			->setAttribute('icon', 'fa fa-edit');

@@ -120,7 +120,11 @@ fos_user:
     registration:
         form:
             type: user_registration
-            validation_groups: [ My_registration, Registration, Default ]
+            validation_groups: [ My_registration, Default ]
+#    profile:
+#        form:
+#            type: user_profile
+#            validation_groups: [ Default ]
           
 # Web Socket
 gos_web_socket:

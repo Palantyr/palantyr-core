@@ -6,3 +6,9 @@ services:
         class: UserBundle\Form\Type\RegistrationType
         tags:
             - { name: form.type, alias: user_registration }
+            
+    user.profile.form.type:
+        class: UserBundle\Form\Type\ProfileType
+#        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: user_profile }

@@ -15,3 +15,7 @@
 #account_create:
     #path:     /register/create
     #defaults: { _controller: UserBundle:Account:create }
+    
+#profile:
+#    path:     /profile
+#    defaults: { _controller: UserBundle:Account:register }
