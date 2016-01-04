@@ -8,5 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     '01b872096dad055849387e42d41a176d' => $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
     'f0cfed1a23b444183024a3c7df93aafa' => $vendorDir . '/kriswallsmith/assetic/src/functions.php',
-    '41c1f482e95e048ac21560f14c0e11f3' => $vendorDir . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/functions.php',
+    '1d5fba5693ed1fb2e1169bac43e6cfe8' => $vendorDir . '/paragonie/random_compat/lib/random.php',
+    '05669301f06448944ce5eb260126f84e' => $vendorDir . '/ircmaxell/password-compat/lib/password.php',
+    'df5fa0cc77a97953513f3411f17f1179' => $vendorDir . '/symfony/polyfill-php70/bootstrap.php',
+    '03d83d8496ed2ba16ae326b097a7a1a9' => $vendorDir . '/symfony/polyfill-php56/bootstrap.php',
+    'ca91ee2800c2909ce186e2a197b435d8' => $vendorDir . '/symfony/polyfill-php55/bootstrap.php',
+    '96f607199120955f570abc9d23b3ca96' => $vendorDir . '/symfony/polyfill-php54/bootstrap.php',
+    'f5b3ada715b2e75e9a702d70d0eeca62' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
+    'c66d02e2ecb1205f357cbc98003bf55f' => $vendorDir . '/symfony/polyfill-intl-icu/bootstrap.php',
 );

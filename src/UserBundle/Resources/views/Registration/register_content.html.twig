@@ -1,0 +1,13 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+	{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'style': 'horizontal', 'attr': {'class': 'fos_user_registration_register', novalidate: 'novalidate'}}) }}
+	    {{ form_row(form.username, { 'label': 'Username', 'label_col': 2, 'widget_col': 3}) }}
+	    {{ form_row(form.email, { 'label': 'Email', 'label_col': 2, 'widget_col': 5}) }}
+	    {{ form_row(form.plainPassword.first, { 'label': 'Password', 'label_col': 2, 'widget_col': 2}) }}
+	    {{ form_row(form.plainPassword.second, { 'label': 'Password Confirmation', 'label_col': 2, 'widget_col': 2}) }}
+	    {{ form_row(form.real_name, { 'label': 'Real name', 'label_col': 2, 'widget_col': 3}) }}
+	    {{ form_row(form.real_surname, { 'label': 'Real surname', 'label_col': 2, 'widget_col': 3}) }}
+	    {{ form_row(form.termsAccepted, { 'label': 'Terms accepted'}) }}
+	    {{ form_row(form.submit_button)}}
+		{{ form_widget(form) }}
+	{{ form_end(form) }}

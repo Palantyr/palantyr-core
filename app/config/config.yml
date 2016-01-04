@@ -33,6 +33,7 @@ framework:
         handler_id: session.handler.pdo
     fragments:       ~
     http_method_override: true
+    translator: ~
 
 # Twig
 twig:
@@ -119,12 +120,16 @@ fos_user:
     user_class: UserBundle\Entity\User
     registration:
         form:
-            type: user_registration
+            type: UserBundle\Form\Type\RegistrationType
             validation_groups: [ My_registration, Default ]
-#    profile:
-#        form:
-#            type: user_profile
-#            validation_groups: [ Default ]
+    profile:
+        form:
+            type: UserBundle\Form\Type\ProfileType
+            validation_groups: [ My_profile, Default ]
+    change_password:
+        form:
+            type: UserBundle\Form\Type\ChangePasswordType
+            validation_groups: [ My_change_password, Default ]
           
 # Web Socket
 gos_web_socket:

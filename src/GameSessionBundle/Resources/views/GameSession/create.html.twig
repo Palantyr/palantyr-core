@@ -3,18 +3,15 @@
 {% block title %}Create game Session{% endblock %}
 
 {% block body %}
-  
-	<div class="content">
-		<h1>Create Game Sesion</h1>
-		
-		{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_create_game_session', 'novalidate': 'novalidate'} }) }}
-			{{ form_row(form.name) }}
-			{{ form_row(form.password) }}
-			{{ form_row(form.rol_game) }}
-			{{ form_row(form.language) }}
-			{{ form_row(form.comments) }}
-		{{ form_end(form) }}
-	</div>
+	<h1>Create Game Sesion</h1>
+	
+	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_create_game_session', 'novalidate': 'novalidate'} }) }}
+		{{ form_row(form.name) }}
+		{{ form_row(form.password) }}
+		{{ form_row(form.rol_game) }}
+		{{ form_row(form.language) }}
+		{{ form_row(form.comments) }}
+	{{ form_end(form) }}
 	
 {% endblock %}
 

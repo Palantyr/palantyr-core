@@ -11,7 +11,8 @@ UserBundle\Entity\User:
             groups: [My_registration, My_profile]
     properties:
         id:
-            - IsNull: ~
+            - IsNull:
+                groups: [My_registration]
         username:
             - NotBlank:
                 message: Username should not be blank
@@ -59,16 +60,13 @@ UserBundle\Entity\User:
         plainPassword:
             - NotBlank:
                 message: Password Should not be blank
-                groups: [My_registration]
+                groups: [My_registration, My_change_password]
             - Length:
                 min: 6 
                 max: 4096
                 minMessage: "Password must be at least {{ limit }} characters long"
                 maxMessage: "Password cannot be longer than {{ limit }} characters"
-                groups: [My_profile, My_registration]
-            - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
-                message: Wrong value for your current password
-                groups: [My_profile]
+                groups: [My_registration, My_change_password]
         #registration_date:
             #- IsNull: ~
         #last_login:

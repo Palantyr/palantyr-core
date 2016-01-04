@@ -12,14 +12,21 @@ class ProfileType extends AbstractType
     {
 		$builder->add('real_name', 'text');
 		$builder->add('real_surname', 'text');
+		$builder->add('submit_button', 'submit', array(
+				'attr' => array('class' => 'submit'),
+				'label' => "Edit",
+				'attr' => [
+						'value' => "profile.edit.submit"
+				]
+		));
     }
     
     public function getParent()
     {
-    	return 'fos_user_profile';
+    	return 'FOS\UserBundle\Form\Type\ProfileFormType';
     }
     
-    public function getName()
+    public function getBlockPrefix()
     {
     	return 'user_profile';
     }

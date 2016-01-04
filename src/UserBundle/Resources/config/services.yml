@@ -12,3 +12,8 @@ services:
 #        arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: user_profile }
+            
+    user.change_password.form.type:
+        class: UserBundle\Form\Type\ChangePasswordType
+        tags:
+            - { name: form.type, alias: user_change_password }

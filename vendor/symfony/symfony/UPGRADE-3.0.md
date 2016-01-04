@@ -11,7 +11,7 @@ UPGRADE FROM 2.x to 3.0
    | `registerNamespaces()` | `addPrefixes()`
    | `registerPrefixes()` | `addPrefixes()`
    | `registerNamespaces()` | `addPrefix()`
-   | `registerPrefixes()` | `addPrefix()`
+   | `registerPrefix()` | `addPrefix()`
    | `getNamespaces()` | `getPrefixes()`
    | `getNamespaceFallbacks()` | `getFallbackDirs()`
    | `getPrefixFallbacks()` | `getFallbackDirs()`
@@ -124,6 +124,24 @@ UPGRADE FROM 2.x to 3.0
    ));
    ```
 
+ * The option "`virtual`" was renamed to "`inherit_data`".
+
+   Before:
+
+   ```php
+   $builder->add('address', 'form', array(
+       'virtual' => true,
+   ));
+   ```
+
+   After:
+
+   ```php
+   $builder->add('address', 'form', array(
+       'inherit_data' => true,
+   ));
+   ```
+
  * The method `AbstractType::setDefaultOptions(OptionsResolverInterface $resolver)` and
    `AbstractTypeExtension::setDefaultOptions(OptionsResolverInterface $resolver)` have been
    renamed. You should use `AbstractType::configureOptions(OptionsResolver $resolver)` and
@@ -205,24 +223,6 @@ UPGRADE FROM 2.x to 3.0
    });
    ```
 
- * The option "`virtual`" was renamed to "`inherit_data`".
-
-   Before:
-
-   ```php
-   $builder->add('address', 'form', array(
-       'virtual' => true,
-   ));
-   ```
-
-   After:
-
-   ```php
-   $builder->add('address', 'form', array(
-       'inherit_data' => true,
-   ));
-   ```
-
  * The class `VirtualFormAwareIterator` was renamed to `InheritDataAwareIterator`.
 
    Before:
@@ -264,6 +264,12 @@ UPGRADE FROM 2.x to 3.0
        // ...
    }
    ```
+   
+ * The option "options" of the CollectionType has been renamed to "entry_options".
+
+ * The option "type" of the CollectionType has been renamed to "entry_type".
+   As a value for the option you must provide the fully-qualified class name (FQCN) 
+   now as well.   
 
  * The `FormIntegrationTestCase` and `FormPerformanceTestCase` classes were moved form the `Symfony\Component\Form\Tests` namespace to the `Symfony\Component\Form\Test` namespace.
 
@@ -311,6 +317,12 @@ UPGRADE FROM 2.x to 3.0
 
  * The `Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList` class has been removed in
    favor of `Symfony\Component\Form\ChoiceList\ArrayChoiceList`.
+   
+ * The `TimezoneType::getTimezones()` method was removed. You should not use 
+   this method.
+
+ * The `Symfony\Component\Form\ChoiceList\ArrayKeyChoiceList` class has been removed in
+   favor of `Symfony\Component\Form\ChoiceList\ArrayChoiceList`.
 
 ### FrameworkBundle
 
@@ -353,6 +365,42 @@ UPGRADE FROM 2.x to 3.0
        }
    }
    ```
+   
+ * In Symfony 2.7 a small BC break was introduced with the new choices_as_values
+   option. In order to have the choice values populated to the html value attribute
+   you had to define the choice_value option. This is now not any more needed.
+ 
+   Before:
+
+   ```php
+   $form->add('status', 'choice', array(
+       'choices' => array(
+           'Enabled' => Status::ENABLED,
+           'Disabled' => Status::DISABLED,
+           'Ignored' => Status::IGNORED,
+       ),
+       // choices_as_values defaults to true in Symfony 3.0
+       // and setting it to anything else is deprecated as of 3.0
+       'choices_as_values' => true,
+       // important if you rely on your option value attribute (e.g. for JavaScript)
+       // this will keep the same functionality as before
+       'choice_value' => function ($choice) {
+           return $choice;
+       },
+   ));
+   ```
+   
+   After:
+   
+   ```php
+   $form->add('status', ChoiceType::class, array(
+       'choices' => array(
+           'Enabled' => Status::ENABLED,
+           'Disabled' => Status::DISABLED,
+           'Ignored' => Status::IGNORED,
+       )
+   ));
+   ```   
 
  * The `request` service was removed. You must inject the `request_stack`
    service instead.
@@ -600,6 +648,131 @@ UPGRADE FROM 2.x to 3.0
 ### Security
 
  * The `Resources/` directory was moved to `Core/Resources/`
+
+ * The `key` settings of `anonymous`, `remember_me` and `http_digest` are
+   renamed to `secret`.
+
+   Before:
+
+   ```yaml
+   security:
+       # ...
+       firewalls:
+           default:
+               # ...
+               anonymous: { key: "%secret%" }
+               remember_me:
+                   key: "%secret%"
+               http_digest:
+                   key: "%secret%"
+   ```
+
+   ```xml
+   <!-- ... -->
+   <config>
+       <!-- ... -->
+
+       <firewall>
+           <!-- ... -->
+
+           <anonymous key="%secret%"/>
+           <remember-me key="%secret%"/>
+           <http-digest key="%secret%"/>
+       </firewall>
+   </config>
+   ```
+
+   ```php
+   // ...
+   $container->loadFromExtension('security', array(
+       // ...
+       'firewalls' => array(
+           // ...
+           'anonymous' => array('key' => '%secret%'),
+           'remember_me' => array('key' => '%secret%'),
+           'http_digest' => array('key' => '%secret%'),
+       ),
+   ));
+   ```
+
+   After:
+
+   ```yaml
+   security:
+       # ...
+       firewalls:
+           default:
+               # ...
+               anonymous: { secret: "%secret%" }
+               remember_me:
+                   secret: "%secret%"
+               http_digest:
+                   secret: "%secret%"
+   ```
+
+   ```xml
+   <!-- ... -->
+   <config>
+       <!-- ... -->
+
+       <firewall>
+           <!-- ... -->
+
+           <anonymous secret="%secret%"/>
+           <remember-me secret="%secret%"/>
+           <http-digest secret="%secret%"/>
+       </firewall>
+   </config>
+   ```
+
+   ```php
+   // ...
+   $container->loadFromExtension('security', array(
+       // ...
+       'firewalls' => array(
+           // ...
+           'anonymous' => array('secret' => '%secret%'),
+           'remember_me' => array('secret' => '%secret%'),
+           'http_digest' => array('secret' => '%secret%'),
+       ),
+   ));
+  ```
+
+ * The `AbstractVoter::getSupportedAttributes()` and `AbstractVoter::getSupportedClasses()`
+   methods have been removed in favor of `AbstractVoter::supports()`.
+
+   Before:
+
+   ```php
+   class MyVoter extends AbstractVoter
+   {
+       protected function getSupportedAttributes()
+       {
+           return array('CREATE', 'EDIT');
+       }
+
+       protected function getSupportedClasses()
+       {
+           return array('AppBundle\Entity\Post');
+       }
+
+       // ...
+   }
+   ```
+
+   After:
+
+   ```php
+   class MyVoter extends AbstractVoter
+   {
+       protected function supports($attribute, $object)
+       {
+           return $object instanceof Post && in_array($attribute, array('CREATE', 'EDIT'));
+       }
+
+       // ...
+   }
+   ```
 
 ### Translator
 
@@ -1103,6 +1276,24 @@ UPGRADE FROM 2.x to 3.0
 
 ### Yaml
 
+ * Using a colon in an unquoted mapping value leads to a `ParseException`.
+ * Starting an unquoted string with `@`, `` ` ``, `|`, or `>` leads to a `ParseException`.
+ * When surrounding strings with double-quotes, you must now escape `\` characters. Not
+   escaping those characters (when surrounded by double-quotes) leads to a `ParseException`.
+
+   Before:
+
+   ```yml
+   class: "Foo\Var"
+   ```
+
+   After:
+
+   ```yml
+   class: "Foo\\Var"
+   ```
+
+
  * The ability to pass file names to `Yaml::parse()` has been removed.
 
    Before:
@@ -1122,3 +1313,10 @@ UPGRADE FROM 2.x to 3.0
  * `Process::setStdin()` and `Process::getStdin()` have been removed. Use
    `Process::setInput()` and `Process::getInput()` that works the same way.
  * `Process::setInput()` and `ProcessBuilder::setInput()` do not accept non-scalar types.
+
+### Config
+
+ * `\Symfony\Component\Config\Resource\ResourceInterface::isFresh()` has been removed. Also,
+   cache validation through this method (which was still supported in 2.8 for BC) does no longer
+   work because the `\Symfony\Component\Config\Resource\BCResourceInterfaceChecker` helper class
+   has been removed as well.

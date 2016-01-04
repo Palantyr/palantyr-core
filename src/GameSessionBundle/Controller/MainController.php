@@ -80,7 +80,7 @@ class MainController extends Controller
     	->getRepository('GameSessionBundle:RolGame')
     	->find($game_session->getRolGame());
     	
-    	return $this->render('GameSessionBundle:GameSession:game.html.twig', array(
+    	return $this->render('GameSessionBundle:GameSession:game_session.html.twig', array(
     			'game_session' => $game_session, 'rol_game' => $rol_game
     	));
     }

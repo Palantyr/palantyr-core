@@ -1,27 +1,27 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{% for game_session in game_session_array %}
-<h1>{{ game_session['array_gameSession'].getName() }}</h1>
-<p>Master of game: <b>{{ game_session['user_username'] }}</b> </p>
-<p>Date of creation: <b>{{ game_session['array_gameSession'].getStartDate().date }}</b> </p>
-<p>Rol game: <b>{{ game_session['rolGame_name'] }}</b> </p>
-<p>Langiage: <b>{{ game_session['language_name'] }}</b> </p>
-<p>Comments: <b>{{ game_session['array_gameSession'].getComments() }}</b> </p>
-{% endfor %}
-
-</br>
-<h3>Access</h3>
-{{ form_start(form, {'method': 'POST'}) }}
-
-{{ form_row(form.password) }}
-</br>
-{{ form_row(form.Start) }}
-{{ form_end(form) }}
-
-</br></br>
-
-<form action="{{ path('game_sessions') }}">
-	<input type="submit" value="Cancel">
-</form>
+	{% for game_session in game_session_array %}
+	<h1>{{ game_session['array_gameSession'].getName() }}</h1>
+	<p>Master of game: <b>{{ game_session['user_username'] }}</b> </p>
+	<p>Date of creation: <b>{{ game_session['array_gameSession'].getStartDate().date }}</b> </p>
+	<p>Rol game: <b>{{ game_session['rolGame_name'] }}</b> </p>
+	<p>Langiage: <b>{{ game_session['language_name'] }}</b> </p>
+	<p>Comments: <b>{{ game_session['array_gameSession'].getComments() }}</b> </p>
+	{% endfor %}
+	
+	</br>
+	<h3>Access</h3>
+	{{ form_start(form, {'method': 'POST'}) }}
+	
+	{{ form_row(form.password) }}
+	</br>
+	{{ form_row(form.Start) }}
+	{{ form_end(form) }}
+	
+	</br></br>
+	
+	<form action="{{ path('game_sessions') }}">
+		<input type="submit" value="Cancel">
+	</form>
 {% endblock %}
