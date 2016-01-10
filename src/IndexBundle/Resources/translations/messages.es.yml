@@ -1,0 +1,11 @@
+main_menu.administration: Administrar
+main_menu.game_session: Session de juego
+main_menu.game_session.create: Crear sesión de juego
+main_menu.game_session.join: Unirse a sesión de juego
+
+secondary_menu.user.view_profile: Ver perfil
+secondary_menu.user.logout: Desconectarse
+seconday_menu.sign_in: Acceder
+secondary_menu.register: Registrarse
+
+secondary_menu.welcome %user_username%: Bienvenido %user_username%

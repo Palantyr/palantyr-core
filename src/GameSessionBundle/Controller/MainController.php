@@ -178,7 +178,7 @@ class MainController extends Controller
     	->getRepository('GameSessionBundle:GameSession')
     	->findActiveGameSessions();
     	
-    	return $this->render('GameSessionBundle:GameSession:game_list.html.twig', array(
+    	return $this->render('GameSessionBundle:GameSession:game_sessions_list.html.twig', array(
     			'game_sessions_actives' => $game_sessions_actives
     	));
     }

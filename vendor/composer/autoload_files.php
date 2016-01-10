@@ -8,8 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     '01b872096dad055849387e42d41a176d' => $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
     'f0cfed1a23b444183024a3c7df93aafa' => $vendorDir . '/kriswallsmith/assetic/src/functions.php',
-    '1d5fba5693ed1fb2e1169bac43e6cfe8' => $vendorDir . '/paragonie/random_compat/lib/random.php',
     '05669301f06448944ce5eb260126f84e' => $vendorDir . '/ircmaxell/password-compat/lib/password.php',
+    'dd47b6e45c1b6125718977114399cc77' => $vendorDir . '/paragonie/random_compat/lib/random.php',
     'df5fa0cc77a97953513f3411f17f1179' => $vendorDir . '/symfony/polyfill-php70/bootstrap.php',
     '03d83d8496ed2ba16ae326b097a7a1a9' => $vendorDir . '/symfony/polyfill-php56/bootstrap.php',
     'ca91ee2800c2909ce186e2a197b435d8' => $vendorDir . '/symfony/polyfill-php55/bootstrap.php',

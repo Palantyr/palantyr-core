@@ -1,23 +1,47 @@
 create_game_session:
-    path:     /game/createGameSesion
-    defaults: { _controller: GameSessionBundle:Main:createGameSession }
+    path:     /{_locale}/game/createGameSesion
+    defaults:  
+        _controller: GameSessionBundle:Main:createGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
 
 join_game_session:
-    path:     /game/session/{game_session_id}
-    defaults: { _controller: GameSessionBundle:Main:joinGameSession }
-    
+    path:     /{_locale}/game/session/{game_session_id}
+    defaults:  
+        _controller: GameSessionBundle:Main:joinGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
 login_game_session:
-    path:     /game/session/login/{game_session_id}
-    defaults: { _controller: GameSessionBundle:Main:loginGameSession }
+    path:     /{_locale}/game/session/login/{game_session_id}
+    defaults:  
+        _controller: GameSessionBundle:Main:loginGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
     
 login_game_session_rejected:
-    path:     /game/session/login/rejected/{game_session_id}
-    defaults: { _controller: GameSessionBundle:Main:loginGameSessionRejected }
-
+    path:     /{_locale}/game/session/login/rejected/{game_session_id}
+    defaults:  
+        _controller: GameSessionBundle:Main:loginGameSessionRejected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
 game_sessions:
-    path:     /game/sessions
-    defaults: { _controller: GameSessionBundle:Main:gameSessions }
+    path:     /{_locale}/game/sessions
+    defaults:  
+        _controller: GameSessionBundle:Main:gameSessions
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
     
 administration_game_session_homepage:
-    path:     /game/administration
-    defaults: { _controller: GameSessionBundle:Administration:index }
+    path:     /{_locale}/game/administration
+    defaults:  
+        _controller: GameSessionBundle:Administration:index
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
