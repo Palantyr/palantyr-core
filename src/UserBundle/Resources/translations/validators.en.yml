@@ -1,0 +1,30 @@
+email:
+    in_use: The email is already in use
+    not_blank: Email should not be blank
+    not_valid: The email "{{ value }}" is not a valid email
+    minimum_characters: Email must be at least {{ limit }} characters long
+    maximum_characters: Email cannot be longer than {{ limit }} characters
+
+username:
+    in_use: The username is already in use
+    not_blank: Username should not be blank
+    minimum_characters: Username must be at least {{ limit }} characters long
+    maximum_characters: Username cannot be longer than {{ limit }} characters
+
+real_name:
+    not_blank: Name should not be blank
+    minimum_characters: Name must be at least {{ limit }} characters long
+    maximum_characters: Name cannot be longer than {{ limit }} characters
+    
+real_surname:
+    not_blank: Surname should not be blank
+    minimum_characters: Surname must be at least {{ limit }} characters long
+    maximum_characters: Surname cannot be longer than {{ limit }} characters
+    
+plainPassword:
+    not_blank: Password Should not be blank
+    minimum_characters: Password must be at least {{ limit }} characters long
+    maximum_characters: Password cannot be longer than {{ limit }} characters
+    
+terms_accepted:
+    is_true: You must agree to the terms and conditions to register

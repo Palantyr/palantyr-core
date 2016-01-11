@@ -1,0 +1,15 @@
+login:
+    username: Nombre de usuario
+    password: Contraseña
+    remember_me: Recordar
+    submit: Acceder
+    
+register:
+    username: Nombre de usuario
+    email: Correo electrónico
+    password: Contraseña
+    password_confirmation: Confirmar contraseña
+    real_name: Nombre
+    real_surname: Apellidos
+    terms_accepted: Términos aceptados
+    submit: Registrarse

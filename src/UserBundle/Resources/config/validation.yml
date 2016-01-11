@@ -3,11 +3,11 @@ UserBundle\Entity\User:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
             fields: email
-            message: "The email is already in use"
+            message: email.in_use
             groups: [My_registration, My_profile]
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: 
             fields: username
-            message: "The username is already in use"
+            message: username.in_use
             groups: [My_registration, My_profile]
     properties:
         id:
@@ -15,75 +15,59 @@ UserBundle\Entity\User:
                 groups: [My_registration]
         username:
             - NotBlank:
-                message: Username should not be blank
+                message: username.not_blank
                 groups: [My_registration]
             - Length:
                 min: 5
                 max: 30
-                minMessage: "Username must be at least {{ limit }} characters long"
-                maxMessage: "Username cannot be longer than {{ limit }} characters"
+                minMessage: username.minimum_characters
+                maxMessage: username.maximum_characters
                 groups: [My_registration, My_profile]
         real_name:
             - NotBlank:
-                message: Real name should not be blank
+                message: real_name.not_blank
                 groups: [My_registration, My_profile]
             - Length:
                 min: 2
                 max: 255
-                minMessage: "Real name must be at least {{ limit }} characters long"
-                maxMessage: "Real name cannot be longer than {{ limit }} characters"
+                minMessage: real_name.minimum_characters
+                maxMessage: real_name.maximum_characters
                 groups: [My_registration, My_profile]
         real_surname:
             - NotBlank:
-                message: Real surname should not be blank
+                message: real_surname.not_blank
                 groups: [My_registration, My_profile]
             - Length:
                 min: 2
                 max: 255
-                minMessage: "Real surname must be at least {{ limit }} characters long"
-                maxMessage: "Real surname cannot be longer than {{ limit }} characters"
+                minMessage: real_surname.minimum_characters
+                maxMessage: real_surname.maximum_characters
                 groups: [My_registration, My_profile]
         email:
             - NotBlank:
-                message: Email should not be blank
+                message: email.not_blank
                 groups: [My_registration, My_profile]
             - Email:
-                message: The email "{{ value }}" is not a valid email.
+                message: email.not_valid
                 checkMX: true
                 groups: [My_registration, My_profile]
             - Length:
                 min: 4
                 max: 60
-                minMessage: "Email must be at least {{ limit }} characters long"
-                maxMessage: "Email cannot be longer than {{ limit }} characters"
+                minMessage: email.minimum_characters
+                maxMessage: email.maximum_characters
                 groups: [My_registration, My_profile]
         plainPassword:
             - NotBlank:
-                message: Password Should not be blank
+                message: plainPassword.not_blank
                 groups: [My_registration, My_change_password]
             - Length:
                 min: 6 
                 max: 4096
-                minMessage: "Password must be at least {{ limit }} characters long"
-                maxMessage: "Password cannot be longer than {{ limit }} characters"
+                minMessage: plainPassword.minimum_characters
+                maxMessage: plainPassword.maximum_characters
                 groups: [My_registration, My_change_password]
-        #registration_date:
-            #- IsNull: ~
-        #last_login:
-            #- IsNull: ~
         terms_accepted:
             - IsTrue:
-                message: You must agree to the terms and conditions to register
+                message: terms_accepted.is_true
                 groups: [My_registration]
-            
-#UserBundle\Form\Model\Registration:
-#    properties:
-#        user:
-#            - Type:
-#                type: UserBundle\Entity\User
-#                message: "The value {{ value }} is not a valid {{ type }}."
-#            - Valid: ~
-#        terms_accepted:
-#            - NotBlank: ~
-#            - 'True':
-#                message: Debes aceptar los términos y condiciones

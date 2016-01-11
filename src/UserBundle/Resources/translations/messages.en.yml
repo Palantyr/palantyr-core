@@ -1,0 +1,15 @@
+login:
+    username: Username
+    password: Password
+    remember_me: Remember me
+    submit: Log in
+    
+register:
+    username: Username
+    email: Email
+    password: Password
+    password_confirmation: Password confirmation
+    real_name: Name
+    real_surname: Surname
+    terms_accepted: Terms accepted
+    submit: Register
