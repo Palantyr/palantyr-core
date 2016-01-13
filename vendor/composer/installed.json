@@ -545,69 +545,6 @@
         ]
     },
     {
-        "name": "twig/twig",
-        "version": "v1.23.1",
-        "version_normalized": "1.23.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/twigphp/Twig.git",
-            "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/twigphp/Twig/zipball/d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
-            "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.7"
-        },
-        "require-dev": {
-            "symfony/debug": "~2.7",
-            "symfony/phpunit-bridge": "~2.7"
-        },
-        "time": "2015-11-05 12:49:06",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.23-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Twig_": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com",
-                "homepage": "http://fabien.potencier.org",
-                "role": "Lead Developer"
-            },
-            {
-                "name": "Armin Ronacher",
-                "email": "armin.ronacher@active-4.com",
-                "role": "Project Founder"
-            },
-            {
-                "name": "Twig Team",
-                "homepage": "http://twig.sensiolabs.org/contributors",
-                "role": "Contributors"
-            }
-        ],
-        "description": "Twig, the flexible, fast, and secure template language for PHP",
-        "homepage": "http://twig.sensiolabs.org",
-        "keywords": [
-            "templating"
-        ]
-    },
-    {
         "name": "guzzle/common",
         "version": "v3.9.2",
         "version_normalized": "3.9.2.0",
@@ -2200,50 +2137,6 @@
         ]
     },
     {
-        "name": "components/jquery",
-        "version": "2.1.4",
-        "version_normalized": "2.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/components/jquery.git",
-            "reference": "7b1d1104656a092423fbfba13c5920e9bbba290c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/components/jquery/zipball/7b1d1104656a092423fbfba13c5920e9bbba290c",
-            "reference": "7b1d1104656a092423fbfba13c5920e9bbba290c",
-            "shasum": ""
-        },
-        "time": "2015-05-08 05:04:47",
-        "type": "component",
-        "extra": {
-            "component": {
-                "scripts": [
-                    "jquery.js"
-                ],
-                "files": [
-                    "jquery.min.js",
-                    "jquery.min.map",
-                    "jquery-migrate.js",
-                    "jquery-migrate.min.js"
-                ]
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "John Resig",
-                "email": "jeresig@gmail.com"
-            }
-        ],
-        "description": "jQuery JavaScript Library",
-        "homepage": "http://jquery.com"
-    },
-    {
         "name": "twbs/bootstrap",
         "version": "v3.3.6",
         "version_normalized": "3.3.6.0",
@@ -2294,73 +2187,6 @@
             "mobile-first",
             "responsive",
             "web"
-        ]
-    },
-    {
-        "name": "knplabs/knp-menu",
-        "version": "v2.1.0",
-        "version_normalized": "2.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/KnpLabs/KnpMenu.git",
-            "reference": "c6ad49933babd06a27b2f962a3469601ec9038b8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/c6ad49933babd06a27b2f962a3469601ec9038b8",
-            "reference": "c6ad49933babd06a27b2f962a3469601ec9038b8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "pimple/pimple": "~1.0",
-            "silex/silex": "~1.0",
-            "symfony/phpunit-bridge": "~2.7",
-            "twig/twig": "~1.16|~2.0"
-        },
-        "suggest": {
-            "pimple/pimple": "for the built-in implementations of the menu provider and renderer provider",
-            "silex/silex": "for the integration with your silex application",
-            "twig/twig": "for the TwigRenderer and the integration with your templates"
-        },
-        "time": "2015-09-20 08:23:47",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.1-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Knp\\Menu\\": "src/Knp/Menu"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Christophe Coevoet",
-                "email": "stof@notk.org"
-            },
-            {
-                "name": "KnpLabs",
-                "homepage": "http://knplabs.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
-            }
-        ],
-        "description": "An object oriented menu library",
-        "homepage": "http://knplabs.com",
-        "keywords": [
-            "menu",
-            "tree"
         ]
     },
     {
@@ -2565,12 +2391,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-            "reference": "e5e7a2b8984da8dfedaf44adc7e5f60a62ad280c"
+            "reference": "6ccff96434c0ac7fee077d1dce90966341dfd278"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e5e7a2b8984da8dfedaf44adc7e5f60a62ad280c",
-            "reference": "e5e7a2b8984da8dfedaf44adc7e5f60a62ad280c",
+            "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6ccff96434c0ac7fee077d1dce90966341dfd278",
+            "reference": "6ccff96434c0ac7fee077d1dce90966341dfd278",
             "shasum": ""
         },
         "require": {
@@ -2592,7 +2418,7 @@
         "suggest": {
             "willdurand/propel-typehintable-behavior": "Needed when using the propel implementation"
         },
-        "time": "2015-12-28 18:02:43",
+        "time": "2016-01-08 10:46:39",
         "type": "symfony-bundle",
         "extra": {
             "branch-alias": {
@@ -3393,6 +3219,181 @@
             "csprng",
             "pseudorandom",
             "random"
+        ]
+    },
+    {
+        "name": "components/jquery",
+        "version": "2.2.0",
+        "version_normalized": "2.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/components/jquery.git",
+            "reference": "d8b2ac0c1978e9ed8602789123976b1c7161ef96"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/components/jquery/zipball/d8b2ac0c1978e9ed8602789123976b1c7161ef96",
+            "reference": "d8b2ac0c1978e9ed8602789123976b1c7161ef96",
+            "shasum": ""
+        },
+        "time": "2016-01-08 23:29:41",
+        "type": "component",
+        "extra": {
+            "component": {
+                "scripts": [
+                    "jquery.js"
+                ],
+                "files": [
+                    "jquery.min.js",
+                    "jquery.min.map",
+                    "jquery-migrate.js",
+                    "jquery-migrate.min.js"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "John Resig",
+                "email": "jeresig@gmail.com"
+            }
+        ],
+        "description": "jQuery JavaScript Library",
+        "homepage": "http://jquery.com"
+    },
+    {
+        "name": "twig/twig",
+        "version": "v1.23.3",
+        "version_normalized": "1.23.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twigphp/Twig.git",
+            "reference": "ae53fc2c312fdee63773b75cb570304f85388b08"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae53fc2c312fdee63773b75cb570304f85388b08",
+            "reference": "ae53fc2c312fdee63773b75cb570304f85388b08",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.7"
+        },
+        "require-dev": {
+            "symfony/debug": "~2.7",
+            "symfony/phpunit-bridge": "~2.7"
+        },
+        "time": "2016-01-11 14:02:19",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.23-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": "http://fabien.potencier.org",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com",
+                "role": "Project Founder"
+            },
+            {
+                "name": "Twig Team",
+                "homepage": "http://twig.sensiolabs.org/contributors",
+                "role": "Contributors"
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http://twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
+        "name": "knplabs/knp-menu",
+        "version": "v2.1.1",
+        "version_normalized": "2.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/KnpMenu.git",
+            "reference": "9917b999a3c3d3901386d60c4888b07679291031"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/9917b999a3c3d3901386d60c4888b07679291031",
+            "reference": "9917b999a3c3d3901386d60c4888b07679291031",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "pimple/pimple": "~1.0",
+            "silex/silex": "~1.0",
+            "symfony/phpunit-bridge": "~2.7|~3.0",
+            "symfony/routing": "~2.3|~3.0",
+            "twig/twig": "~1.16|~2.0"
+        },
+        "suggest": {
+            "pimple/pimple": "for the built-in implementations of the menu provider and renderer provider",
+            "silex/silex": "for the integration with your silex application",
+            "twig/twig": "for the TwigRenderer and the integration with your templates"
+        },
+        "time": "2016-01-08 15:42:54",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.1-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Knp\\Menu\\": "src/Knp/Menu"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Christophe Coevoet",
+                "email": "stof@notk.org"
+            },
+            {
+                "name": "KnpLabs",
+                "homepage": "http://knplabs.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
+            }
+        ],
+        "description": "An object oriented menu library",
+        "homepage": "http://knplabs.com",
+        "keywords": [
+            "menu",
+            "tree"
         ]
     }
 ]
