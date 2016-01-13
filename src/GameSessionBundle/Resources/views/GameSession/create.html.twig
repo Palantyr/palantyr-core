@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create game Session{% endblock %}
+{% block title %}{% trans %}game_session.create.title{% endtrans %}{% endblock %}
 
 {% block body %}
-	<h1>Create Game Sesion</h1>
-	
+	<h1>{% trans %}game_session.create.title{% endtrans %}</h1>
 	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_create_game_session', 'novalidate': 'novalidate'} }) }}
-		{{ form_row(form.name) }}
-		{{ form_row(form.password) }}
-		{{ form_row(form.rol_game) }}
-		{{ form_row(form.language) }}
-		{{ form_row(form.comments) }}
+		{{ form_row(form.name, { 'label': 'game_session.name', 'label_col': 2, 'widget_col': 3}) }}
+		{{ form_row(form.password, { 'label': 'game_session.password', 'label_col': 2, 'widget_col': 2}) }}
+		{{ form_row(form.rol_game, { 'label': 'game_session.rol_game', 'label_col': 2, 'widget_col': 3}) }}
+		{{ form_row(form.language, { 'label': 'game_session.language', 'label_col': 2, 'widget_col': 3}) }}
+		{{ form_row(form.comments, { 'label': 'game_session.comments', 'label_col': 2, 'widget_col': 5}) }}
+		{{ form_row(form.submit_button, {'label': 'game_session.create.submit'}) }}
+		{{ form_widget(form) }}
 	{{ form_end(form) }}
 	
 {% endblock %}
@@ -21,10 +22,4 @@
 	    <script src="{{ asset_url }}"></script>
 	{% endjavascripts %}
 	
-	<script>
-		$( "#form_create_game_session #form_actions_cancel" ).click(function(){
-			path('game_session_homepage')
-		});
-	</script>
-
 {% endblock %}

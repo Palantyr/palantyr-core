@@ -1,15 +1,44 @@
-login:
-    username: Username
-    password: Password
-    remember_me: Remember me
-    submit: Log in
+role:
+    super_admin: SUPER ADMIN
+    admin: ADMIN
+    user: USER
     
-register:
+user:
     username: Username
     email: Email
     password: Password
     password_confirmation: Password confirmation
+    current_password: Current password
     real_name: Name
     real_surname: Surname
+    
+login:
+    remember_me: Remember me
+    submit: Log in
+    title: Log in
+    
+register:
     terms_accepted: Terms accepted
     submit: Register
+    title: Register
+    confirmed:
+        title: Confirmed
+        message: Your registration has been successful, %username%, welcome.
+        
+    
+profile:
+    show:
+        edit_button: Edit profile
+        change_password_button: Change password
+        title: Profile
+    edit:
+        submit: Edit
+        title: Edit profile
+
+change_password:
+    new_password: New password
+    repeat_new_password: Repeat new password
+    submit: Change password
+    title: Change password
+
+    

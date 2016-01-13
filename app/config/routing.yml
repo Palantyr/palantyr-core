@@ -14,14 +14,10 @@ game_session:
 #app:
 #    resource: "@AppBundle/Controller/"
 #    type:     annotation
-    
-app_index:     
-    path: /{_locale}
-    defaults:  
-        _controller: "IndexBundle:Main:index"
-        _locale: %app.locale_default%
-    requirements:
-        _locale: %app.locales_string%
+
+web:
+    resource: "@WebBundle/Resources/config/routing.yml"
+    prefix: /
 
 #In order to use the built-in email functionality (confirmation of the account, 
 #resetting of the password), you must activate and configure the SwiftmailerBundle.

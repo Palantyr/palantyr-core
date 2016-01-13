@@ -1,35 +1,33 @@
-{% trans_default_domain 'FOSUserBundle' %}
-
 	<h1>
 		{{ user.username }}
 		{% for role in user.roles %}
 			{% if role == "ROLE_SUPER_ADMIN" %}
-				<span class="label label-default">SUPER ADMIN</span>
+				<span class="label label-default">{% trans %}role.super_admin{% endtrans %}</span>
 			{% elseif role == "ROLE_ADMIN" %}
-	    		<span class="label label-default">ADMIN</span>
+	    		<span class="label label-default">{% trans %}role.admin{% endtrans %}</span>
 	    	{% elseif role == "ROLE_USER" %}
-	    		<span class="label label-default">USER</span>
+	    		<span class="label label-default">{% trans %}role.user{% endtrans %}</span>
 			{% endif %}
 		{% endfor %}
 	</h1>
 	
 	<h3>
 		{{ icon('envelope') }}
-		Email: <b>{{ user.email }}</b>
+		{% trans %}user.email{% endtrans %}: <b>{{ user.email }}</b>
 	</h3>
 	<h3>
 		{{ icon('pencil') }}
-		Real Name: <b>{{ user.realName }}</b>
+		{% trans %}user.real_name{% endtrans %}: <b>{{ user.realName }}</b>
 	</h3>
 	<h3>
 		{{ icon('pencil') }}
-		Real Surname: <b>{{ user.realSurname }}</b>
+		{% trans %}user.real_surname{% endtrans %}: <b>{{ user.realSurname }}</b>
 	</h3>
 	
 	<a href="{{ path('fos_user_profile_edit') }}">
-		<button type="submit" id="edit_profile" class="btn btn-primary">Edit profile</button>
+		<button type="submit" id="edit_profile" class="btn btn-primary">{% trans %}profile.show.edit_button{% endtrans %}</button>
 	</a>
 	
 	<a href="{{ path('fos_user_change_password') }}">
-		<button type="submit" id="change_password" class="btn btn-primary">Change password</button>
+		<button type="submit" id="change_password" class="btn btn-primary">{% trans %}profile.show.change_password_button{% endtrans %}</button>
 	</a>

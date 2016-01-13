@@ -1,9 +1,9 @@
 <?php
 
-namespace IndexBundle;
+namespace WebBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class IndexBundle extends Bundle
+class WebBundle extends Bundle
 {
 }

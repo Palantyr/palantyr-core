@@ -1,5 +1,5 @@
 <?php
-namespace IndexBundle\Menu;
+namespace WebBundle\Menu;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

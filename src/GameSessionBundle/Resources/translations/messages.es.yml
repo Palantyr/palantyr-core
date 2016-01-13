@@ -1,4 +1,29 @@
+game_session:
+    name: Nombre
+    password: Contraseña
+    rol_game: Juego de rol
+    language: Idioma
+    comments: Comentarios
+    gamemaster: Director de juego
+    creation_date: Fecha de creación
+    create:
+        submit: Crear
+        title: Crear sessión de juego
+        choose_rol_game: Elegir juego de rol
+        choose_language: Elegir idioma
+    join:
+        submit: Unirse
+        title: Unirse a sesión de juego
+    login:
+        submit: Acceder
+        title: Acceder a sesión de juego
+        incorrect_password: Contraseña incorrecta
+    already_connected:
+        title: Ya conectado
+        message: Lo siento, ya está conectado a la sesión de juego
+        
+spanish: español
+english: english
 
-
-game_sessions: Sesiones de juego
-game_session.join: Unirse a sesión de juego
+Vampire The Masquerade: Vampiro La Mascarada
+Legend of Five Rings: La Leyenda de los Cinco Anillos

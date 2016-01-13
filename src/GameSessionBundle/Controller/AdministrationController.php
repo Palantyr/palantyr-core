@@ -78,7 +78,7 @@ class AdministrationController extends Controller
     
     public function addLanguages() {
     	$em = $this->getDoctrine()->getEntityManager();
-    	$languages_names = array("Spanish", "English", "France", "French", "Germany", "Italian");
+    	$languages_names = array("spanish", "english");
     	$languages_names_count = count($languages_names);
     	for ($i = 0 ; $i < $languages_names_count ; $i++) {
     		$language = new Language();
@@ -90,7 +90,7 @@ class AdministrationController extends Controller
     
     public function addRolGames() {
     	$em = $this->getDoctrine()->getEntityManager();
-    	$rol_games_names = array("Pathfinder", "D&D 3.5", "Vampire", "Werewolf", "Anima", "Legend of Five Rings", "Star Wars");
+    	$rol_games_names = array("Pathfinder", "D&D 3.5", "Vampire The Masquerade", "Werewolf", "Anima", "Legend of Five Rings", "Star Wars");
     	$rol_game_actives = array(1, 1, 1, 0, 0, 1, 1);
     	$rol_games_names_count = count($rol_games_names);
     	for ($i = 0 ; $i < $rol_games_names_count ; $i++) {

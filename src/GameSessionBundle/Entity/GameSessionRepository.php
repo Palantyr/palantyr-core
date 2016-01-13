@@ -55,7 +55,7 @@ class GameSessionRepository extends EntityRepository
 				);
 			
 		try {
-			return $query->getResult();
+			return $query->getSingleResult();
 		} catch (\Doctrine\ORM\NoResultException $e) {
 			return null;
 		}

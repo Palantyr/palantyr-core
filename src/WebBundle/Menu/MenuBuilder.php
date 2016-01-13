@@ -1,5 +1,5 @@
 <?php
-namespace IndexBundle\Menu;
+namespace WebBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
@@ -28,7 +28,7 @@ class MenuBuilder extends ContainerAware
     public function userMenu(FactoryInterface $factory, array $options)
     {
     	$translator = $this->container->get('translator');
-    	
+
     	$menu = $factory->createItem('root');
     	$menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
     	
@@ -104,13 +104,26 @@ class MenuBuilder extends ContainerAware
     	$menu->addChild('Laguage', array('label' => $current_language))
     	->setAttribute('dropdown', true)
     	->setAttribute('icon', 'fa fa-user');
-    	 
+    	
+    	$current_parameters = array();
+    	$attributes_iterator = $this->container->get('request')->attributes->getIterator();
+	    while ($attributes_iterator->valid()) {
+	    	if ($attributes_iterator->key() == "_route_params") {
+				$current_parameters = $attributes_iterator->current();
+	    	}
+	    	$attributes_iterator->next();
+		}
+    	
     	for ($count_languages = 0;
     	$count_languages < count($languages_less_actual);
     	$count_languages++) {
+    		
+    		if ($current_parameters['_locale']) {
+    			$current_parameters['_locale'] = $languages_less_actual[$count_languages];
+    		}
     
     		$menu['Laguage']->addChild($languages_less_actual[$count_languages],
-    				array('route' => $current_route, 'routeParameters' => array('_locale' => $languages_less_actual[$count_languages])))
+    				array('route' => $current_route, 'routeParameters' => $current_parameters))
     				->setAttribute('icon', 'fa fa-edit');
     	}
     }

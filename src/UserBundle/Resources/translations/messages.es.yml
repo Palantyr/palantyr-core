@@ -1,15 +1,41 @@
-login:
-    username: Nombre de usuario
-    password: Contraseña
-    remember_me: Recordar
-    submit: Acceder
+role:
+    super_admin: SUPER ADMINISTRADOR
+    admin: ADMINISTRADOR
+    user: USUARIO
     
-register:
+user:
     username: Nombre de usuario
     email: Correo electrónico
     password: Contraseña
     password_confirmation: Confirmar contraseña
+    current_password: Contraseña actual
     real_name: Nombre
     real_surname: Apellidos
+    
+login:
+    remember_me: Recordar
+    submit: Acceder
+    title: Acceder
+    
+register:
     terms_accepted: Términos aceptados
     submit: Registrarse
+    title: Registrarse
+    confirmed:
+        title: Confirmado
+        message: Tu registro ha sido exitoso, %username%, bienvenido.
+    
+profile:
+    show:
+        edit_button: Editar perfil
+        change_password_button: Cambiar contraseña
+        title: Perfil
+    edit:
+        submit: Editar
+        title: Editar perfil
+        
+change_password:
+    new_password: Nueva contraseña
+    repeat_new_password: Repetir nueva contraseña
+    submit: Cambiar contraseña
+    title: Cambiar contraseña

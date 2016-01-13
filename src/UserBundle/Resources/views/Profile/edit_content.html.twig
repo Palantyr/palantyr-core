@@ -1,10 +1,9 @@
-{% trans_default_domain 'FOSUserBundle' %}
-
 	{{ form_start(form, { 'action': path('fos_user_profile_edit'), 'style': 'horizontal', 'attr': { 'class': 'fos_user_profile_edit', novalidate: 'novalidate'  } }) }}
-    	{{ form_row(form.username, { 'label': 'Username', 'label_col': 2, 'widget_col': 3}) }}
-    	{{ form_row(form.email, { 'label': 'Email', 'label_col': 2, 'widget_col': 5}) }}	    
-		{{ form_row(form.real_name, { 'label': 'Real name', 'label_col': 2, 'widget_col': 3}) }}
-	    {{ form_row(form.real_surname, { 'label': 'Real surname', 'label_col': 2, 'widget_col': 3}) }}
-   		{{ form_row(form.current_password, { 'label': 'Current password', 'label_col': 2, 'widget_col': 2}) }}
-	    {{ form_widget(form) }}
+    	{{ form_row(form.username, { 'label': 'user.username', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 3}) }}
+    	{{ form_row(form.email, { 'label': 'user.email', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 5}) }}	    
+		{{ form_row(form.real_name, { 'label': 'user.real_name', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 3}) }}
+	    {{ form_row(form.real_surname, { 'label': 'user.real_surname', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 3}) }}
+   		{{ form_row(form.current_password, { 'label': 'user.current_password', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 2}) }}
+	    {{ form_row(form.submit_button, {'label': 'profile.edit.submit', 'translation_domain': 'messages', 'translation_domain': 'messages'}) }}	    
+   		{{ form_widget(form) }}
 	{{ form_end(form) }}

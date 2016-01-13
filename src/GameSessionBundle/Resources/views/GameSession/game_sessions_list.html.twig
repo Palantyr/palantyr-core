@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% trans %}game_session.join{% endtrans %}{% endblock %}
+{% block title %}{% trans %}game_session.join.title{% endtrans %}{% endblock %}
 
 {% block body %}
 
-	<h1>{% trans %}game_sessions{% endtrans %}</h1>
+	<h1>{% trans %}game_session.join.title{% endtrans %}</h1>
 	
 	</br>
 	
@@ -12,23 +12,23 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Name Game</th>
-					<th>Rol Game</th>
-					<th>Gamemaster</th>
-					<th>Language</th>
-					<th>Access</th>
+					<th>{% trans %}game_session.name{% endtrans %}</th>
+					<th>{% trans %}game_session.rol_game{% endtrans %}</th>
+					<th>{% trans %}game_session.gamemaster{% endtrans %}</th>
+					<th>{% trans %}game_session.language{% endtrans %}</th>
+					<th>{% trans %}game_session.join.submit{% endtrans %}</th>
 				</tr>
 			</thead>
 			<tbody>
 			{% for game_session_actives in game_sessions_actives %}
 				    <tr>
 						<td>{{ game_session_actives['array_gameSession'].getName() }}</td>
-						<td>{{ game_session_actives['rolGame_name'] }}</td>
+						<td>{{ game_session_actives['rolGame_name']|trans }}</td>
 						<td>{{ game_session_actives['user_username'] }}</td>
-						<td>{{ game_session_actives['language_name'] }}</td>
+						<td>{{ game_session_actives['language_name']|trans|capitalize }}</td>
 						<td>
 							<form action="{{ path('join_game_session', {'game_session_id': game_session_actives['array_gameSession'].getId()}) }}">
-					    		<input type="submit" value="Join">
+					    		<input type="submit" value={% trans %}game_session.join.submit{% endtrans %}>
 							</form>	
 						</td>
 				    </tr>

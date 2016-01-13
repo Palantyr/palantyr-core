@@ -1,0 +1,18 @@
+name:
+    not_blank: El nombre no debe estar en blanco
+    minimum_characters: El nombre debe ser al menos de {{ limit }} caracteres
+    maximum_characters: El nombre no puede tener más de {{ limit }} caracteres
+    
+password:
+    not_blank: La contraseña no debe estar en blanco
+    minimum_characters: La contraseña debe ser al menos de {{ limit }} caracteres
+    maximum_characters: La contraseña no puede tener más de {{ limit }} caracteres
+    
+comments:
+    maximum_characters: Los comentarios no puede tener más de {{ limit }} caracteres
+    
+rol_game:
+    not_blank: Debes seleccionar un juego de rol
+    
+language:
+    not_blank: Debes seleccionar un idioma

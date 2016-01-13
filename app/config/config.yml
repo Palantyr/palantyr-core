@@ -54,7 +54,7 @@ knp_menu:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles: [ IndexBundle, GameSessionBundle ]
+    bundles: [ WebBundle, GameSessionBundle ]
     #java: /usr/bin/java
     filters:
         lessphp:
