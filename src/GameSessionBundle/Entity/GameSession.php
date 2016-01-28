@@ -6,7 +6,7 @@ class GameSession
 {
 	private $id;
 	private $name;
-	private $owner_user;
+	private $owner;
 	private $password;
 	private $start_date;
 	private $rol_game;
@@ -48,26 +48,26 @@ class GameSession
     }
 
     /**
-     * Set owner_user
+     * Set owner
      *
-     * @param integer $ownerUser
+     * @param integer $owner
      * @return GameSession
      */
-    public function setOwnerUser($ownerUser)
+    public function setOwner($owner)
     {
-        $this->owner_user = $ownerUser;
+        $this->owner = $owner;
 
         return $this;
     }
 
     /**
-     * Get owner_user
+     * Get owner
      *
      * @return integer 
      */
-    public function getOwnerUser()
+    public function getOwner()
     {
-        return $this->owner_user;
+        return $this->owner;
     }
 
     /**

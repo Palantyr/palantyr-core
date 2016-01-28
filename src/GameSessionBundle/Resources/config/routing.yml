@@ -29,6 +29,14 @@ login_game_session_rejected:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
+
+game_session_disconnected:
+    path:     /{_locale}/game/session/disconected/{game_session_id}
+    defaults:  
+        _controller: GameSessionBundle:Main:disconnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
         
 game_sessions:
     path:     /{_locale}/game/sessions
@@ -42,6 +50,14 @@ administration_game_session_homepage:
     path:     /{_locale}/game/administration
     defaults:  
         _controller: GameSessionBundle:Administration:index
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+edit_game_sessions:
+    path:     /{_locale}/game/sessions/edit/{game_session_id}
+    defaults:  
+        _controller: GameSessionBundle:Main:editGameSession
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%

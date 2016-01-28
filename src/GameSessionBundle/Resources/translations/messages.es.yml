@@ -18,9 +18,27 @@ game_session:
         submit: Acceder
         title: Acceder a sesión de juego
         incorrect_password: Contraseña incorrecta
-    already_connected:
-        title: Ya conectado
-        message: Lo siento, ya está conectado a la sesión de juego
+    re_login:
+        title: Volver a acceder
+        message: Lo siento, necesita volver a acceder
+    edit:
+        title: Editar sesión de juego
+        submit: Editar
+    remove:
+        submit: Eliminar
+        message: Has sido desconectado de la sesión de juego
+    leave:
+        confirmation_message: ¿Estás seguro de querer salir?
+        
+secondary_menu:
+    settings:
+        title: Ajustes
+        manage_users:
+            title: Gestión de usuarios
+            no_other_users_connected: No hay otros usuarios conectados
+            remove_button: Expulsar
+        exit:
+            title: Salir
         
 spanish: español
 english: english

@@ -1,0 +1,21 @@
+{# {% extends 'GameSessionBundle:GameSession:base_popup.html.twig' %}#}
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal">&times;</button>
+	<h4 class="modal-title">Modal Header</h4>
+</div>
+
+<div class="modal-body">
+	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_edit_game_session', 'novalidate': 'novalidate'} }) }}
+		{{ form_row(form.name, { 'label': 'game_session.name'}) }}
+		{{ form_row(form.password, { 'label': 'game_session.password'}) }}
+		{{ form_row(form.comments, { 'label': 'game_session.comments'}) }}
+		{{ form_row(form.submit_button, {'label': 'game_session.edit.submit'}) }}
+    {{ form_end(form) }}
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+
+
+{#     <input type="submit" value="Create"#}
+{#            class="btn btn-default pull-right" />#}

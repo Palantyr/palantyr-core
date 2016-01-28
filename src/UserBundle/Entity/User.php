@@ -69,6 +69,5 @@ class User extends BaseUser
     {
     	$this->terms_accepted = (bool) $terms_accepted;
     }
-    
 }
 

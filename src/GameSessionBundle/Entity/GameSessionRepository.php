@@ -28,7 +28,7 @@ class GameSessionRepository extends EntityRepository
 					rolGame.name AS rolGame_name, language.name AS language_name
 				FROM GameSessionBundle:GameSession gameSession, UserBundle:User user, 
 					GameSessionBundle:RolGame rolGame, GameSessionBundle:Language language
-				WHERE gameSession.owner_user = user.id 
+				WHERE gameSession.owner = user.id 
 					AND gameSession.rol_game = rolGame.id 
 					AND gameSession.language = language.id'
 		);
@@ -48,7 +48,7 @@ class GameSessionRepository extends EntityRepository
 					rolGame.name AS rolGame_name, language.name AS language_name
 				FROM GameSessionBundle:GameSession gameSession, UserBundle:User user,
 					GameSessionBundle:RolGame rolGame, GameSessionBundle:Language language
-				WHERE gameSession.owner_user = user.id
+				WHERE gameSession.owner = user.id
 					AND gameSession.rol_game = rolGame.id
 					AND gameSession.language = language.id
 					AND gameSession.id = '.$id.''

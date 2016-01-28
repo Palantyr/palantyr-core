@@ -28,7 +28,7 @@
 						<td>{{ game_session_actives['language_name']|trans|capitalize }}</td>
 						<td>
 							<form action="{{ path('join_game_session', {'game_session_id': game_session_actives['array_gameSession'].getId()}) }}">
-					    		<input type="submit" value={% trans %}game_session.join.submit{% endtrans %}>
+					    		<input class="btn btn-primary" type="submit" value={% trans %}game_session.join.submit{% endtrans %}>
 							</form>	
 						</td>
 				    </tr>

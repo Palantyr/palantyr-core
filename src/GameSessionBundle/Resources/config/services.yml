@@ -1,13 +1,4 @@
 services:
-#    game_session.example:
-#        class: GameSessionBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
-
-#    acme_hello.topic_sample_service:
-#        class: GameSessionBundle\Topic\AcmeTopic
-#        tags:
-#            - { name: gos_web_socket.topic }
-
     game_session.topic:
         class: GameSessionBundle\Topic\GameSessionTopic
         tags:
@@ -15,7 +6,18 @@ services:
         arguments: 
             - @gos_web_socket.websocket.client_manipulator
             - @doctrine.orm.entity_manager
+            - @form.factory
+            - @validator.builder
+            - @translator.default
 #           - @gos_web_socket.client_storage
+            
+#    rol_game_form:
+#        class: GameSessionBundle\Form\RolGameType
+#        arguments: 
+#            - @doctrine.orm.entity_manager        
+#        calls:
+#            - [setEntityManager, [@doctrine.orm.entity_manager]]
+
 #    acme_hello.rpc_sample_service:
 #        class: GameSessionBundle\Rpc\AcmeRpc
 #        tags:

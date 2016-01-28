@@ -2,36 +2,44 @@
 GameSessionBundle\Entity\GameSession:
     properties:
         id:
-            - IsNull: ~
+            - IsNull:
+                groups: [Create]
         name:
             - NotBlank:
                 message: name.not_blank
+                groups: [Create]
             - Length:
                 min: 5
                 max: 30
                 minMessage: name.minimum_characters
                 maxMessage: name.maximum_characters
-        owner_user:
-            - IsNull: ~
+                groups: [Create]
+        owner:
+            - IsNull:
+                groups: [Create]
         password:
             - NotBlank:
                 message: plainPassword.not_blank
-                groups: [Login]
+                groups: [Create, Login]
             - Length:
                 min: 6 
                 max: 30
                 minMessage: password.minimum_characters
                 maxMessage: password.maximum_characters
-                groups: [Login]
+                groups: [Create, Login]
         start_date:
-            - IsNull: ~         
+            - IsNull:
+                groups: [Create]
         rol_game:
             - NotBlank:
                 message: rol_game.not_blank
+                groups: [Create]
         language:
             - NotBlank:
                 message: language.not_blank
+                groups: [Create]
         comments:
             - Length:
                 max: 200
                 maxMessage: comments.maximum_characters
+                groups: [Create]

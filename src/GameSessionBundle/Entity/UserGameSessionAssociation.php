@@ -6,7 +6,8 @@ class UserGameSessionAssociation
 {
 	private $id;
 	private $allow_access;
-	private $conected;
+	private $connected;
+	private $language;
     /**
      * @var integer
      */
@@ -98,25 +99,48 @@ class UserGameSessionAssociation
     }
 
     /**
-     * Set conected
+     * Set connected
      *
-     * @param boolean $conected
+     * @param boolean $connected
      * @return UserGameSessionAssociation
      */
-    public function setConected($conected)
+    public function setConnected($connected)
     {
-        $this->conected = $conected;
+        $this->connected = $connected;
 
         return $this;
     }
 
     /**
-     * Get conected
+     * Get connected
      *
      * @return boolean 
      */
-    public function getConected()
+    public function getConnected()
     {
-        return $this->conected;
+        return $this->connected;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language
+     * @return UserGameSessionAssociation
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string 
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 }

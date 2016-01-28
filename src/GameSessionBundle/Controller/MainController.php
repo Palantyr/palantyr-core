@@ -6,15 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use GameSessionBundle\Entity\GameSession;
 use GameSessionBundle\Entity\RolGame;
-use GameSessionBundle\Entity\PasswordGameSession;
-use Symfony\Component\HttpFoundation\Response;
 use GameSessionBundle\Entity\UserGameSessionAssociation;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MainController extends Controller
 { 
     public function addGameSession($game_session) 
     {
-    	$game_session->setOwnerUser($this->getUser()->getId());
+    	$game_session->setOwner($this->getUser()->getId());
     	$game_session->setStartDate(new \DateTime());
     	$em = $this->getDoctrine()->getManager();
     	$em->persist($game_session);
@@ -28,7 +27,8 @@ class MainController extends Controller
     	$game_session = new GameSession();
     	$game_session->setName("Epic Game");
     	
-    	$form = $this->createFormBuilder($game_session)
+    	$form = $this->createFormBuilder($game_session, array(
+    		'validation_groups' => array('Create')))
     	->add('name', 'text')
     	->add('password', 'password')
     	->add('rol_game', 'entity', array(
@@ -52,11 +52,6 @@ class MainController extends Controller
     	->add('comments', 'textarea', array(
         	'required' => false))
         ->add('submit_button', 'submit')
-//     	->add('actions', 'form_actions', [
-//     			'buttons' => [
-//     					'save' => ['type' => 'submit', 'options' => ['label' => 'Start']],
-//     			]
-//     	])
     	->getForm();
     	
     	$form->handleRequest($request);
@@ -68,7 +63,7 @@ class MainController extends Controller
     		return $this->redirect($this->generateUrl('join_game_session', array('game_session_id' => $game_session->getId())));
     	}
 
-    	return $this->render('GameSessionBundle:GameSession:create.html.twig', array(
+    	return $this->render('GameSessionBundle:Web:create.html.twig', array(
     			'form' => $form->createView(),
     	));
     }
@@ -96,13 +91,13 @@ class MainController extends Controller
     		->findByUserAndGameSession($this->getUser()->getId(), $game_session_id);
     	
     	$allow_access = false;
-    	$conected = false;
+    	$connected = false;
     	if ($user_game_session_assotiation) {
     		$allow_access = $user_game_session_assotiation->getAllowAccess();
-    		$conected = $user_game_session_assotiation->getConected();
+    		$connected = $user_game_session_assotiation->getConnected();
     	}
     	
-    	if ($conected === true) {
+    	if ($connected === true) {
     		return $this->redirectToRoute('login_game_session_rejected', array('game_session_id' => $game_session_id));
     	}
     	
@@ -121,7 +116,7 @@ class MainController extends Controller
     		->getRepository('GameSessionBundle:GameSession')
     		->findCompleteGameSessionById($game_session_id);
 
-    	if ($game_session['array_gameSession']->getOwnerUser() == $this->getUser()->getId()) {
+    	if ($game_session['array_gameSession']->getOwner() == $this->getUser()->getId()) {
 			return self::loginGameAllowAccess($request, $game_session_id);
     	}
     	
@@ -164,6 +159,7 @@ class MainController extends Controller
 		
     	if ($user_game_session_assotiation) {
     		$user_game_session_assotiation->setAllowAccess(true);
+    		$user_game_session_assotiation->setLanguage($request->getLocale());
     		$em->persist($user_game_session_assotiation);
     		$em->flush();
     	}
@@ -172,7 +168,8 @@ class MainController extends Controller
     		$user_game_session_assotiation->setUserId($this->getUser()->getId());
     		$user_game_session_assotiation->setGameSessionId($game_session_id);
     		$user_game_session_assotiation->setAllowAccess(true);
-    		$user_game_session_assotiation->setConected(false);
+    		$user_game_session_assotiation->setConnected(false);
+    		$user_game_session_assotiation->setLanguage($request->getLocale());
     		$em->persist($user_game_session_assotiation);
     		$em->flush();
     	}
@@ -180,28 +177,77 @@ class MainController extends Controller
     }
     
     public function loginGameSessionRejectedAction($game_session_id) {
-    	return self::alreadyConectedRender($game_session_id);
+    	return self::loginGameSessionRejecteRender($game_session_id);
     }
     
-    public function alreadyConectedRender($game_session_id) {
+    public function loginGameSessionRejecteRender($game_session_id) {
     	$em = $this->getDoctrine()->getManager();
     	$game_session = $em
     		->getRepository('GameSessionBundle:GameSession')
     		->find($game_session_id);
     	
-    	return $this->render('GameSessionBundle:Security:already_conected_game_session.html.twig', array(
+    	return $this->render('GameSessionBundle:Security:re_login_game_session.html.twig', array(
     			'game_session' => $game_session
     	));
     }
     
-    public function gameSessionsAction(\Symfony\Component\HttpFoundation\Request $request) 
+    public function disconnectedAction ($game_session_id) {
+		return self::disconnectedRender($game_session_id);
+    }
+    
+    public function disconnectedRender ($game_session_id) {
+    	$em = $this->getDoctrine()->getManager();
+    	$game_session = $em
+    	->getRepository('GameSessionBundle:GameSession')
+    	->find($game_session_id);
+    	
+    	return $this->render('GameSessionBundle:Security:disconnected_game_session.html.twig', array(
+    			'game_session' => $game_session
+    	));
+    }
+    
+    public function gameSessionsAction(Request $request) 
     {
     	$game_sessions_actives = $this->getDoctrine()
     	->getRepository('GameSessionBundle:GameSession')
     	->findActiveGameSessions();
     	
-    	return $this->render('GameSessionBundle:GameSession:game_sessions_list.html.twig', array(
+    	return self::gameSessionsRender($game_sessions_actives);
+    }
+    
+    public function gameSessionsRender($game_sessions_actives)
+    {
+    	return $this->render('GameSessionBundle:Web:game_sessions_list.html.twig', array(
     			'game_sessions_actives' => $game_sessions_actives
     	));
+    }
+    
+    public function editGameSessionAction (Request $request, $game_session_id) {
+   	 
+    	$game_session = $this->getDoctrine()->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+    	
+    	$form = $this->createFormBuilder($game_session)
+    	->add('name', 'text')
+    	->add('password', 'password')
+    	->add('comments', 'textarea', array(
+        	'required' => false))
+//         ->add('submit_button', 'submit')
+        ->add('submit_button', SubmitType::class, array(
+        		'attr' => array('class' => 'submit'),
+        ))
+    	->getForm();
+    	
+//     	$form->handleRequest($request);
+
+    	if ($form->isValid()) {
+    		var_dump("patata");die();
+			self::updateGameSession($game_session);
+//     		$this->addGameSession($game_session);
+//     		return $this->redirect($this->generateUrl('join_game_session', array('game_session_id' => $game_session->getId())));
+    	}
+
+    	return $this->render('GameSessionBundle:GameSession:edit_popup_game_session.html.twig', array(
+    			'form' => $form->createView()
+		));
     }
 }

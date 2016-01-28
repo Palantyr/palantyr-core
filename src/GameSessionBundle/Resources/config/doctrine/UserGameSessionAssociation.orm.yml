@@ -14,5 +14,7 @@ GameSessionBundle\Entity\UserGameSessionAssociation:
             type: integer
         allow_access: 
             type: boolean
-        conected:
+        connected:
             type: boolean
+        language:
+            type: string

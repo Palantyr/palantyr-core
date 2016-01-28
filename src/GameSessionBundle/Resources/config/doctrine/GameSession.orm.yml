@@ -11,7 +11,7 @@ GameSessionBundle\Entity\GameSession:
         name:
             type: string
             length: 255
-        owner_user:
+        owner:
             type: integer
         password: 
             type: string

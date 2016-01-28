@@ -2,8 +2,6 @@
 //GameSessionBundle\Entity\Language.php
 namespace GameSessionBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 class Language
 {
 	private $id;
