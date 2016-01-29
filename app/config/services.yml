@@ -19,6 +19,9 @@ services:
     session.handler.pdo:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
         arguments: [@pdo, {lock_mode: 0}]
+        
+    fos_user.doctrine_registry:
+        alias: doctrine
     
 #To generate DB
     #session.handler.pdo:

@@ -71,7 +71,7 @@ braincrafted_bootstrap:
     output_dir:
     assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap
     jquery_path: %kernel.root_dir%/../vendor/components/jquery/jquery.js
-    less_filter: lessphp # "less", "less", "sass" or "none"
+    css_preprocessor: lessphp # "less", "less", "sass" or "none"
     fonts_dir: %kernel.root_dir%/../web/fonts
     auto_configure:
         assetic: true
