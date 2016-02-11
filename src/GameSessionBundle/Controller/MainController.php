@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class MainController extends Controller
 { 
-    public function addGameSession($game_session) 
+    private function addGameSession($game_session) 
     {
     	$game_session->setOwner($this->getUser()->getId());
     	$game_session->setStartDate(new \DateTime());
@@ -85,6 +85,10 @@ class MainController extends Controller
     
     public function joinGameSessionAction(Request $request, $game_session_id) 
     {
+    	if (!self::gameSessionExist($game_session_id)) {
+    		return self::removedAction();
+    	}
+    	
     	$em = $this->getDoctrine()->getManager();
     	
     	$user_game_session_assotiation = $em->getRepository('GameSessionBundle:UserGameSessionAssociation')
@@ -111,6 +115,9 @@ class MainController extends Controller
 
     public function loginGameSessionAction(Request $request, $game_session_id)
     {
+    	if (!self::gameSessionExist($game_session_id)) {
+    		return self::removedAction();
+    	}
     	$em = $this->getDoctrine()->getManager();
     	$game_session = $em
     		->getRepository('GameSessionBundle:GameSession')
@@ -176,11 +183,17 @@ class MainController extends Controller
     	return $this->redirectToRoute('join_game_session', array('game_session_id' => $game_session_id));
     }
     
+    private function gameSessionExist($game_session_id)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	return (boolean)$em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+    }
+    
     public function loginGameSessionRejectedAction($game_session_id) {
     	return self::loginGameSessionRejecteRender($game_session_id);
     }
     
-    public function loginGameSessionRejecteRender($game_session_id) {
+    private function loginGameSessionRejecteRender($game_session_id) {
     	$em = $this->getDoctrine()->getManager();
     	$game_session = $em
     		->getRepository('GameSessionBundle:GameSession')
@@ -195,7 +208,7 @@ class MainController extends Controller
 		return self::disconnectedRender($game_session_id);
     }
     
-    public function disconnectedRender ($game_session_id) {
+    private function disconnectedRender ($game_session_id) {
     	$em = $this->getDoctrine()->getManager();
     	$game_session = $em
     	->getRepository('GameSessionBundle:GameSession')
@@ -204,6 +217,16 @@ class MainController extends Controller
     	return $this->render('GameSessionBundle:Security:disconnected_game_session.html.twig', array(
     			'game_session' => $game_session
     	));
+    }
+    
+    public function removedAction()
+    {
+    	return self::removedRender();
+    }
+    
+    private function removedRender()
+    {
+    	return $this->render('GameSessionBundle:Security:removed_game_session.html.twig');
     }
     
     public function gameSessionsAction(Request $request) 
@@ -215,7 +238,7 @@ class MainController extends Controller
     	return self::gameSessionsRender($game_sessions_actives);
     }
     
-    public function gameSessionsRender($game_sessions_actives)
+    private function gameSessionsRender($game_sessions_actives)
     {
     	return $this->render('GameSessionBundle:Web:game_sessions_list.html.twig', array(
     			'game_sessions_actives' => $game_sessions_actives

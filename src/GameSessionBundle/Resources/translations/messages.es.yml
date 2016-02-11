@@ -26,9 +26,14 @@ game_session:
         submit: Editar
     remove:
         submit: Eliminar
+    removed:
+        title: Sesión de juego eliminada
+        message: La sesión de juego ha sido eliminada
+    disconnected:
+        title: Desconectado
         message: Has sido desconectado de la sesión de juego
     leave:
-        confirmation_message: ¿Estás seguro de querer salir?
+        confirmation_message: Are you sure you want to leave?
         
 secondary_menu:
     settings:

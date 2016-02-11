@@ -38,6 +38,14 @@ game_session_disconnected:
     requirements:
         _locale: %app.locales_string%
         
+game_session_removed:
+    path:     /{_locale}/game/session/removed/{game_session_id}
+    defaults:  
+        _controller: GameSessionBundle:Main:removed
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
 game_sessions:
     path:     /{_locale}/game/sessions
     defaults:  

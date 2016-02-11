@@ -26,6 +26,11 @@ game_session:
         submit: Edit
     remove:
         submit: Remove
+    removed:
+        title: Game session removed
+        message: The game session has been removed
+    disconnected:
+        title: Disconnected
         message: You have been disconnected from the game session
     leave:
         confirmation_message: Are you sure you want to leave?

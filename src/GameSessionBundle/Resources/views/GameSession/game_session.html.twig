@@ -1,50 +1,36 @@
 {% extends 'GameSessionBundle:GameSession:base_game_session.html.twig' %}
 
 {% block body %}
+	{{ include('GameSessionBundle:GameSession:base_popup.html.twig') }}
+	{{ ws_client() }}
+{% endblock %}
 
-<!-- Trigger the modal with a button -->
-{# <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>#}
+{% block up_left %}
+	<div id="other_users_connected"></div>
+{% endblock %}
 
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-  
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal -->
-	
-	<div id="chat">
-		<textarea id="written-text" rows="5" readonly style="overflow-y: scroll;"></textarea>
-		</br>
-		<textarea id="new-text" rows="2">Writte here.</textarea>
-		<button id="send-button">Send</button>
-	</div>
-	
-	<!-- div my_data -->
+{% block up_right %}{% endblock %}
+
+{% block down_left %}
 	<div id="{{ app.user.username }}">
-		<div id="import_character_sheet">
-			<button id="request_character_sheet_button">Request character sheets</button>
-		</div>
 		<div id="character_sheets"></div>
 	</div>
-	
-	<div id="other_users_connected"></div>
+{% endblock %}
 
-	{{ ws_client() }}
-	
+{% block down_right %}
+	<div class="full-square">
+		<div class="panel-body">
+			<ul id="chat" class="chat"></ul>
+		</div>
+		<div class="panel-footer">
+			<div class="input-group">
+				<input id="chat_new_text" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+				<span class="input-group-btn">
+					<button id="chat_send_button" class="btn btn-warning btn-sm">Send</button>
+				</span>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 
@@ -133,13 +119,31 @@
 
 
 // CHAT
-		$( "#chat #send-button" ).click(function() {
-			var newText = $( "#new-text" ).val();
-			session.publish(route_game_session, {
-				section:"chat", 
-				msg: newText
-			});
+		$( "#chat_send_button" ).click(function() {
+			var newText = $( "#chat_new_text" ).val();
+			if (newText != '') {
+				session.publish(route_game_session, {
+					section:"chat", 
+					msg: newText
+				});
+				$( "#chat_new_text" ).val('');
+			}
 		});
+
+	 	$(document).keypress(function(e) {
+	 	    if(e.which == 13) {
+	 	 	    if (last_id_from_input == 'chat_new_text') {
+	 				var newText = $( "#chat_new_text" ).val();
+	 				if (newText != '') {
+		 				session.publish(route_game_session, {
+		 					section:"chat", 
+		 					msg: newText
+		 				});
+		 				$( "#chat_new_text" ).val('');
+	 				}
+				}
+	 	    }
+	 	});
 // CHAT
 		
 // IMPORT CHARACTER SHEET
@@ -149,6 +153,14 @@
 				option: "request"
 			});
 		});
+
+		$( '#request_character_sheet_button' ).on("click", function() {
+			session.publish(route_game_session, {
+				section:"import_character_sheet", 
+				option: "request"
+			});
+		});
+				
 
 		$( "#"+user_username ).on("click", "#import_character_sheet > #request_character_sheet_cancel_button", function() {
 			$(this).parent().empty();
@@ -228,469 +240,36 @@
  	    $( "#chat #written-text" ).append("&#10;");
  	}); 
  // ||||||||||||||||||||||||||||||||||||| END WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
+</script>
 
-// CONNECTION
- 	function subscribeConnection(payload) {
- 		switch(payload.option) {
- 		case "add_all_users":
- 			var other_users_connected = JSON.parse(payload.other_users_connected);
- 			addAllUsers(other_users_connected);
- 			break;
 
- 		case "add_new_user":
- 			addUser(payload.user_username);
- 			break;
-
- 		case "delete_disconnected_user":
- 			deleteUser(payload.user_username);
- 			break;
- 		case "already_connected":
- 	 		redirect(payload.option);
- 			break;
- 		case "remove_user":
- 	 		redirect(payload.option);
- 	 		break;
- 		case "remove_game_session":
- 			redirect(payload.option);
- 	 		break;
- 		}
- 	}
-		
- 	function addAllUsers(other_users_connected) {
- 		for (var other_user_connected in other_users_connected) {
- 			addUser(other_users_connected[other_user_connected]);
- 		}
- 	}
-
- 	function addUser(user_username) {
- 		$( "#other_users_connected" ).append("<div id="+user_username+"></div> ");
- 	}
-
- 	function deleteUser(user_username) {
- 		$( "#other_users_connected > #"+user_username ).remove();
- 	}
-
- 	function redirect (option) {
-
- 		$( 'body' ).empty();
- 		var new_route;
- 	 	
- 	 	switch(option) {
- 	 	case 'already_connected':
- 	 		new_route = "{{ path('login_game_session_rejected', { 'game_session_id': game_session.getId() }) }}";
- 	 	 	break;
- 	 	case 'remove_user':
- 	 		new_route = "{{ path('game_session_disconnected', { 'game_session_id': game_session.getId() }) }}";
- 	 	 	break;
- 	 	case 'remove_game_session':
- 	 		new_route = "{{ path('game_session_disconnected', { 'game_session_id': game_session.getId() }) }}";
- 	 	 	break;
- 	 	}
- 		$(window).attr('location', new_route);
- 	 }
-
- 	$(window).on('beforeunload', function() {
- 		if ($('body').is(':empty')){}
- 		else {
- 			return "{% trans %}game_session.leave.confirmation_message{% endtrans %}";
- 	 	}
- 	});
-// CONNECTION
+{# CONNECTION #}
+	{{ include('GameSessionBundle:GameSession:connection.html.twig') }}
+{# CONNECTION #}
  
-//	SETTINGS
-	function subscribeSettings(payload) {
-		switch(payload.option) {
-		case "game_session_request_edit":
-			var game_session = JSON.parse(payload.game_session_json);
-			popupEditGameSession(game_session);
-			break;
-		case "change_game_session_name":
-			changeGameSessionName(payload.game_session_name);
-			break;
-		case "game_session_invalid_edit":
-			var game_session = JSON.parse(payload.game_session_json);
-			var error_messages = JSON.parse(payload.error_messages_json);
-			popupEditGameSession(game_session, error_messages);
-			break;
-		case "manage_users_request":
-			if (payload.other_users_connected_json) {
-				var other_users_connected = JSON.parse(payload.other_users_connected_json);
-				popupManageUsers(other_users_connected);
-			}
-			else {
-				popupManageNoUsers();
-			}
-			break;
-		}
-	}
+ 
+{# SETTINGS #}
+	{{ include('GameSessionBundle:GameSession:settings.html.twig') }}
+{# SETTINGS #}
 
-	function popupManageNoUsers () {
-		var title = "{% trans %}secondary_menu.settings.manage_users.title{% endtrans %}";
 
-		var body = "{% trans %}secondary_menu.settings.manage_users.no_other_users_connected{% endtrans %}";
-		
-		var footer = "";
-		
-		usePopup(title, body, footer);
-	}
+{# IMPORT CHARACTER SHEET #}
+	{{ include('GameSessionBundle:GameSession:import_character_sheet.html.twig') }}
+{# IMPORT CHARACTER SHEET #}
 
-	function popupManageUsers (other_users_connected) {
-		var title = "{% trans %}secondary_menu.settings.manage_users.title{% endtrans %}";
 
-		var body = '';
-
-		for (var other_user_connected in other_users_connected) {
-			body = body + ' \
-			<div id="form" class="form-inline"> \
-				<div class="form-group"> \
-					<label class="control-label">'+other_users_connected[other_user_connected]+'</label> \
-				</div> \
-		        &nbsp; \
-		        <div id="remove_user" class="form-group"> \
-		        	<button type="submit" id="'+other_users_connected[other_user_connected]+'" class="btn btn-danger">'+"{% trans %}secondary_menu.settings.manage_users.remove_button{% endtrans %}"+'</button> \
-		        </div> \
-	        </div></br>';
-		}
-		
-		var footer = "";
-					
-		usePopup(title, body, footer);
-	}
-
-	function editGameSessionWrong (error_messages) {
-		var title = "{% trans %}game_session.edit.wrong.title{% endtrans %}";
-		var body = error_messages;
-		var footer = "";
-					
-		usePopup(title, body, footer);
-	}
-
-	function popupEditGameSession(game_session, error_messages) {
-		var title = "{% trans %}game_session.edit.title{% endtrans %}";
-		
-		var body =' \
-			<form name="form" method="post" action="" id="form_edit_game_session" novalidate="novalidate" class="form-horizontal" role="form"> \
-			    <div class="form-group"><label class="control-label col-lg-2">'+"{% trans %}game_session.name{% endtrans %}"+'</label><div class="col-lg-5"><input type="text" id="form_name" name="form[name]" class="form-control" value="'+game_session.name+'"></div></div> \
-			    <div class="form-group"><label class="control-label col-lg-2">'+"{% trans %}game_session.password{% endtrans %}"+'</label><div class="col-lg-4"><input type="text" id="form_password" name="form[password]" class="form-control" value="'+game_session.password+'"></div></div> \
-			    <div class="form-group"><label class="control-label col-lg-2">'+"{% trans %}game_session.comments{% endtrans %}"+'</label><div class="col-lg-7"><textarea id="form_comments" name="form[comments]" class="form-control">'+game_session.comments+'</textarea></div></div> \
-		    </form>';
-
-		if (error_messages) {
-			var body_error = '<div id="edit_error">';
-
-			for (var count_error_messages = 0;
-				count_error_messages < error_messages.length;
-				count_error_messages++) {
-
-				var actual_error = error_messages[count_error_messages];
-				body_error = body_error + actual_error + '</br>';
-			}
-
-			body = body_error + "</div></br>" + body;
-		}
+{# FUNCTIONALITY CHARACTER SHEET #}
+	{{ include('GameSessionBundle:GameSession:functionality_character_sheet.html.twig') }}
+{# FUNCTIONALITY CHARACTER SHEET #}
 	
-		var footer = '<button id="game_session_remove_submit_button" type="button" class="btn btn-danger btn-lg pull-left" data-dismiss="modal">'+"{% trans %}game_session.remove.submit{% endtrans %}"+'</button> \
-					<button id="game_session_edit_submit_button" type="button" class="btn btn-primary btn-lg"  data-dismiss="modal">'+"{% trans %}game_session.edit.submit{% endtrans %}"+'</button>';	
 
-		usePopup(title, body, footer);
-	}
+{# CHAT #}
+	{{ include('GameSessionBundle:GameSession:chat.html.twig') }}
+{# CHAT #}
 
-	function changeGameSessionName (game_session_name) {
-		$( '#game_session_name' ).text(game_session_name);
-	}
-//	SETTINGS
-	
- // 	IMPORT CHARACTER SHEET
- 	function subscribeImportCharacterSheet(payload) {
- 		switch(payload.option) {
- 		case "only_view":
- 			var character_sheets_in_game = JSON.parse(payload.character_sheets_in_game);
- 			printCharacterSheets(character_sheets_in_game, "only_view");
- 			break;
-			
- 		case "request":
- 			var character_sheets = JSON.parse(payload.character_sheets);
- 			printCharacterSheets(character_sheets, "request");
- 			break;
 
- 		case "import":
- 			var character_sheet = JSON.parse(payload.character_sheet);
- 			if (payload.username_sender == user_username) {
- 				printCharacterSheet(character_sheet, "import");
- 			}
- 			else {
- 				printCharacterSheet(character_sheet, "only_view");
- 			}
- 			break;
- 		case "delete_own":
- 			deleteCharacterSheet(payload.character_sheet_id, payload.option);
- 			break;
- 		case "delete_external":
- 			deleteCharacterSheet(payload.character_sheet_id, payload.option, payload.username_sender);
- 			break;
- 		}
- 	}
-
- 	function deleteCharacterSheet (character_sheet_id, option, username_sender) {
- 		var character_sheet_location;
-		
- 		switch(option) {
- 		case "delete_own":
- 			character_sheet_location = "#"+user_username+" > #character_sheets > #"+character_sheet_id;
- 			deleteFunctionalityPanel();
- 			break;
- 		case "delete_external":
- 			character_sheet_location = "#other_users_connected > #"+username_sender+" > #"+character_sheet_id;
- 			break;
- 		}
- 		$(character_sheet_location).remove();
- 	}
-		
- 	function printCharacterSheets(character_sheets, option){
- 		if (character_sheets != null) { //Object.keys(character_sheets).length >= 1
- 			for (var count_character_sheets = 0; 
- 				count_character_sheets < Object.keys(character_sheets).length; 
- 				count_character_sheets++) {
-
- 				printCharacterSheet(character_sheets[count_character_sheets], option);
- 			}
- 			switch(option) {
- 			case "request":
- 				$("#"+user_username+" > #import_character_sheet > #request_character_sheet_button").remove();
- 				$( "#"+user_username+" > #import_character_sheet" ).prepend(
- 						"<button id='request_character_sheet_cancel_button'>Cancel</button>" );
- 				break;
- 			}
- 		}
- 		else {
- 			switch(option) {
- 			case "request":
- 				alert("You haven't any character sheet");
- 				break;
- 			case "import":
- 				alert("printCharacterSheets option=import FAIL");
- 				break;
- 			case "only_view":
- 				alert("printCharacterSheets option=only_view FAIL");
- 				break;
- 			}
- 		}
- 	}
-
- 	function printCharacterSheet(character_sheet, option) {
- 		//alert(JSON.stringify(character_sheet));
- 		var character_sheet_id = getCharacterSheetId(character_sheet);
- 		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
- 		var sheet_destination;
-		
- 		switch(option) {
- 		case "request":
- 			character_sheet_id = character_sheet_id.concat("_provisional");
- 			sheet_destination = "#"+user_username+" > #import_character_sheet";
- 			break;
- 		case "import":
- 			sheet_destination = "#"+user_username+" > #character_sheets";
- 			break;
- 		case "only_view":
- 			sheet_destination = "#other_users_connected > #"+character_sheet_user_username;
- 			break;
- 		}
-		
- 		$( sheet_destination ).append( 
- 				"<div id="+character_sheet_id+"></div>" );
-		
- 		for (var count_sections = 0; 
- 			count_sections < Object.keys(character_sheet).length; 
- 			count_sections++) {
-
- 			if (Object.keys(character_sheet)[count_sections] == "character_sheet_settings") {
- 				$( "#"+character_sheet_id ).append( 
- 					"<div id='character_sheet_settings' style='display: none;'></div>" );
-
- 				for (var count_settings_sections = 0; 
- 					count_settings_sections < Object.keys(character_sheet['character_sheet_settings']).length; 
- 					count_settings_sections++) {
-
- 					var actual_key = Object.keys(character_sheet['character_sheet_settings'])[count_settings_sections];
- 					$( "#"+user_username+" > #import_character_sheet > #"+character_sheet_id+" > #character_sheet_settings" ).append( 
- 						"<span id="+actual_key+">"
- 						+character_sheet['character_sheet_settings'][actual_key]+"</span>" );
- 				}
- 			}
-
- 			else { 
- 				switch (character_sheet[count_sections].type) {
- 				case "group":
- 					typeGroupOfCharacterSheet(character_sheet[count_sections], "#"+character_sheet_id);
- 					break;
- 				}
- 			}
- 		}
- 		if (option == "request") {
- 			$( "#"+character_sheet_id ).append(
- 					"<button id='import_character_sheet_button' value='"+character_sheet_id+"'>Import Character</button>" );
- 		}
- 		else if (option == "import") {
- 			//Pending to develop
- 			$( "#"+character_sheet_id ).append(
- 					"<button id='import_character_sheet_delete_button' value='"+character_sheet_id+"'>Delete</button>" );
- 		}	
- 	}
-
- 	function typeGroupOfCharacterSheet(group, father_div_identification) {
- 		$( father_div_identification ).append( 
- 			"<div id="+group.id+"></div>" );
- 		if(group.name) {
- 			$( father_div_identification+" > #"+group.id ).append( 
- 				"<span id='name'>"+group.name+"</span>" );
- 		}
-		
- 		for (var count_group_sections = 0; 
- 			count_group_sections < Object.keys(group).length - 3; //Less id, name and type
- 			count_group_sections++) {
-			
- 			if (group[count_group_sections].type == "group") {
- 				typeGroupOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
- 			}
-			
- 			else if (group[count_group_sections].type == "field") {
- 				typeFieldOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
- 			}
- 		}
- 	}
-
- 	function typeFieldOfCharacterSheet(field, father_div_identification){
- 		$( father_div_identification ).append( 
- 				"<div id="+field.id+"><span id='name'>"+field.name+
- 				"</span><span id='value'>"+field.value+"</span></div>" );
- 	}
-
- 	function getCharacterSheetId (character_sheet) {
- 		return character_sheet['character_sheet_settings']['character_sheet_id'];
- 	}
-
- 	function getUserUsernameFromCharacterSheet (character_sheet) {
- 		return character_sheet['character_sheet_settings']['user_username'];
- 	}
- // 	IMPORT CHARACTER SHEET
-	
- // 	FUNCTIONALITY CHARACTER SHEET
- 	function subscribeFunctionalityCharacterSheet(payload) {
- 		switch(payload.option) {
- 		case "individual":
- 			alert("FUNCTIONALITY CHARACTER SHEET case individual");
- 			break;
- 		}
- 	}
-
- 	var individual_functionality_started = false;
- 	var individual_functionality_last_element = false;
- 	var individual_functionality_actual_character_sheet_id = false;
- 	function vampireFunctionality (element) {
- 		if (individual_functionality_started == false) {
- 			generateIndividualFunctionalityPanel();
- 			$( "#individual_functionality_panel" ).append("<div id="+element.id+"><span id='name'>"+
- 					element.name+"</span><input id='value' type='number' value="+
- 					element.value_list.value+"></input></div>");
-			
- 			$( "#individual_functionality_panel" ).append("<div id='result_type'><span id='type' style='display:none'>"+
- 					element.result_type.type+"</span><span id='name'>"+
- 					element.result_type.name+"</span><input id='value' type='number' value="+
- 					element.result_type.value+"></input></div>");
-
- 			$( "#individual_functionality_panel" ).append("<button id='individual_functionality_panel_add_button'>Add</button>");
- 			$( "#individual_functionality_panel" ).append("<button id='individual_functionality_panel_throw_button'>Throw</button");
- 			$( "#individual_functionality_panel" ).append("<button id='individual_functionality_panel_cancel_button'>Cancel</button");
-
- 			individual_functionality_started = true;
- 			individual_functionality_actual_character_sheet_id = element.character_sheet_id;
- 			individual_functionality_last_element = element.id;
- 		}
- 		else {
- 			$( "#individual_functionality_panel > #"+individual_functionality_last_element ).after("<div id="+element.id+"><span id='name'>"+
- 					element.name+"</span><input id='value' type='number' value="+
- 					element.value_list.value+"></input></div>");
-
- 			individual_functionality_last_element = element.id;
- 		}
- 	}
-
- 	function generateIndividualFunctionalityPanel() {
- 		$( "#"+user_username ).append("<div id='individual_functionality_panel'></div>");
- 	}
-
- 	//})[id*="td_"] to id of character sheet
- 	$( "#"+user_username ).on("click", "div > #atributtes > div > div", function() {
- 		var character_sheet_id = getCharacterSheetIdFromElement($(this));
- 		if(character_sheet_id) {
- 			if(individual_functionality_actual_character_sheet_id === false || 
- 				individual_functionality_actual_character_sheet_id == character_sheet_id) {
- 				var element = { 
- 					    id: $(this).attr("id"),
- 					    name: $(this).children( "#name" ).text(),
- 					    character_sheet_id: character_sheet_id,
- 					    value_list: {value: $(this).children( "#value" ).text()},
- 					    result_type: {type: "number_of_successes", name: "Difficulty", value: "6"}
- 					};
- 				vampireFunctionality(element);
- 			}
- 		}
- 	});
-
- 	$( "#"+user_username ).on("click", "div > #abilities > div > div", function() {
- 		var character_sheet_id = getCharacterSheetIdFromElement($(this));
-
- 		if(character_sheet_id) {
- 			if(individual_functionality_actual_character_sheet_id === false || 
- 				individual_functionality_actual_character_sheet_id == character_sheet_id) {
- 				var element = { 
- 					    id: $(this).attr("id"),
- 					    name: $(this).children( "#name" ).text(),
- 					    character_sheet_id: character_sheet_id,
- 					    value_list: {value: $(this).children( "#value" ).text()},
- 					    result_type: {type: "number_of_successes", name: "Difficulty", value: "6"}
- 					};
- 				vampireFunctionality(element);
- 			}
- 		}
- 	});
-
- 	function deleteFunctionalityPanel () {
- 		$("#"+user_username+" > #individual_functionality_panel").remove();
- 		individual_functionality_started = false;
- 		individual_functionality_last_element = false;
- 		individual_functionality_actual_character_sheet_id = false;
- 	}
- // 	FUNCTIONALITY CHARACTER SHEET
-	
- // 	CHAT
- 	function subscribeChat(payload) {
- 		if (payload.text != null) {
- 			addTextToChat(payload);
- 		}
- 	}
-			
- 	function addTextToChat(payload){
-
- 		if (payload.username_sender != null) {
- 			$( "#chat #written-text" ).append(payload.date);
- 			$( "#chat #written-text" ).append("-");
- 			$( "#chat #written-text" ).append(payload.username_sender);
- 			$( "#chat #written-text" ).append(": ");
- 			$( "#chat #written-text" ).append(payload.text);
- 			$( "#chat #written-text" ).append("&#10;");
- 		}
- 		else {
- 			$( "#chat #written-text" ).append(payload.date);
- 			$( "#chat #written-text" ).append(": ");
- 			$( "#chat #written-text" ).append(payload.text);
- 			$( "#chat #written-text" ).append("&#10;");
- 			$( "#chat #written-text" ).append("&#10;");
- 		}
- 	}
- // 	CHAT
-	
- // 	OTHER
+<script>
+// OTHER
  	function getCharacterSheetIdFromElement(element) {
  		var is_only_number = /^\d+$/;
 		
@@ -731,9 +310,14 @@
 	function closePopup () {
 		$('#myModal').modal('hide');
 	}
- // 	OTHER
+
+	var last_id_from_input;
+	$(function() {
+	    $("input").on("click", function() {
+	    	last_id_from_input = $(this).attr("id");
+	    });
+	});
+// OTHER
  </script>
- 
-{# 	<button id="modal_button" type="button" class="hidden" data-toggle="modal" data-target="#myModal">Open Modal</button>#}
 
 {% endblock %}

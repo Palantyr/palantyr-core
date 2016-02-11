@@ -111,10 +111,17 @@ class GameSessionTopic extends Controller implements TopicInterface
 
 // 	CONNECTION SECURITY
 	private function onSuscribeConectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request) {
-	
+
 		if ($this->clientManipulator->getClient($connection)->getId()) {
 				
 			$game_session_id = $request->getAttributes()->get('room');
+			
+			// If game session not exist
+			if(!self::gameSessionExist($game_session_id)) {
+				self::gameSessionRemovedKickPlayer($connection, $topic, $request);
+				return false;
+			}
+			
 			$user_id = $this->clientManipulator->getClient($connection)->getId();
 				
 			$user_game_session_assotiation = $this->em->getRepository('GameSessionBundle:UserGameSessionAssociation')
@@ -160,6 +167,20 @@ class GameSessionTopic extends Controller implements TopicInterface
 		$user_game_session_assotiation->setConnected(false);
 		$this->em->persist($user_game_session_assotiation);
 		$this->em->flush();
+	}
+	
+	private function gameSessionExist($game_session_id)
+	{
+		return (boolean)$this->em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+	}
+	
+	private function gameSessionRemovedKickPlayer(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+	{
+		$connection->event($topic->getId(), [
+				'section' => "connection",
+				'option' => "remove_game_session"]);
+		
+		self::onUnSubscribe($connection, $topic, $request);
 	}
 	// CONNECTION SECURITY
 	
@@ -350,14 +371,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$client_to_remove = $this->clientManipulator->findByUsername($topic, $user_username_to_remove);
 
 				if ($client_to_remove !== false) {
-					
-					$topic->broadcast([
-							'section' => "connection",
-							'option' => "remove_user"
-					], 
-						array(), 
-						array($client_to_remove['connection']->WAMP->sessionId));
-					self::onUnSubscribe($client_to_remove['connection'], $topic, $request);
+					self::gameSessionRemovedKickPlayer($client_to_remove['connection'], $topic, $request);
 				}
 		}
 	}
@@ -389,15 +403,17 @@ class GameSessionTopic extends Controller implements TopicInterface
 	}
 	
 	private function onPublishChat (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
+		if ($event["msg"] != '') {
 			$date = new \DateTime();
 			$date = $date->format('H:i:s');
-	
+			
 			$topic->broadcast([
 					'section' => "chat",
 					'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 					'text' => $event["msg"],
 					'date' => $date,
 			]);
+		}
 	}
 // 	CHAT
 	

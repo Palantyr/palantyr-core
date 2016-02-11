@@ -35,10 +35,10 @@ class MenuBuilder extends ContainerAware
 		$user_id = $this->container->get('security.context')->getToken()->getUser()->getId();
 		if (self::isOwner($user_id, $game_session_id)) {
 			$menu['settings']->addChild($translator->trans('game_session.edit.title'),
-					array('uri' => '#'))
+					array('uri' => 'javascript:void(0)'))
 				->setAttribute('id', 'game_session_edit_button');
 			$menu['settings']->addChild($translator->trans('secondary_menu.settings.manage_users.title'),
-					array('uri' => '#'))
+					array('uri' => 'javascript:void(0)'))
 				->setAttribute('id', 'manage_users_button');
 		}
 		

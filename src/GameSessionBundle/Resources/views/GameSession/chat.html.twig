@@ -1,0 +1,65 @@
+<script type="text/javascript">
+
+ 	function subscribeChat(payload) {
+ 		if (payload.text != null) {
+ 			addTextToChat(payload);
+ 		}
+ 	}
+			
+ 	function addTextToChat(payload){
+
+ 		if (payload.username_sender != null) {
+ 	 		if (payload.username_sender == user_username) {
+ 				$ ( '#chat' ).append(' \
+ 					<li class="right clearfix"> \
+ 						<span class="chat-img pull-right"> \
+	 				 		'+"{% image "@GameSessionBundle/Resources/public/images/chat-me.png" output="images/chat-me.png" %}"+' \
+	 				 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
+	 				 		'+"{% endimage %}"+' \
+ 			    		</span> \
+ 			    		<div class="chat-body clearfix"> \
+ 			    	        <div class="header"> \
+                               	<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
+                               	<strong class="pull-right primary-font">'+payload.username_sender+'</strong> \
+ 			    	        </div> \
+ 			    	        <p>'+payload.text+'</p> \
+ 			    	    </div> \
+ 			    	</li>');
+ 	 	 	}
+ 	 		else {
+ 				$ ( '#chat' ).append(' \
+ 					<li class="left clearfix"> \
+ 						<span class="chat-img pull-left"> \
+	 				 		'+"{% image "@GameSessionBundle/Resources/public/images/chat-other.png" output="images/chat-me.png" %}"+' \
+	 				 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
+	 				 		'+"{% endimage %}"+' \
+ 			    		</span> \
+ 			    		<div class="chat-body clearfix"> \
+ 			    	        <div class="header"> \
+ 			    	            <strong class="primary-font">'+payload.username_sender+'</strong> <small class="pull-right text-muted"> \
+ 			    	            <span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
+ 			    	        </div> \
+ 			    	        <p>'+payload.text+'</p> \
+ 			    	    </div> \
+ 			    	</li>');
+ 	 	 	}
+ 		}
+ 		else {
+			$ ( '#chat' ).append(' \
+ 				<li class="left clearfix"> \
+ 					<span class="chat-img pull-left"> \
+	 			 		'+"{% image "@GameSessionBundle/Resources/public/images/chat-system.png" output="images/chat-me.png" %}"+' \
+	 			 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
+	 			 		'+"{% endimage %}"+' \
+ 			   		</span> \
+ 			   		<div class="chat-body clearfix"> \
+ 			   	        <div class="header"> \
+ 			   	            <span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
+ 			   	        </div> \
+ 			   	        <p>'+payload.text+'</p> \
+ 			   	    </div> \
+ 			   	</li>');
+ 	 	}
+ 	}
+
+</script>
