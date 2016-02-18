@@ -112,7 +112,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 // 	CONNECTION SECURITY
 	private function onSuscribeConectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request) {
 
-		if ($this->clientManipulator->getClient($connection)->getId()) {
+		if ($this->clientManipulator->getClient($connection)->getId()) { // maybe require != false || != null
 				
 			$game_session_id = $request->getAttributes()->get('room');
 			
@@ -429,8 +429,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 			$character_sheets_in_game_json = json_encode($this->character_sheets_in_game[$room]);
 			$connection->event($topic->getId(), [
 					'section' => "import_character_sheet",
-					'option' => "only_view",
-					'character_sheets_in_game' => $character_sheets_in_game_json
+					'option' => "import_all_external",
+					'character_sheets_json' => $character_sheets_in_game_json
 			]);
 		}
 	}
@@ -439,25 +439,34 @@ class GameSessionTopic extends Controller implements TopicInterface
 		$room = $request->getAttributes()->get('room');
 		
 		switch ($event['option']) {
-			case "request": //Request Character Sheet
+			case "request":
 				$character_sheets = self::getCharacterSheets($room, $this->clientManipulator->getClient($connection)->getId());
 				$character_sheets_json = json_encode($character_sheets);
 				$connection->event($topic->getId(), [
 						'section' => "import_character_sheet",
 						'option' => $event['option'],
-						'character_sheets' => $character_sheets_json
+						'character_sheets_json' => $character_sheets_json
 				]);
 				break;
 				
-			case "import": //Import Characer Sheet
+			case "import_own":
 				$character_sheet = self::getCharacterSheet($this->clientManipulator->getClient($connection)->getUsername(), $event['character_sheet_id']);
 				$character_sheet_json = json_encode($character_sheet);
+				
+				$connection->event($topic->getId(), [
+						'section' => "import_character_sheet",
+						'option' => "import_own",
+						'character_sheet_json' => $character_sheet_json
+				]);
+				
 				$topic->broadcast([
 						'section' => "import_character_sheet",
-						'option' => $event['option'],
+						'option' => 'import_external',
 						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
-						'character_sheet' => $character_sheet_json
-				]);
+						'character_sheet_json' => $character_sheet_json],
+						array($connection->WAMP->sessionId)
+						);
+				
 				$this->character_sheets_in_game[$room][] = $character_sheet;
 				break;
 				
@@ -490,14 +499,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 	
 	private function isCharacterSheetInGame ($room, $character_sheet_id) {
 		if (!empty($this->character_sheets_in_game[$room])) {
-
-			for ($count_character_sheets_in_game = 0;
-			$count_character_sheets_in_game < count($this->character_sheets_in_game[$room]);
-			$count_character_sheets_in_game++) {
-
-				if (self::getCharacterSheetId($this->character_sheets_in_game[$room][$count_character_sheets_in_game]) 
-					== $character_sheet_id) {
-
+			
+			foreach ($this->character_sheets_in_game[$room] as &$character_sheet_in_game) {
+				if (self::getCharacterSheetId($character_sheet_in_game) == $character_sheet_id) {
 					return true;
 				}
 			}
@@ -507,16 +511,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 	
 	private function deleteCharacterSheetInGame ($room, $character_sheet_id) {		
 		if (!empty($this->character_sheets_in_game[$room])) {
-	
-			for ($count_character_sheets_in_game = 0;
-			$count_character_sheets_in_game < count($this->character_sheets_in_game[$room]);
-			$count_character_sheets_in_game++) {
-	
-				if ($this->getCharacterSheetId($this->character_sheets_in_game[$room][$count_character_sheets_in_game])
-					== $character_sheet_id) {
-
-					unset($this->character_sheets_in_game[$room][$count_character_sheets_in_game]);
-					$this->character_sheets_in_game[$room] = array_values($this->character_sheets_in_game[$room]);
+			
+			foreach ($this->character_sheets_in_game[$room] as $key => &$character_sheet_in_game) {
+				if (self::getCharacterSheetId($character_sheet_in_game) == $character_sheet_id) {
+					unset($this->character_sheets_in_game[$room][$key]);
 					return true;
 				}
 			}
@@ -533,15 +531,11 @@ class GameSessionTopic extends Controller implements TopicInterface
 		else {
 			if (!empty($this->character_sheets_in_game[$room])) {
 				$user_username = $this->clientManipulator->getClient($connection)->getUsername();
-				for ($count_character_sheets_in_game = 0;
-				$count_character_sheets_in_game < count($this->character_sheets_in_game[$room]);
-				$count_character_sheets_in_game++) {
-						
-					if (self::getCharacterSheetUserUsername($this->character_sheets_in_game[$room][$count_character_sheets_in_game])
-							== $user_username) {
-			
-								self::deleteCharacterSheetInGame($room, self::getCharacterSheetId($this->character_sheets_in_game[$room][$count_character_sheets_in_game]));
-							}
+				
+				foreach ($this->character_sheets_in_game[$room] as &$character_sheet_in_game) {
+					if (self::getCharacterSheetUserUsername($character_sheet_in_game) == $user_username) {
+						self::deleteCharacterSheetInGame($room, self::getCharacterSheetId($character_sheet_in_game));
+					}
 				}
 			}
 		}
@@ -566,14 +560,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 		}
 
 		if (!empty($character_sheets_stored)) {
-			for ($count_character_sheets_stored = 0;
-				$count_character_sheets_stored < count($character_sheets_stored);
-				$count_character_sheets_stored++) {
-				
-				if (!self::isCharacterSheetInGame($room, self::getCharacterSheetId($character_sheets_stored[$count_character_sheets_stored]))) {
-					$character_sheets_to_send[] = $character_sheets_stored[$count_character_sheets_stored];
+			foreach ($character_sheets_stored as &$character_sheet_stored) {
+				if (!self::isCharacterSheetInGame($room, self::getCharacterSheetId($character_sheet_stored))) {
+					$character_sheets_to_send[] = $character_sheet_stored;
 				}
 			}
+
 			if (!empty($character_sheets_to_send)) {
 				return $character_sheets_to_send;
 			}
@@ -602,13 +594,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$character_sheets = self::getCharacterSheetsFromUserPablo();
 				break;
 		}
-		for ($count_character_sheets = 0;
-		$count_character_sheets < count($character_sheets);
-		$count_character_sheets++) {
 		
-			if (self::getCharacterSheetId($character_sheets[$count_character_sheets])
-				== $character_sheet_id) {
-				return $character_sheets[$count_character_sheets];
+		foreach ($character_sheets as &$character_sheet) {
+			if (self::getCharacterSheetId($character_sheet) == $character_sheet_id) {
+				return $character_sheet;
 			}
 		}
 	}

@@ -5,25 +5,32 @@ html, body {
 	position: relative;
 }
 
+body .header-menu {
+  	height: 50px;
+	width: 100%;
+/*  	overflow: auto; */
+ 	position: relative;
+}
+
 body .main-container {        
-  	height: 100%;
+  	height: calc(100% - 50px);
 	width: calc(100% - 50px);
 	left: 50px;
- 	overflow: hidden;
+/*  	overflow: auto; */
  	position: relative;
 }
 
 body .main-container .middle-row {        
   	height: 50%;
 	width: 100%;
- 	overflow: hidden;
+/*  	overflow: auto; */
  	position: relative;
 }
 
 body .main-container .middle-row .middle-col {
     height: 100%;
 	width: 50%;
-	overflow: hidden;
+/* 	overflow: auto; */
  	position: relative;
  	padding: 1px;
 }
@@ -31,7 +38,7 @@ body .main-container .middle-row .middle-col {
 .full-square {
   	height: 100%;
 	width: 100%;
-	overflow: hidden;
+/* 	overflow: auto; */
  	position: relative;
 }
 
@@ -55,9 +62,6 @@ body .main-container .middle-row .middle-col {
 	border-width: 0px 0px 0px 0px;	
     border-color: #729fcf;
 }
-
-
-
 
 
 /* Chat */
@@ -100,14 +104,14 @@ body .main-container .middle-row .middle-col {
 .panel-body
 {
     overflow-y: scroll;
-   	height: 72.5%;
+   	height: 87.5%;
  	position: relative;
     padding: 5px;
 }
 
 .panel-footer
 {
-   	height: 17.5%;
+   	height: 12.5%;
     padding: 2px;
 }
 
@@ -133,3 +137,88 @@ body .main-container .middle-row .middle-col {
     background-color: #555;
 }
 /* Chat */
+
+
+/* Character Sheet */
+.character_sheets {
+	height: 100%;
+	width: 100%;
+ 	overflow: auto;
+ 	position: relative;
+ 	display: -webkit-box;
+ 	display: -moz-box;
+}
+
+.character-sheet-own-box {
+  	height: 100%;
+	width: 65%;
+/*  	overflow: auto; */
+ 	position: relative;
+ 	display: -webkit-box;
+ 	display: -moz-box;
+}
+
+.character-sheet-own-box .action-bar {
+  	height: 100%;
+	width: 15%;
+	background-color: #f8f8f8;
+/*  	overflow: auto; */
+ 	position: relative;
+}
+
+.character-sheet-own-box .content {
+  	height: 100%;
+	width: 85%;
+ 	overflow: auto;
+ 	position: relative;
+}
+
+.other-users-connected {
+	height: 100%;
+	width: 100%;
+ 	overflow: auto;
+ 	position: relative;
+ 	display: -webkit-box;
+ 	display: -moz-box;
+}
+
+.character-sheets-external {
+  	height: 100%;
+	max-width: 85%;
+/*  	overflow: auto; */
+ 	position: relative;
+ 	display: -webkit-box;
+ 	display: -moz-box;
+}
+
+.character-sheet-external-box {
+  	height: 100%;
+	max-width: 100%;
+ 	overflow: auto;
+ 	position: relative;
+ 	display: -webkit-box; /*-moz-box*/
+ 	display: -moz-box;
+}
+
+.character-sheet-external-box .content {
+  	height: 100%;
+	width: 95%;
+ 	overflow: auto;
+ 	position: relative;
+}
+
+.character-sheet-external-box .action-bar {
+  	height: 100%;
+	width: 5%;
+	background-color: #f8f8f8;
+/*  	overflow: auto; */
+ 	position: relative;
+}
+/* Character Sheet */
+
+.standard-size {
+  	height: 100%;
+	width: 100%;
+ 	overflow: auto;
+ 	position: relative;
+}

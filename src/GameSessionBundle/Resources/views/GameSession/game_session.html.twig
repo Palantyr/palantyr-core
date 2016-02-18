@@ -6,14 +6,14 @@
 {% endblock %}
 
 {% block up_left %}
-	<div id="other_users_connected"></div>
+	<div id="other_users_connected" class="other-users-connected"></div>
 {% endblock %}
 
 {% block up_right %}{% endblock %}
 
 {% block down_left %}
-	<div id="{{ app.user.username }}">
-		<div id="character_sheets"></div>
+	<div id="{{ app.user.username }}" class="standard-size">
+		<div class="character_sheets"></div>
 	</div>
 {% endblock %}
 
@@ -145,7 +145,8 @@
 	 	    }
 	 	});
 // CHAT
-		
+
+
 // IMPORT CHARACTER SHEET
 		$( "#"+user_username ).on("click", "#import_character_sheet > #request_character_sheet_button", function() {
 			session.publish(route_game_session, {
@@ -160,22 +161,14 @@
 				option: "request"
 			});
 		});
-				
 
-		$( "#"+user_username ).on("click", "#import_character_sheet > #request_character_sheet_cancel_button", function() {
-			$(this).parent().empty();
-			$("#"+user_username+" > #import_character_sheet").append("<button id='request_character_sheet_button'>Request character sheets</button>");
-		});
-
-		$( "#"+user_username ).on("click", "#import_character_sheet_button", function() {
-			var character_sheet_id = $(this).parent().children("#character_sheet_settings").children("#character_sheet_id").text();//getCharacterSheetIdFromElement($(this));
-
+		$( '#myModal' ).on('click', '#import_character_sheet_button', function() {
+			var character_sheet_id = getCharacterSheetIdFromElement($(this));
+			closePopup();
 			session.publish(route_game_session, {
 				section:"import_character_sheet",
-				option: "import", 
+				option: "import_own", 
 				character_sheet_id: character_sheet_id});
-			$("#"+user_username+" > #import_character_sheet").empty();
-			$("#"+user_username+" > #import_character_sheet").append("<button id='request_character_sheet_button'>Request character sheets</button>");
  		});
 
  		$( "#"+user_username ).on("click", "#import_character_sheet_delete_button", function() {
@@ -187,6 +180,7 @@
  				character_sheet_id: character_sheet_id});
  		});
 // IMPORT CHARACTER SHEET
+
 
 // FUNCTIONALITY CHARACTER SHEET
  		$( "#"+user_username ).on("click", "#individual_functionality_panel > #individual_functionality_panel_throw_button", function() {
@@ -235,7 +229,7 @@
  		});
 // FUNCTIONALITY CHARACTER SHEET		
  	});
- 	websocket.on("socket/disconnect", function(error){
+ 	websocket.on("socket/disconnect", function(error){ //CHANGE
  	    $( "#chat #written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
  	    $( "#chat #written-text" ).append("&#10;");
  	}); 
@@ -273,8 +267,9 @@
  	function getCharacterSheetIdFromElement(element) {
  		var is_only_number = /^\d+$/;
 		
- 		if (element.parent().attr("id") == user_username ||
- 				element.parent().attr("id") == "other_users_connected") {
+ 		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
+ 				element.parent().attr('id') == 'other_users_connected' ||
+ 				element.parent().attr('id') == 'myModal') { 
  			return false;
  		}
  		else if (is_only_number.test(element.parent().attr("id"))) {
@@ -309,6 +304,9 @@
 
 	function closePopup () {
 		$('#myModal').modal('hide');
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').empty();
 	}
 
 	var last_id_from_input;
