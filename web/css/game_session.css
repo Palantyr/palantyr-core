@@ -222,3 +222,7 @@ body .main-container .middle-row .middle-col {
  	overflow: auto;
  	position: relative;
 }
+
+.select-dice {
+    display: inline-flex;
+}

@@ -55,6 +55,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 			self::onSuscribeImportCharacterSheet($connection, $topic, $request);
 		}
 	}
+	
 	/**
 	 * This will receive any UnSubscription requests for this topic.
 	 *
@@ -75,6 +76,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 			self::onUnSubscribeConnectionSecurity($connection, $topic, $request);
 		}
 	}
+	
 	/**
 	 * This will receive any Publish requests for this topic.
 	 *
@@ -88,8 +90,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 	 */
 	public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
-		 switch ($event["section"]) {
-		 	case "settings":
+		 switch ($event['section']) {
+		 	case 'settings':
 		 		if (self::isOwner($connection, $topic, $request, $event, $exclude, $eligible) == true) {
 		 			self::onPublishSettings($connection, $topic, $request, $event, $exclude, $eligible);		 			
 		 		}
@@ -97,13 +99,16 @@ class GameSessionTopic extends Controller implements TopicInterface
 		 			//hacking
 		 		}
 		 		break;
-		 	case "chat":
+		 	case 'chat':
 		 		self::onPublishChat($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
-		 	case "import_character_sheet":
+		 	case 'utilities':
+		 		self::onPublishUtilities($connection, $topic, $request, $event, $exclude, $eligible);
+		 		break;
+		 	case 'import_character_sheet':
 		 		self::onPublishImportCharacterSheet($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
-		 	case "functionality_character_sheet":
+		 	case 'functionality_character_sheet':
 		 		self::onPublishFunctionality($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
 		 }
@@ -416,6 +421,55 @@ class GameSessionTopic extends Controller implements TopicInterface
 		}
 	}
 // 	CHAT
+
+// 	UTILITIES
+	private function onPublishUtilities(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+	{
+		switch ($event['option']) {
+			case 'throw_dice':
+				$dice_result = self::getThrowDice(json_decode($event['dice_to_roll_json'], true));
+				$dice_result_message = self::getThrowDiceMessage($dice_result);
+
+				$date = new \DateTime();
+				$date = $date->format('H:i:s');
+					
+				$topic->broadcast([
+						'section' => "chat",
+						'option' => 'throw',
+						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+						'text' => $dice_result_message,
+						'date' => $date,
+				]);
+				break;
+		}
+	}
+	
+	private function getThrowDice($dice_to_roll)
+	{
+		$dice_result = array();
+		foreach ($dice_to_roll as $die_to_roll => $number_of_dice_roll) {
+			if ( in_array($die_to_roll, array(4, 6, 8, 10, 12, 20, 100), true ) ) { //Security
+				$dice_result[$die_to_roll] = array();
+				for ($count = 0; $count < $number_of_dice_roll; $count++) {
+					$dice_result[$die_to_roll][] = rand(1, $die_to_roll);
+				}
+			}
+		}
+		return $dice_result;
+	}
+	
+	private function getThrowDiceMessage($dice_result)
+	{
+		$dice_result_message = '';
+		foreach ($dice_result as $die_type => $die_values) {
+			$dice_result_message .= 'The d'.$die_type.' result is: ';
+			foreach ($die_values as $die_value) {
+				$dice_result_message .= $die_value.' ';
+			}
+		}
+		return $dice_result_message;
+	}
+// 	UTILITIES
 	
 // 	IMPORT CHARACTER SHEET
 	private function onSuscribeImportCharacterSheet (ConnectionInterface $connection, Topic $topic, WampRequest $request) {

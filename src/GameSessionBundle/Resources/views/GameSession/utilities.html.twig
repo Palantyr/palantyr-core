@@ -1,0 +1,83 @@
+<script type="text/javascript">
+
+	function subscribeUtilities(payload) {
+		switch(payload.option) {		
+		case 'throw_dice':
+			break;
+		}
+	}
+
+	$( '#dice_open_panel_button' ).on('click', function() {
+		var title = 'Throw dice';
+		var body = generatePreSelectDiceButtons();
+		var footer = '';
+		
+		usePopup(title, body, footer);
+	});
+
+	function generatePreSelectDiceButtons() {
+		var dice_buttons = '';
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(4));
+		dice_buttons = dice_buttons.concat(' ');
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(6));
+		dice_buttons = dice_buttons.concat(' ');
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(8));
+		dice_buttons = dice_buttons.concat(' ');
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(10));
+		dice_buttons = dice_buttons.concat(' ');
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(12));
+		dice_buttons = dice_buttons.concat(' ');
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(20));
+		dice_buttons = dice_buttons.concat(' ');
+		dice_buttons = dice_buttons.concat(generatePreSelectDiceButton(100));
+		return dice_buttons;
+	}
+
+	function generatePreSelectDiceButton(dice_type) {
+		return '<button value="'+dice_type+'" type="button" class="btn btn-primary pre-select-dice">d'+dice_type+'</button>';
+	}
+
+	$( '#myModal' ).on('click', '.pre-select-dice', function() {
+
+		var new_dice_value = $(this).attr('value');
+		var allow_new_dice = true;
+		$( '.select-dice' ).each(function() {
+			if ($( this ).attr('value') == new_dice_value) {
+				allow_new_dice = false;
+			}
+		});
+
+		if (allow_new_dice == true) {
+			var footer = getModalFooter();
+			if (footer == '') {
+				var throw_button = '<button id="throw_dice" type="button" class="btn btn-success">Throw</button>';
+				footer = footer.concat(throw_button);		
+			}
+			footer = footer.concat(generateDiceThrowDiv($(this).attr('value')));
+			setModalFooter(footer);
+		}
+	});
+
+	$( '#myModal' ).on('click', '.delete-select-dice', function() {
+
+		var number_of_dice = $(this).parent().parent().children().length - 1;
+
+		if (number_of_dice == 1) {
+			$(this).parent().parent().empty();
+		}
+		else {
+			$(this).parent().remove();
+		}
+	});
+
+	function generateDiceThrowDiv(dice_type) {
+		return ' \
+			<div value="'+dice_type+'" class="select-dice btn-group"> \
+				<button type="button" class="btn btn-danger delete-select-dice">-</button> \
+				<span class="btn btn-primary">d'+dice_type+'</span> \
+				<input type="number" class="col-xs-6 value-select-dice" min="1" max="25" value="1"> \
+			<div>'
+	}
+
+
+</script>
