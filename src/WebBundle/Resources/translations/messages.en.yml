@@ -1,11 +1,18 @@
-main_menu.administration: Administer
-main_menu.game_session: Game session
-main_menu.game_session.create: Create game session
-main_menu.game_session.join: Join game session
+main_menu:
+    administration: Administer
+    game_session: 
+        title: Game session
+        create: Create game session
+        join: Join game session
 
-secondary_menu.user.view_profile: View profile
-secondary_menu.user.logout: Logout
-seconday_menu.sign_in: Sign in
-secondary_menu.register: Register
+secondary_menu:
+    user:
+        view_profile: View profile
+        logout: Logout
+    sign_in: Sign in
+    register: Register
 
+secondary_menu:
+    welcome %user_username%: Welcome %user_username%
+    
 secondary_menu.welcome %user_username%: Welcome %user_username%

@@ -68,7 +68,7 @@ class MenuBuilder extends ContainerAware
     	
     	self::languageSubMenu($menu);
  	
-    	$menu->addChild($translator->trans('seconday_menu.sign_in'),
+    	$menu->addChild($translator->trans('secondary_menu.sign_in'),
     			array('route' => 'fos_user_security_login'))
     		->setAttribute('icon', 'fa fa-list');
     	
@@ -82,7 +82,7 @@ class MenuBuilder extends ContainerAware
     	$translator = $this->container->get('translator');
     	
     	$menu->addChild('game_session', 
-    			array('label' => $translator->trans('main_menu.game_session')))
+    			array('label' => $translator->trans('main_menu.game_session.title')))
     		->setAttribute('dropdown', true)
     		->setAttribute('icon', 'fa fa-user');
     	

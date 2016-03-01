@@ -24,9 +24,9 @@
 		</div>
 		<div class="panel-footer">
 			<div class="input-group">
-				<input id="chat_new_text" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+				<input id="chat_new_text" type="text" class="form-control input-sm" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
 				<span class="input-group-btn">
-					<button id="chat_send_button" class="btn btn-warning btn-sm">Send</button>
+					<button id="chat_send_button" class="btn btn-warning btn-sm">{% trans %}chat.send_button{% endtrans %}</button>
 				</span>
 			</div>
 		</div>
@@ -113,10 +113,11 @@
 				user_username_to_remove: $(this).attr('id')
 			});
 			closePopup();
-			session.publish(route_game_session, {
-				section: "settings",
-				option: "manage_users_request"
-			});
+			setTimeout(function () {
+				session.publish(route_game_session, {
+					section: "settings",
+					option: "manage_users_request"
+			});}, 1000);
 		});
 // SETTINGS
 

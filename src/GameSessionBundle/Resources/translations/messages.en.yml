@@ -44,6 +44,16 @@ secondary_menu:
             remove_button: Kick out
         exit:
             title: Exit
-        
+            
+navigation_sidebar:
+    request_character_sheets: Request character sheets 
+    dice: Dados
+
+chat:
+    send_button: Send
+    placeholder: Type your message here...
+chat.user_is_online %user_username%: %user_username% is online
+chat.user_is_offline %user_username%: %user_username% is offline
+
 spanish: español
 english: english

@@ -44,6 +44,16 @@ secondary_menu:
             remove_button: Expulsar
         exit:
             title: Salir
+            
+navigation_sidebar:
+    request_character_sheets: Pedir fichas de personaje
+    dice: Dados
+  
+chat:
+    send_button: Enviar
+    placeholder: Escribe aquí tu mensaje...
+chat.user_is_online %user_username%: %user_username% está en línea
+chat.user_is_offline %user_username%: %user_username% se ha desconectado
         
 spanish: español
 english: english
