@@ -34,6 +34,16 @@ game_session:
         message: You have been disconnected from the game session
     leave:
         confirmation_message: Are you sure you want to leave?
+    request_character_sheets:
+        title: Request character sheets
+        not_to_import: You haven\'t any character sheet to import
+        import_button: Import character
+        delete_button: Delete character
+    throw_dice:
+        title: Throw dice
+        throw_button: Throw
+        
+game_session.throw_dice.partial_message %die_type%: 'The d%die_type% result is: '
         
 secondary_menu:
     settings:

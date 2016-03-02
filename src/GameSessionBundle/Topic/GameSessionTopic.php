@@ -473,18 +473,27 @@ class GameSessionTopic extends Controller implements TopicInterface
 // 	UTILITIES
 	private function onPublishUtilities(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
+		$room = $request->getAttributes()->get('room');
+		
 		switch ($event['option']) {
 			case 'throw_dice':
 				$dice_result = self::getThrowDice(json_decode($event['dice_to_roll_json'], true));
-				$dice_result_message = self::getThrowDiceMessage($dice_result);
+
+				foreach ($topic as $client) {
+					$user_id = $this->clientManipulator->getClient($client)->getId();
+					$user_language = self::getUserLanguage($room, $user_id);
+
+					$dice_result_message = self::getThrowDiceMessage($dice_result, $user_language);
 					
-				$topic->broadcast([
-						'section' => "chat",
-						'option' => 'throw',
-						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
-						'text' => $dice_result_message,
-						'date' => self::getDateFormattedToChat(),
-				]);
+					$client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
+					$client_connection['connection']->event($topic->getId(), [
+							'section' => "chat",
+							'option' => 'throw',
+							'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+							'text' => $dice_result_message,
+							'date' => self::getDateFormattedToChat(),
+					]);
+				}
 				break;
 		}
 	}
@@ -503,14 +512,22 @@ class GameSessionTopic extends Controller implements TopicInterface
 		return $dice_result;
 	}
 	
-	private function getThrowDiceMessage($dice_result)
+	private function getThrowDiceMessage($dice_result, $user_language)
 	{
 		$dice_result_message = '';
+		$dice_partial_message = '';
 		foreach ($dice_result as $die_type => $die_values) {
-			$dice_result_message .= 'The d'.$die_type.' result is: ';
+			$dice_partial_message = $this->translator->trans(
+					'game_session.throw_dice.partial_message %die_type%',
+					array('%die_type%' => $die_type),
+					'messages',
+					$user_language
+					);
 			foreach ($die_values as $die_value) {
-				$dice_result_message .= $die_value.' ';
+				$dice_partial_message .= $die_value.' ';
 			}
+			$dice_result_message .= $dice_partial_message.' ';
+			$dice_partial_message = '';
 		}
 		return $dice_result_message;
 	}

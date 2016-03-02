@@ -34,6 +34,16 @@ game_session:
         message: Has sido desconectado de la sesión de juego
     leave:
         confirmation_message: Are you sure you want to leave?
+    request_character_sheets:
+        title: Pedir fichas de personaje
+        not_to_import: No tienes ninguna ficha de personaje para importar
+        import_button: Importar personaje
+        delete_button: Eliminar personaje
+    throw_dice:
+        title: Lanzar dados
+        throw_button: Lanzar
+        
+game_session.throw_dice.partial_message %die_type%: 'El resultado de d%die_type% es: '
         
 secondary_menu:
     settings:

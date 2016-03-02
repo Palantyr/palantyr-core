@@ -8,11 +8,10 @@
 	}
 
 	$( '#dice_open_panel_button' ).on('click', function() {
-		var title = 'Throw dice';
+		var title = '{% trans %}game_session.throw_dice.title{% endtrans %}';
 		var body = generatePreSelectDiceButtons();
-		var footer = '';
 		
-		usePopup(title, body, footer);
+		usePopup(title, body, '');
 	});
 
 	function generatePreSelectDiceButtons() {
@@ -50,7 +49,7 @@
 		if (allow_new_dice == true) {
 			var footer = getModalFooter();
 			if (footer == '') {
-				var throw_button = '<button id="throw_dice" type="button" class="btn btn-success">Throw</button>';
+				var throw_button = '<button id="throw_dice" type="button" class="btn btn-success">{% trans %}game_session.throw_dice.throw_button{% endtrans %}</button>';
 				footer = footer.concat(throw_button);		
 			}
 			footer = footer.concat(generateDiceThrowDiv($(this).attr('value')));

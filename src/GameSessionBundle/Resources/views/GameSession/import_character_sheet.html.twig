@@ -49,17 +49,19 @@
 
  	function printRequestCharacterSheets (character_sheets)
  	{
+ 		var title = '{% trans %}game_session.request_character_sheets.title{% endtrans %}';
+
  		if (character_sheets != null) {
- 	 		
- 			usePopup('Request character sheet','','');
- 			$( '.modal-body' ).append('<div id="import_character_sheet"></div>');
+ 	 		var body = '<div id="import_character_sheet"></div>';
+ 			usePopup(title, body,'');
  
 			for (var character_sheet in character_sheets) {
 				printRequestCharacterSheet(character_sheets[character_sheet]);
 			}
  		}
  		else {
- 			usePopup('Request character sheet','You haven\'t any character sheet');
+ 	 		var body = '{% trans %}game_session.request_character_sheets.not_to_import{% endtrans %}';
+ 			usePopup(title, body, '');
  	 	}
 	}
 
@@ -98,7 +100,7 @@
  		}
 
  		$( '#'+character_sheet_id+'.'+character_sheet_class ).append(
- 			'<button id="import_character_sheet_button" value="'+character_sheet_id+'">Import Character</button>' );
+ 			'<button id="import_character_sheet_button" value="'+character_sheet_id+'">'+"{% trans %}game_session.request_character_sheets.import_button{% endtrans %}"+'</button>' );
  	}
 
  	function printImportOwnCharacterSheet (character_sheet) 
@@ -135,7 +137,7 @@
  	 		}
  		}
 		$( '#'+character_sheet_id+' > .action-bar' ).append(
- 				'<button  id="import_character_sheet_delete_button" title="Delete character sheet" class="btn-lg glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button>' );
+ 				'<button  id="import_character_sheet_delete_button" title="{% trans %}game_session.request_character_sheets.delete_button{% endtrans %}" class="btn-lg glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button>' );
  	}
 
  	function printImportExternalCharacterSheets (character_sheets)
