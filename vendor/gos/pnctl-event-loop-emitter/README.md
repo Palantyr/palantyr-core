@@ -1,6 +1,8 @@
 PNCTL Event Loop Emitter
 ========================
 
+[![Latest Stable Version](https://poser.pugx.org/gos/pnctl-event-loop-emitter/v/stable)](https://packagist.org/packages/gos/pnctl-event-loop-emitter) [![Total Downloads](https://poser.pugx.org/gos/pnctl-event-loop-emitter/downloads)](https://packagist.org/packages/gos/pnctl-event-loop-emitter) [![License](https://poser.pugx.org/gos/pnctl-event-loop-emitter/license)](https://packagist.org/packages/gos/pnctl-event-loop-emitter)
+
 Brings PNCTL event to event loop.
 
 Install
@@ -19,7 +21,7 @@ use Gos\Component\PnctlEventLoopEmitter\PnctlEmitter;
 
 $loop = Factory::create();
 
-$pnctlEmitter = new PnctlEmitter($this->loop);
+$pnctlEmitter = new PnctlEmitter($loop);
 
 $pnctlEmitter->on(SIGTERM, function () use ($loop) {
 	//do something
@@ -46,7 +48,7 @@ use React\EventLoop\Factory;
 use Gos\Component\PnctlEventLoopEmitter\PnctlEmitter;
 
 $loop = Factory::create();
-$pnctlEmitter = new PnctlEmitter($this->loop);
+$pnctlEmitter = new PnctlEmitter($loop);
 
 $pnctlEmitter->on(SIGINT, function () use ($loop) {
 	$this->logger->notice('Press CTLR+C again to stop the server');
