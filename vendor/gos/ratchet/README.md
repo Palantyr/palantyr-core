@@ -1,4 +1,4 @@
-#Ratchet
+#Ratchet for Gos
 
 [![Build Status](https://secure.travis-ci.org/ratchetphp/Ratchet.png?branch=master)](http://travis-ci.org/ratchetphp/Ratchet)
 [![Latest Stable Version](https://poser.pugx.org/cboden/ratchet/v/stable.png)](https://packagist.org/packages/cboden/ratchet)
