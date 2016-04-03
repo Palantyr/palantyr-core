@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}character_sheet.add_character_sheet.title{% endtrans %}{% endblock %}
+
+{% block body %}
+
+	<h1>Add Character Sheet</h1>
+	</br>
+	
+    {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_character_sheet_rol_game', 'novalidate': 'novalidate'} }) }}
+{#         {{ form_row(form.rol_game, { 'label': 'character_sheet.rol_game', 'label_col': 2, 'widget_col': 4}) }}	#}
+	    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

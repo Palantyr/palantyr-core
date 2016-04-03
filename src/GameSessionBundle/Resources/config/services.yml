@@ -10,7 +10,23 @@ services:
             - @validator.builder
             - @translator.default
 #           - @gos_web_socket.client_storage
+
+    add_character_sheet_menu_type.service:
+        class: GameSessionBundle\Form\Type\AddCharacterSheetMenuType
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @translator.default
             
+#    character_sheet.rpc.service:
+#        class: GameSessionBundle\RPC\CharacterSheetService
+#        tags:
+#            - { name: gos_web_socket.rpc }
+#        arguments: 
+#            - @doctrine.orm.entity_manager
+#            - @form.factory
+#            - @validator.builder
+#            - @translator.default
+
 #    rol_game_form:
 #        class: GameSessionBundle\Form\RolGameType
 #        arguments: 

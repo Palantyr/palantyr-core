@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{% trans %}administration.main_menu.title{% endtrans %}{% endblock %}
+
 {% block body %}
 
 	<h1>Administration games index</h1>
@@ -24,7 +26,8 @@
 	{{ form_widget(form.delete_game_sessions) }}
 	</br></br></br> 
 	{{ form_widget(form.delete_user_game_sessions_association) }}
+	</br></br></br> 
+	{{ form_widget(form.add_character_sheet_template) }}
 	{{ form_end(form) }}
-	{# render(controller('GameSessionBundle:Administration:prueba')) #}
 
 {% endblock %}

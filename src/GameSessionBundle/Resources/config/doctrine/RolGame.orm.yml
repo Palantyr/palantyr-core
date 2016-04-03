@@ -13,3 +13,7 @@ GameSessionBundle\Entity\RolGame:
             length: 255
         active:
             type: boolean
+    oneToMany:
+        character_sheet_templates:
+            targetEntity: CharacterSheetTemplate
+            mappedBy: rol_game

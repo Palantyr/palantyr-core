@@ -1,0 +1,35 @@
+# src/GameSessionBundle/Resources/config/doctrine/CharacterSheetData.orm.yml
+GameSessionBundle\Entity\CharacterSheetData:
+    type: entity
+    repositoryClass: GameSessionBundle\Entity\CharacterSheetDataRepository
+    table: character_sheet_data
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 50
+        display_name:
+            type: string
+            length: 50
+            nullable: TRUE
+        type:
+            type: string
+            length: 50
+        value:
+            type: string
+            length: 50
+            nullable: TRUE
+    manyToOne:
+        character_sheet:
+            targetEntity: CharacterSheet
+            inversedBy: character_sheet_data
+            joinColumn:
+                name: character_sheet_id
+                referencedColumnName: id
+#    oneToMany:
+#        character_sheet_data:
+#          targetEntity: CharacterSheetData
+#          mappedBy: id

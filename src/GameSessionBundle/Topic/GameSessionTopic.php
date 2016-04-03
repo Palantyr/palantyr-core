@@ -1,5 +1,7 @@
 <?php
 namespace GameSessionBundle\Topic;
+
+
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
 use Ratchet\ConnectionInterface;

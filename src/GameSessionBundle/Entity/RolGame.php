@@ -4,61 +4,120 @@ namespace GameSessionBundle\Entity;
 
 class RolGame
 {
-	private $id;
-	private $name;
-	private $active;
+    /**
+     * @var integer
+     */
+    private $id;
 
-	function __construct() {}
+    /**
+     * @var string
+     */
+    private $name;
 
-	/**
-	 * Get id
-	 *
-	 * @return integer
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
+    /**
+     * @var boolean
+     */
+    private $active;
 
-	/**
-	 * Set name
-	 *
-	 * @param string $name
-	 * @return GameSession
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $character_sheet_templates;
 
-		return $this;
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->character_sheet_templates = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
-	/**
-	 * Get name
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	/**
-	 * Set Active
-	 *
-	 * @param boolean $boolean
-	 * @return GameSession
-	 */
-	public function setActive($boolean) {
-		 $this->active = (Boolean) $boolean;;
-	}
-	
-	/**
-	 * Get Active
-	 *
-	 * @return boolean
-	 */
-	public function getActive() {
-		return $this->active;
-	}
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return RolGame
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return RolGame
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Add character_sheet_templates
+     *
+     * @param \GameSessionBundle\Entity\CharacterSheetTemplate $characterSheetTemplates
+     * @return RolGame
+     */
+    public function addCharacterSheetTemplate(\GameSessionBundle\Entity\CharacterSheetTemplate $characterSheetTemplates)
+    {
+        $this->character_sheet_templates[] = $characterSheetTemplates;
+
+        return $this;
+    }
+
+    /**
+     * Remove character_sheet_templates
+     *
+     * @param \GameSessionBundle\Entity\CharacterSheetTemplate $characterSheetTemplates
+     */
+    public function removeCharacterSheetTemplate(\GameSessionBundle\Entity\CharacterSheetTemplate $characterSheetTemplates)
+    {
+        $this->character_sheet_templates->removeElement($characterSheetTemplates);
+    }
+
+    /**
+     * Get character_sheet_templates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCharacterSheetTemplates()
+    {
+        return $this->character_sheet_templates;
+    }
 }

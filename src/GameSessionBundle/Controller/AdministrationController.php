@@ -8,6 +8,7 @@ use GameSessionBundle\Entity\RolGame;
 use GameSessionBundle\Entity\Language;
 use GameSessionBundle\Entity\GameSession;
 use FOS\UserBundle\Util\UserManipulator as UserManipulator;
+use GameSessionBundle\Entity\CharacterSheetTemplate;
 
 
 class AdministrationController extends Controller
@@ -35,6 +36,7 @@ class AdministrationController extends Controller
     		->add('delete_rol_games', 'submit', array('label' => 'Delete Rol Games'))
     		->add('delete_game_sessions', 'submit', array('label' => 'Delete Game Sessions'))
     		->add('delete_user_game_sessions_association', 'submit', array('label' => 'Delete User Game Sessions Association'))
+    		->add('add_character_sheet_template', 'submit', array('label' => 'Add Character Sheet Template'))
     		->getForm();
     	
     	$form->handleRequest($request);
@@ -68,12 +70,50 @@ class AdministrationController extends Controller
     		elseif ($form->get('delete_user_game_sessions_association')->isClicked()) {
     			self::deleteUserGameSessionAssociation();
     		}
+    		elseif ($form->get('add_character_sheet_template')->isClicked()) {
+    		    return $this->redirect($this->generateUrl('add_character_sheet_template'));
+    		}
     		$petition_text = "Operation completed successfully";
     	}
 
         return $this->render('GameSessionBundle:Administration:main_menu.html.twig', 
         		array('form' => $form->createView(), 
         			'petition_text' => $petition_text));
+    }
+    
+    public function addCharacterSheetTemplateAction(Request $request)
+    {
+        $translator = $this->get('translator');
+        
+        $character_sheet_template = new CharacterSheetTemplate();
+
+        $form = $this->createFormBuilder($character_sheet_template)
+        ->add('name', 'text')
+        ->add('version', 'text')
+        ->add('rol_game', 'entity', array(
+            'required'    => true,
+            'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
+            'class'    => 'GameSessionBundle:RolGame',
+            'property' => 'name',
+            'choices' => $this->getDoctrine()
+            ->getRepository('GameSessionBundle:RolGame')
+            ->findAllActives()
+        ))
+        ->add('submit_button', 'submit')
+        ->getForm();
+        
+        $form->handleRequest($request);
+         
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($character_sheet_template);
+            $em->flush();
+            return $this->redirect($this->generateUrl('add_character_sheet_template'));
+        }
+        
+        return $this->render('GameSessionBundle:Administration:add_character_sheet_template.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
     
     public function addLanguages() {

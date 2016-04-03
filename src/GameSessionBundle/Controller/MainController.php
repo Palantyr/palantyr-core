@@ -64,7 +64,7 @@ class MainController extends Controller
     	}
 
     	return $this->render('GameSessionBundle:Web:create.html.twig', array(
-    			'form' => $form->createView(),
+    			'form' => $form->createView()
     	));
     }
     

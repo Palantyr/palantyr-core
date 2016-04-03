@@ -93,6 +93,10 @@ class MenuBuilder extends ContainerAware
     	$menu['game_session']->addChild($translator->trans('main_menu.game_session.join'),
     			array('route' => 'game_sessions'))
     		->setAttribute('icon', 'fa fa-edit');
+
+        $menu->addChild($translator->trans('main_menu.add_character_sheet_menu'),
+            array('route' => 'add_character_sheet_menu'))
+            ->setAttribute('icon', 'fa fa-list');
     }
     
     private function languageSubMenu ($menu) {

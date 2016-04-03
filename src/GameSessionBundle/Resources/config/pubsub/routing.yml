@@ -1,3 +1,19 @@
+game_session_topic:
+    channel: gameSession/{room}
+    handler:
+        callback: 'game_session.topic' #related to the getName() of your topic
+    requirements:
+        room:
+            pattern: "^(0|[1-9][0-9]*)$"
+
+#character_sheet_rpc:
+#    channel: character_sheet/{method}
+#    handler:
+#        callback: 'character_sheet.rpc' #related to the getName() or your RPC service
+#    requirements:
+#        method:
+#            pattern: "[a-z_]+"
+           
 #acme_topic:
 #    channel: acme/channel
 #    handler:
@@ -10,11 +26,3 @@
 #    requirements:
 #        method:
 #            pattern: "[a-z_]+"
-
-game_session_topic:
-    channel: gameSession/{room}
-    handler:
-        callback: 'game_session.topic' #related to the getName() of your topic
-    requirements:
-        room:
-            pattern: "^(0|[1-9][0-9]*)$"

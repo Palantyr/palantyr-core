@@ -69,3 +69,35 @@ edit_game_sessions:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
+        
+character_sheets_homepage:
+    path:     /{_locale}/game/character_sheets
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:index
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+              
+add_character_sheet_menu:
+    path:     /{_locale}/game/add-character-sheet
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:addCharacterSheetMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+add_character_sheet:
+    path:     /{_locale}/game/add-character-sheet/{rol_game_name}/{character_sheet_template_name}
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:addCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+add_character_sheet_template:
+    path:     /{_locale}/game/administration/add-character-sheet-template
+    defaults:  
+        _controller: GameSessionBundle:Administration:addCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%

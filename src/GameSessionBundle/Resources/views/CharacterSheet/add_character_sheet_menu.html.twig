@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}character_sheet.add_character_sheet_menu.title{% endtrans %}{% endblock %}
+
+{% block body %}
+
+	<h1>Add Character Sheet Menu</h1>
+	</br>
+{# 	{{ dump(form) }}#}
+    {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form', 'novalidate': 'novalidate'} }) }}
+{#         {{ form_row(form.rol_game, { 'label': 'character_sheet.rol_game', 'label_col': 2, 'widget_col': 4}) }}	#}
+{# 	        {{ form_row(form.rol_game) }}    {# <select id="user_country" ... #}
+	        {{ form_row(form.rol_game, { 'id': 'form_rol_game'} )}}
+{#             {{ form_row(form.character_sheet_template, { 'id': 'form_character_sheet_template'}) }} {# <select id="user_state" ... #}
+{#         {{ form_widget(form) }}#}
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+<script>    
+//     var form = rol_game.closest('form');
+
+	$( 'body' ).on('change', '#form_rol_game', function() {
+		var rol_game_id = $('#form_rol_game');
+		var form = $(this).closest('form');
+		
+        var data = rol_game_id.serialize();
+// 		alert(JSON.stringify($('#form_rol_game')));
+
+        // Hacemos un envío del formulario, lo que ejecutará el evento preSubmit
+        // del listener AddFieldSubscriber,
+        // y actualizará el campo
+        $.ajax({
+            url : form.attr('action'),
+            type: form.attr('method'),
+            data : data,
+            success: function(html) {
+            	if ($('#add_character_sheet_character_sheet_template').length) {
+            		$('#add_character_sheet_character_sheet_template').replaceWith($(html).find('#add_character_sheet_character_sheet_template'));
+            	}
+            	else {
+                    $('#form').replaceWith($(html).find('#form'));
+                }     
+            }
+        });
+    });
+</script>
+{% endblock %}
