@@ -4,6 +4,8 @@ main_menu:
         title: Session de juego
         create: Crear sesión de juego
         join: Unirse a sesión de juego
+    add_character_sheet:
+        title: Añadir ficha de personaje
 
 secondary_menu:
     user:

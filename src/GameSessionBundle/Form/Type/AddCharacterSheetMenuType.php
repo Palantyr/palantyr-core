@@ -30,8 +30,7 @@ class AddCharacterSheetMenuType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-        ->add(
+        $builder->add(
             'rol_game',
             'entity',
             array(
@@ -39,10 +38,12 @@ class AddCharacterSheetMenuType extends AbstractType
                 'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
                 'property' => 'name',
                 'constraints' => array(new NotBlank()),
-//                 'attr' => array('id' => 'form_rol_game'),
+                'label' => 'add_character_sheet.rol_game',
+                'attr' => array('label_col' => 2, 'widget_col' => 3),
                 'choices' => $this->em
                 ->getRepository('GameSessionBundle:RolGame')
-                ->findAllActives()
+                ->findAllActives(),
+                'choice_translation_domain' => true
             ));
         
         $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
@@ -51,18 +52,26 @@ class AddCharacterSheetMenuType extends AbstractType
     
     protected function addElements(FormInterface $form, $character_sheet_templates) 
     {
-        // Remove the submit button, we will place this at the end of the form later
-//         $submit = $form->get('save');
-//         $form->remove('save');
-
-        $form->add('character_sheet_template', EntityType::class, array(
-            'class'       => 'GameSessionBundle:CharacterSheetTemplate',
-            'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
-            'property' => 'name',
-            'constraints' => array(new NotBlank()),
-            'choices' => $character_sheet_templates,
-        ));
-        $form->add('submit_button', 'submit');
+        $form->add(
+            'character_sheet_template',
+            EntityType::class,
+            array(
+                'class'       => 'GameSessionBundle:CharacterSheetTemplate',
+                'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
+                'property' => 'name',
+                'constraints' => array(new NotBlank()),
+                'label' => 'add_character_sheet.character_sheet_template',
+                'attr' => array('label_col' => 2, 'widget_col' => 3),
+                'choices' => $character_sheet_templates,
+                'choice_translation_domain' => true
+            ));
+        
+        $form->add(
+            'submit_button', 
+            'submit',
+            array(
+                'label' => 'add_character_sheet.continue'
+            ));
     }
     
     public function onPreSubmit(FormEvent $event)

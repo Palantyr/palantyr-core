@@ -38,7 +38,8 @@ class MainController extends Controller
 		    'property' => 'name',
     		'choices' => $this->getDoctrine()
     					->getRepository('GameSessionBundle:RolGame')
-    					->findAllActives()
+    					->findAllActives(),
+    	    'choice_translation_domain' => true
 			))
     	->add('language', 'entity', array(
     		'required'    => true,
@@ -47,7 +48,8 @@ class MainController extends Controller
 		    'property' => 'name',
     		'choices' => $this->getDoctrine()
     					->getRepository('GameSessionBundle:Language')
-    					->findAll()
+    					->findAll(),
+    	    'choice_translation_domain' => true
 			))
     	->add('comments', 'textarea', array(
         	'required' => false))

@@ -94,7 +94,7 @@ class MenuBuilder extends ContainerAware
     			array('route' => 'game_sessions'))
     		->setAttribute('icon', 'fa fa-edit');
 
-        $menu->addChild($translator->trans('main_menu.add_character_sheet_menu'),
+        $menu->addChild($translator->trans('main_menu.add_character_sheet.title'),
             array('route' => 'add_character_sheet_menu'))
             ->setAttribute('icon', 'fa fa-list');
     }

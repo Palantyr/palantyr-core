@@ -103,7 +103,9 @@ class CharacterSheetController extends Controller
             
             return $this->redirect($this->generateUrl(
                 'add_character_sheet',
-                array('rol_game_name' => $rol_game_url, 'character_sheet_template_name' => $character_sheet_template_url)
+                array(
+                    'rol_game_name' => $rol_game_url, 
+                    'character_sheet_template_name' => $character_sheet_template_url)
             ));
         }
         
@@ -114,11 +116,30 @@ class CharacterSheetController extends Controller
     
     public function addCharacterSheetAction(Request $request)
     {
-        $rol_game_name = str_replace("-", " ", $request->get('rol_game_name'));
-        $character_sheet_tempalte_name = str_replace("-", " ", $request->get('character_sheet_template_name'));
-        var_dump($character_sheet_tempalte_name); die();
-        
         $translator = $this->get('translator');
+        
+        $rol_game_name = str_replace("-", " ", $request->get('rol_game_name'));
+        $character_sheet_template_name = str_replace("-", " ", $request->get('character_sheet_template_name'));
+        
+        $rol_game = $this->getDoctrine()->getRepository('GameSessionBundle:RolGame')->findOneBy(array('name' => $rol_game_name));
+        $character_sheet_template = $this->getDoctrine()->getRepository('GameSessionBundle:CharacterSheetTemplate')->findOneBy(array('name' => $character_sheet_template_name));
+               
+        if (!$rol_game || !$character_sheet_template) {
+            
+            $error_message = $translator->trans(
+                'add_character_sheet.error.message %rol_game_name% %character_sheet_template_name%',
+                array(
+                    'rol_game_name' => $rol_game_name,
+                    'character_sheet_template_name' => $character_sheet_template_name));
+            
+            return $this->render(
+                'GameSessionBundle:CharacterSheet:add_character_sheet_error.html.twig',
+                array(
+                    'error_message' => $error_message 
+            ));
+        }
+        
+
         
         $character_sheet = new CharacterSheet();
         $form = $this->createForm(CharacterSheetType::class, $character_sheet);
@@ -152,5 +173,10 @@ class CharacterSheetController extends Controller
         return $this->render('GameSessionBundle:CharacterSheet:add_character_sheet.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+    
+    private function vampireCharacterSheet()
+    {
+        
     }
 }

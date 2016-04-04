@@ -4,6 +4,8 @@ main_menu:
         title: Game session
         create: Create game session
         join: Join game session
+    add_character_sheet:
+        title: Add character sheet
 
 secondary_menu:
     user:

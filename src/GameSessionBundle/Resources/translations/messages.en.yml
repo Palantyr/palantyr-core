@@ -42,9 +42,24 @@ game_session:
     throw_dice:
         title: Throw dice
         throw_button: Throw
-        
 game_session.throw_dice.partial_message %die_type%: 'The d%die_type% result is: '
-        
+
+add_character_sheet_template:
+    title: Add character sheet template
+    name: Name
+    version: Version
+    rol_game: Rol game
+    submit: Add
+    
+add_character_sheet:
+    title: Add character sheet
+    rol_game: Rol game
+    character_sheet_template: Character sheet template
+    continue: Continue
+    error:
+        title: Error adding character sheet
+add_character_sheet.error.message %rol_game_name% %character_sheet_template_name%: Sorry, but the sheet "character_sheet_template_name" from rol game "rol_game_name" can't be created. Contact administrator.   
+
 secondary_menu:
     settings:
         title: Settings
@@ -54,7 +69,7 @@ secondary_menu:
             remove_button: Kick out
         exit:
             title: Exit
-            
+
 navigation_sidebar:
     request_character_sheets: Request character sheets 
     dice: Dados
