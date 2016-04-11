@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CharacterSheetType extends AbstractType
 {
@@ -14,7 +15,10 @@ class CharacterSheetType extends AbstractType
     {
 //         $translator = $this->get('translator');
         
-        $builder->add('name');
+        $builder->add('name', TextType::class, array(
+            'label' => 'add_character_sheet.name',
+            'attr' => array('label_col' => 2, 'widget_col' => 4)
+        ));
 //         $builder->add('character_sheet_template', 'entity', array(
 //             'required'    => true,
 //             'placeholder' => $translator->trans('character_sheet.create.choose_template'),
@@ -24,10 +28,14 @@ class CharacterSheetType extends AbstractType
 //             ->getRepository('GameSessionBundle:CharacterSheetTemplate')
 //             ->findAll()
 //         ));
-        
+
         $builder->add('character_sheet_data', CollectionType::class, array(
             'entry_type' => CharacterSheetDataType::class
         ));
+        
+//         $builder->add('character_sheet_data', CollectionType::class, array(
+//             'entry_type' => CharacterSheetDataType::class
+//         ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

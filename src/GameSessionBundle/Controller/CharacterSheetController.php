@@ -17,6 +17,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use GameSessionBundle\Form\Type\AddCharacterSheetType;
+use GameSessionBundle\Entity\CharacterSheetDataField;
+use GameSessionBundle\Entity\CharacterSheetDataGroup;
 
 class CharacterSheetController extends Controller
 {
@@ -142,6 +144,10 @@ class CharacterSheetController extends Controller
 
         
         $character_sheet = new CharacterSheet();
+        self::vampireCharacterSheet($character_sheet);
+//         $character_sheet->getCharacterSheetData()->add($base);
+        
+
         $form = $this->createForm(CharacterSheetType::class, $character_sheet);
 
 //         $rol_games_actives = null;
@@ -156,13 +162,23 @@ class CharacterSheetController extends Controller
 //                 ->findAllActives()
 //             ))
 //             ->getForm();
+
+        $form->add(
+            'submit_button',
+            'submit',
+            array(
+                'label' => 'add_character_sheet.continue'
+            ));
        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//             $em = $this->getDoctrine()->getManager();
-//             $em->persist($post);
-//             $em->flush();
+            $character_sheet->setUser($this->getUser());
+            $character_sheet->setCharacterSheetTemplate($character_sheet_template);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($character_sheet);
+            $em->flush();
     
 //             return $this->redirect($this->generateUrl(
 //                 'admin_post_show',
@@ -175,8 +191,59 @@ class CharacterSheetController extends Controller
         ));
     }
     
-    private function vampireCharacterSheet()
+    private function vampireCharacterSheet(CharacterSheet $character_sheet)
     {
+        $main_data = new CharacterSheetData();
+        $main_data->setCharacterSheet($character_sheet);
+        $main_data->setName('basic_data');
+        $main_data->setDatatype('group');
+        $character_sheet->addCharacterSheetDatum($main_data);
         
+        $character_name = new CharacterSheetData();
+        $character_name->setCharacterSheet($character_sheet);
+        $character_name->setName('character_name');
+        $character_name->setDatatype('field');
+        $character_name->setDisplayName('Character name');
+        $character_name->setCharacterSheetDataGroup($main_data);
+        $main_data->addCharacterSheetDatum($character_name);
+        
+        $player_name = new CharacterSheetData();
+        $player_name->setCharacterSheet($character_sheet);
+        $player_name->setName('player_name');
+        $player_name->setDatatype('field');
+        $player_name->setDisplayName('Player name');
+        $player_name->setCharacterSheetDataGroup($main_data);
+        $main_data->addCharacterSheetDatum($player_name);
+        
+        $attributes = new CharacterSheetData();
+        $attributes->setCharacterSheet($character_sheet);
+        $attributes->setName('attributes');
+        $attributes->setDatatype('group');
+        $attributes->setDisplayName('Attributes');
+        $character_sheet->addCharacterSheetDatum($attributes);
+        
+        $physical = new CharacterSheetData();
+        $physical->setCharacterSheet($character_sheet);
+        $physical->setName('physical');
+        $physical->setDatatype('group');
+        $physical->setDisplayName('Physical');
+        $physical->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($physical);
+        
+        $strength = new CharacterSheetData();
+        $strength->setCharacterSheet($character_sheet);
+        $strength->setName('strength');
+        $strength->setDatatype('field');
+        $strength->setDisplayName('Strength');
+        $strength->setCharacterSheetDataGroup($physical);
+        $physical->addCharacterSheetDatum($strength);
+        
+        $dexterity = new CharacterSheetData();
+        $dexterity->setCharacterSheet($character_sheet);
+        $dexterity->setName('dexterity');
+        $dexterity->setDatatype('field');
+        $dexterity->setDisplayName('Dexterity');
+        $dexterity->setCharacterSheetDataGroup($physical);
+        $physical->addCharacterSheetDatum($dexterity);
     }
 }

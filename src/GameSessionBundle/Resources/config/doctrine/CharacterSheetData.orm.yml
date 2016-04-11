@@ -2,6 +2,14 @@
 GameSessionBundle\Entity\CharacterSheetData:
     type: entity
     repositoryClass: GameSessionBundle\Entity\CharacterSheetDataRepository
+#    inheritanceType: JOINED #SINGLE_TABLE
+#    DiscriminatorColumn:
+#        name: type
+#        type: string
+#    DiscriminatorMap:
+#        character_sheet_data: GameSessionBundle\Entity\CharacterSheetData
+#        character_sheet_data_field: GameSessionBundle\Entity\CharacterSheetDataField
+#        character_sheet_data_group: GameSessionBundle\Entity\CharacterSheetDataGroup
     table: character_sheet_data
     id:
         id:
@@ -11,13 +19,13 @@ GameSessionBundle\Entity\CharacterSheetData:
         name:
             type: string
             length: 50
+        datatype:
+            type: string
+            length: 50
         display_name:
             type: string
             length: 50
             nullable: TRUE
-        type:
-            type: string
-            length: 50
         value:
             type: string
             length: 50
@@ -29,7 +37,14 @@ GameSessionBundle\Entity\CharacterSheetData:
             joinColumn:
                 name: character_sheet_id
                 referencedColumnName: id
-#    oneToMany:
-#        character_sheet_data:
-#          targetEntity: CharacterSheetData
-#          mappedBy: id
+        character_sheet_data_group:
+            targetEntity: GameSessionBundle\Entity\CharacterSheetData
+            inversedBy: character_sheet_data
+            joinColumn:
+                name: character_sheet_data_group_id
+                referencedColumnName: id
+    oneToMany:
+        character_sheet_data:
+            targetEntity: GameSessionBundle\Entity\CharacterSheetData
+            mappedBy: character_sheet_data_group
+            cascade: ["persist"]
