@@ -72,13 +72,13 @@
  		var character_sheet_class = 'character_sheet_provisional';
  		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
  		var sheet_destination = '.modal-body > #import_character_sheet';
-		
+
  		$( sheet_destination ).append( 
  				'<div id='+character_sheet_id+' class='+character_sheet_class+'></div>' );
 
  		for (var key_sections in character_sheet) {
- 	 		switch (key_sections) {
-	 			case 'character_sheet_settings':
+ 	 		switch (key_sections) { 
+	 			case 'character_sheet_settings': 		
 	 				$( '#'+character_sheet_id+'.'+character_sheet_class ).append( 
  					'<div id="character_sheet_settings" style="display: none;"></div>' );
 
@@ -107,7 +107,7 @@
  	{
  		var character_sheet_id = getCharacterSheetId(character_sheet);
  		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
-
+// alert(user_username);alert(character_sheet_id);
  		$( '#'+user_username+' > .character_sheets' ).append( 
  				'<div id='+character_sheet_id+' class="character-sheet-own-box"> \
 					<div class="content"></div> \
@@ -192,22 +192,29 @@
  		}
 		
  		for (var count_group_sections = 0; 
- 			count_group_sections < Object.keys(group).length - 3; //Less id, name and type
+ 			count_group_sections < Object.keys(group).length; //-3 Less id, name and type
  			count_group_sections++) {
-			
- 			if (group[count_group_sections].type == "group") {
- 				typeGroupOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
- 			}
-			
- 			else if (group[count_group_sections].type == "field") {
- 				typeFieldOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
+
+ 			if (group[count_group_sections]) { // != undefined
+
+     			if (group[count_group_sections].type.length && group[count_group_sections].type == "group") {
+     				typeGroupOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
+     			}		
+     			else if (group[count_group_sections].type.length && group[count_group_sections].type == "field") {
+     				typeFieldOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
+     			}
  			}
  		}
  	}
 
  	function typeFieldOfCharacterSheet(field, father_div_identification){
+		var new_class = '';
+		if ($.isNumeric(field.value)) {
+			new_class = 'functional';
+		}
+ 		
  		$( father_div_identification ).append( 
- 				"<div id="+field.id+"><span id='name'>"+field.name+
+ 				"<div id="+field.id+" class="+new_class+"><span id='name'>"+field.name+
  				"</span><span id='value'>"+field.value+"</span></div>" );
  	}
 

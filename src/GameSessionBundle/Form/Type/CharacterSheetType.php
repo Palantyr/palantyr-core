@@ -32,10 +32,6 @@ class CharacterSheetType extends AbstractType
         $builder->add('character_sheet_data', CollectionType::class, array(
             'entry_type' => CharacterSheetDataType::class
         ));
-        
-//         $builder->add('character_sheet_data', CollectionType::class, array(
-//             'entry_type' => CharacterSheetDataType::class
-//         ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

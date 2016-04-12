@@ -200,7 +200,7 @@ class CharacterSheetController extends Controller
         $character_sheet->addCharacterSheetDatum($main_data);
         
         $character_name = new CharacterSheetData();
-        $character_name->setCharacterSheet($character_sheet);
+//         $character_name->setCharacterSheet($character_sheet);
         $character_name->setName('character_name');
         $character_name->setDatatype('field');
         $character_name->setDisplayName('Character name');
@@ -208,7 +208,7 @@ class CharacterSheetController extends Controller
         $main_data->addCharacterSheetDatum($character_name);
         
         $player_name = new CharacterSheetData();
-        $player_name->setCharacterSheet($character_sheet);
+//         $player_name->setCharacterSheet($character_sheet);
         $player_name->setName('player_name');
         $player_name->setDatatype('field');
         $player_name->setDisplayName('Player name');
@@ -223,7 +223,7 @@ class CharacterSheetController extends Controller
         $character_sheet->addCharacterSheetDatum($attributes);
         
         $physical = new CharacterSheetData();
-        $physical->setCharacterSheet($character_sheet);
+//         $physical->setCharacterSheet($character_sheet);
         $physical->setName('physical');
         $physical->setDatatype('group');
         $physical->setDisplayName('Physical');
@@ -231,7 +231,7 @@ class CharacterSheetController extends Controller
         $attributes->addCharacterSheetDatum($physical);
         
         $strength = new CharacterSheetData();
-        $strength->setCharacterSheet($character_sheet);
+//         $strength->setCharacterSheet($character_sheet);
         $strength->setName('strength');
         $strength->setDatatype('field');
         $strength->setDisplayName('Strength');
@@ -239,7 +239,7 @@ class CharacterSheetController extends Controller
         $physical->addCharacterSheetDatum($strength);
         
         $dexterity = new CharacterSheetData();
-        $dexterity->setCharacterSheet($character_sheet);
+//         $dexterity->setCharacterSheet($character_sheet);
         $dexterity->setName('dexterity');
         $dexterity->setDatatype('field');
         $dexterity->setDisplayName('Dexterity');

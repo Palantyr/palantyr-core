@@ -44,6 +44,23 @@
  		$( "#"+user_username ).append("<div id='individual_functionality_panel'></div>");
  	}
 
+ 	$( "#"+user_username ).on("click", ".functional", function() {
+ 		var character_sheet_id = getCharacterSheetIdFromElement($(this));
+ 		if(character_sheet_id) {
+ 			if(individual_functionality_actual_character_sheet_id === false || 
+ 				individual_functionality_actual_character_sheet_id == character_sheet_id) {
+ 				var element = { 
+ 					    id: $(this).attr("id"),
+ 					    name: $(this).children( "#name" ).text(),
+ 					    character_sheet_id: character_sheet_id,
+ 					    value_list: {value: $(this).children( "#value" ).text()},
+ 					    result_type: {type: "number_of_successes", name: "Difficulty", value: "6"}
+ 					};
+ 				vampireFunctionality(element);
+ 			}
+ 		}
+ 	});
+
  	//})[id*="td_"] to id of character sheet
  	$( "#"+user_username ).on("click", "div > #atributtes > div > div", function() {
  		var character_sheet_id = getCharacterSheetIdFromElement($(this));

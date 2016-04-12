@@ -13,6 +13,8 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Validator\ValidatorBuilder;
 use Symfony\Component\Translation\Translator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use GameSessionBundle\Entity\CharacterSheet;
+use GameSessionBundle\Entity\CharacterSheetData;
 
 class GameSessionTopic extends Controller implements TopicInterface
 {
@@ -560,8 +562,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 		
 		switch ($event['option']) {
 			case "request":
-				$character_sheets = self::getCharacterSheets($room, $this->clientManipulator->getClient($connection)->getId());
-				$character_sheets_json = json_encode($character_sheets);
+			    $formatted_character_sheets = self::getFormattedCharacterSheetsNoStored($room, $connection);
+				$character_sheets_json = json_encode($formatted_character_sheets);
 				$connection->event($topic->getId(), [
 						'section' => "import_character_sheet",
 						'option' => $event['option'],
@@ -570,8 +572,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 				break;
 				
 			case "import_own":
-				$character_sheet = self::getCharacterSheet($this->clientManipulator->getClient($connection)->getUsername(), $event['character_sheet_id']);
-				$character_sheet_json = json_encode($character_sheet);
+			    $character_sheet = self::getCharacterSheet($event['character_sheet_id']);
+			    $formatted_character_sheet = self::getFormattedCharacterSheet($character_sheet, $connection);
+				$character_sheet_json = json_encode($formatted_character_sheet);
 				
 				$connection->event($topic->getId(), [
 						'section' => "import_character_sheet",
@@ -587,7 +590,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 						array($connection->WAMP->sessionId)
 						);
 				
-				$this->character_sheets_in_game[$room][] = $character_sheet;
+				$this->character_sheets_in_game[$room][] = $formatted_character_sheet;
 				break;
 				
 			case "delete":
@@ -664,38 +667,91 @@ class GameSessionTopic extends Controller implements TopicInterface
 		}
 	}
 	
-	private function getCharacterSheets ($room, $user_id)
+	private function getCharacterSheets($user_id)
 	{
-		$character_sheets_stored = array();
-		$character_sheets_to_send = array();
-		
-		switch ($user_id) {
-			case 1: 
-				$character_sheets_stored = self::getCharacterSheetsFromUserJaime();
-				break;
-				
-			case 2:
-				$character_sheets_stored = self::getCharacterSheetsFromUserMiguel();
-				break;
+        return $this->em->getRepository('GameSessionBundle:CharacterSheet')->findBy(array('user' => $user_id));
+	}
+	    
+	private function getFormattedCharacterSheets($character_sheets, $connection)
+	{
+	    $formatted_character_sheets = array();
+	    
+	    foreach ($character_sheets as $character_sheet) {
+	        $formatted_character_sheets[] = self::getFormattedCharacterSheet($character_sheet, $connection);
+	    }
+	    
+	    return $formatted_character_sheets;
+	}
+	
+	private function getCharacterSheet($character_sheet_id)
+	{
+	    return $this->em->getRepository('GameSessionBundle:CharacterSheet')->findOneBy(array('id' => $character_sheet_id));
+	}
+	
+	private function getFormattedCharacterSheet(CharacterSheet $character_sheet, $connection)
+	{
+	    $formatted_character_sheet = array();
+	    
+	    $character_sheet_settings = array();
+	    $character_sheet_settings['character_sheet_id'] = $character_sheet->getId();
+	    $character_sheet_settings['character_sheet_template_version'] = $character_sheet->getCharacterSheetTemplate()->getVersion();
+	    $character_sheet_settings['character_sheet_name'] = $character_sheet->getName();
+	    $character_sheet_settings['user_username'] = $this->clientManipulator->getClient($connection)->getUsername();
+// 	    $character_sheet_settings['rol_game'];
+	    $formatted_character_sheet['character_sheet_settings'] = $character_sheet_settings;
+	    
+	    $character_sheet_data = $character_sheet->getCharacterSheetData();
+	    foreach ($character_sheet_data as $character_sheet_datum) {
+            $formatted_character_sheet[] = self::getFormattedCharacterSheetData($character_sheet_datum);
+	    }
 
-			case 3:
-				$character_sheets_stored = self::getCharacterSheetsFromUserPablo();
-				break;
-		}
+	    return $formatted_character_sheet;
+	}
+	
+	private function getFormattedCharacterSheetData(CharacterSheetData $character_sheet_data)
+	{
+	    $formatted_character_sheet_data = array();
+	    $formatted_character_sheet_data['id'] = $character_sheet_data->getName();
+	    $formatted_character_sheet_data['name'] = $character_sheet_data->getDisplayName();
+	    $formatted_character_sheet_data['type'] = $character_sheet_data->getDatatype();
+	    switch ($character_sheet_data->getDatatype()) {
+	        case 'group':
+	           if ($character_sheet_data->getCharacterSheetData()) {
+	               $own_character_sheet_data = $character_sheet_data->getCharacterSheetData();
+	           	    foreach ($own_character_sheet_data as $own_character_sheet_datum) {
+                        $formatted_character_sheet_data[] = self::getFormattedCharacterSheetData($own_character_sheet_datum);
+            	    }
+	           }
+	           break;
+	             
+            case 'field':
+                $formatted_character_sheet_data['value'] = $character_sheet_data->getValue();
+                break;
+	    }
+	    return $formatted_character_sheet_data;
+	}
+	
+	private function getFormattedCharacterSheetsNoStored($room, $connection)
+	{
+	    $user_id = $this->clientManipulator->getClient($connection)->getId();
+	    $character_sheets = self::getCharacterSheets($user_id);
 
-		if (!empty($character_sheets_stored)) {
-			foreach ($character_sheets_stored as &$character_sheet_stored) {
-				if (!self::isCharacterSheetInGame($room, self::getCharacterSheetId($character_sheet_stored))) {
-					$character_sheets_to_send[] = $character_sheet_stored;
-				}
-			}
-
-			if (!empty($character_sheets_to_send)) {
-				return $character_sheets_to_send;
-			}
-		}
-		
-		return null;
+	    $character_sheets_stored = self::getFormattedCharacterSheets($character_sheets, $connection);
+	    $character_sheets_to_send = array();
+	    
+	    if (!empty($character_sheets_stored)) {
+	        foreach ($character_sheets_stored as &$character_sheet_stored) {
+	            if (!self::isCharacterSheetInGame($room, self::getCharacterSheetId($character_sheet_stored))) {
+	                $character_sheets_to_send[] = $character_sheet_stored;
+	            }
+	        }
+	    
+	        if (!empty($character_sheets_to_send)) {
+	            return $character_sheets_to_send;
+	        }
+	    }
+	    
+	    return null;
 	}
 	
 	private function getCharacterSheetId ($character_sheet) {
@@ -704,908 +760,6 @@ class GameSessionTopic extends Controller implements TopicInterface
 	
 	private function getCharacterSheetUserUsername ($character_sheet) {
 		return $character_sheet['character_sheet_settings']['user_username'];
-	}
-	
-	private function getCharacterSheet ($user_username, $character_sheet_id) {
-		switch ($user_username) {
-			case "Jaime":
-				$character_sheets = self::getCharacterSheetsFromUserJaime();
-				break;
-			case "Miguel":
-				$character_sheets = self::getCharacterSheetsFromUserMiguel();
-				break;
-			case "Pablo":
-				$character_sheets = self::getCharacterSheetsFromUserPablo();
-				break;
-		}
-		
-		foreach ($character_sheets as &$character_sheet) {
-			if (self::getCharacterSheetId($character_sheet) == $character_sheet_id) {
-				return $character_sheet;
-			}
-		}
-	}
-	
-	private function getCharacterSheetsFromUserJaime () {
-		return array(
-				'0' => array(
-						'character_sheet_settings' => array(
-								'character_sheet_id' => "0",
-								'character_sheet_template_version' => "1",
-								'character_sheet_version' => "1",
-								'character_sheet_name' => "My first vampire",
-								'rol_game' => "Vampire 20",
-								'rol_game_version' => "1",
-								'user_username' => "Jaime"
-						),
-						'0' => array(
-								'id' => "basic_info",
-								'name' => null,
-								'type' => "group",
-								'0' => array(
-										'id' => "character_name",
-										'name' => "Name",
-										'type' => "field",
-										'value' => "Drácula"
-								),
-								'1' => array(
-										'id' => "user_username",
-										'name' => "Player",
-										'type' => "field",
-										'value' => "Jaime"
-								),
-								'2' => array(
-										'id' => "chronicle",
-										'name' => "Chronicle",
-										'type' => "field",
-										'value' => "The First Game"
-								),
-								'3' => array(
-										'id' => "nature",
-										'name' => "Nature",
-										'type' => "field",
-										'value' => "My nature"
-								),
-								'4' => array(
-										'id' => "conduct",
-										'name' => "Conduct",
-										'type' => "field",
-										'value' => "My conduct"
-								),
-								'5' => array(
-										'id' => "concept",
-										'name' => "Concept",
-										'type' => "field",
-										'value' => "My concept"
-								),
-								'6' => array(
-										'id' => "clan",
-										'name' => "Clan",
-										'type' => "field",
-										'value' => "LaSombra"
-								),
-								'7' => array(
-										'id' => "generation",
-										'name' => "Generation",
-										'type' => "field",
-										'value' => "7ª"
-								),
-								'8' => array(
-										'id' => "sire",
-										'name' => "Sire",
-										'type' => "field",
-										'value' => "Kupala"
-								),
-						),
-						'1' => array(
-								'id' => "atributtes",
-								'name' => "Atributtes",
-								'type' => "group",
-								'0' => array(
-										'id' => "physical",
-										'name' => "Physical",
-										'type' => "group",
-										'0' => array(
-												'id' => "strength",
-												'name' => "Strength",
-												'type' => "field",
-												'value' => "5"
-										),
-										'1' => array(
-												'id' => "dexterity",
-												'name' => "Dexterity",
-												'type' => "field",
-												'value' => "3"
-										),
-										'2' => array(
-												'id' => "stamina",
-												'name' => "Stamina",
-												'type' => "field",
-												'value' => "2"
-										)
-								),
-								'1' => array(
-										'id' => "social",
-										'name' => "Social",
-										'type' => "group",
-										'0' => array(
-												'id' => "charisma",
-												'name' => "Charisma",
-												'type' => "field",
-												'value' => "4"
-										),
-										'1' => array(
-												'id' => "manipulation",
-												'name' => "Manipulation",
-												'type' => "field",
-												'value' => "2"
-										),
-										'2' => array(
-												'id' => "apperance",
-												'name' => "Apperance",
-												'type' => "field",
-												'value' => "3"
-										)
-								),
-								'2' => array(
-										'id' => "mental",
-										'name' => "Mental",
-										'type' => "group",
-										'0' => array(
-												'id' => "perception",
-												'name' => "Perception",
-												'type' => "field",
-												'value' => "2"
-										),
-										'1' => array(
-												'id' => "inteligence",
-												'name' => "Inteligence",
-												'type' => "field",
-												'value' => "2"
-										),
-										'2' => array(
-												'id' => "wits",
-												'name' => "Wits",
-												'type' => "field",
-												'value' => "4"
-										)
-								)
-						),
-						'2' => array(
-								'id' => "abilities",
-								'name' => "Abilities",
-								'type' => "group",
-								'0' => array(
-										'id' => "talents",
-										'name' => "Talents",
-										'type' => "group",
-										'0' => array(
-												'id' => "acting",
-												'name' => "Acting",
-												'type' => "field",
-												'value' => "0"
-										),
-										'1' => array(
-												'id' => "alertness",
-												'name' => "Alertness",
-												'type' => "field",
-												'value' => "2"
-										),
-										'2' => array(
-												'id' => "athletics",
-												'name' => "Athletics",
-												'type' => "field",
-												'value' => "2"
-										)
-								),
-								'1' => array(
-										'id' => "skills",
-										'name' => "Skills",
-										'type' => "group",
-										'0' => array(
-												'id' => "animal_ken",
-												'name' => "Animal Ken",
-												'type' => "field",
-												'value' => "0"
-										),
-										'1' => array(
-												'id' => "drive",
-												'name' => "Drive",
-												'type' => "field",
-												'value' => "1"
-										),
-										'2' => array(
-												'id' => "etiquette",
-												'name' => "Etiquette",
-												'type' => "field",
-												'value' => "0"
-										)
-								),
-								'2' => array(
-										'id' => "knowledge",
-										'name' => "Knowledge",
-										'type' => "group",
-										'0' => array(
-												'id' => "bureaucracy",
-												'name' => "Bureaucracy",
-												'type' => "field",
-												'value' => "2"
-										),
-										'1' => array(
-												'id' => "computer",
-												'name' => "Computer",
-												'type' => "field",
-												'value' => "4"
-										),
-										'2' => array(
-												'id' => "finance",
-												'name' => "Finance",
-												'type' => "field",
-												'value' => "2"
-										)
-								)
-						)
-				),
-				'1' => array(
-						'character_sheet_settings' => array(
-								'character_sheet_id' => "1",
-								'character_sheet_template_version' => "1",
-								'character_sheet_version' => "1",
-								'character_sheet_name' => "My second vampire",
-								'rol_game' => "Vampire 20",
-								'rol_game_version' => "1",
-								'user_username' => "Jaime"
-						),
-						'0' => array(
-								'id' => "basic_info",
-								'name' => null,
-								'type' => "group",
-								'0' => array(
-										'id' => "character_name",
-										'name' => "Name",
-										'type' => "field",
-										'value' => "Vladimir"
-								),
-								'1' => array(
-										'id' => "user_username",
-										'name' => "Player",
-										'type' => "field",
-										'value' => "Jaime"
-								),
-								'2' => array(
-										'id' => "chronicle",
-										'name' => "Chronicle",
-										'type' => "field",
-										'value' => "The First Game"
-								),
-								'3' => array(
-										'id' => "nature",
-										'name' => "Nature",
-										'type' => "field",
-										'value' => "My nature"
-								),
-								'4' => array(
-										'id' => "conduct",
-										'name' => "Conduct",
-										'type' => "field",
-										'value' => "My conduct"
-								),
-								'5' => array(
-										'id' => "concept",
-										'name' => "Concept",
-										'type' => "field",
-										'value' => "My concept"
-								),
-								'6' => array(
-										'id' => "clan",
-										'name' => "Clan",
-										'type' => "field",
-										'value' => "LaSombra"
-								),
-								'7' => array(
-										'id' => "generation",
-										'name' => "Generation",
-										'type' => "field",
-										'value' => "8ª"
-								),
-								'8' => array(
-										'id' => "sire",
-										'name' => "Sire",
-										'type' => "field",
-										'value' => "Drácula"
-								),
-						),
-						'1' => array(
-								'id' => "atributtes",
-								'name' => "Atributtes",
-								'type' => "group",
-								'0' => array(
-										'id' => "physical",
-										'name' => "Physical",
-										'type' => "group",
-										'0' => array(
-												'id' => "strength",
-												'name' => "Strength",
-												'type' => "field",
-												'value' => "4"
-										),
-										'1' => array(
-												'id' => "dexterity",
-												'name' => "Dexterity",
-												'type' => "field",
-												'value' => "4"
-										),
-										'2' => array(
-												'id' => "stamina",
-												'name' => "Stamina",
-												'type' => "field",
-												'value' => "1"
-										)
-								),
-								'1' => array(
-										'id' => "social",
-										'name' => "Social",
-										'type' => "group",
-										'0' => array(
-												'id' => "charisma",
-												'name' => "Charisma",
-												'type' => "field",
-												'value' => "5"
-										),
-										'1' => array(
-												'id' => "manipulation",
-												'name' => "Manipulation",
-												'type' => "field",
-												'value' => "1"
-										),
-										'2' => array(
-												'id' => "apperance",
-												'name' => "Apperance",
-												'type' => "field",
-												'value' => "4"
-										)
-								),
-								'2' => array(
-										'id' => "mental",
-										'name' => "Mental",
-										'type' => "group",
-										'0' => array(
-												'id' => "perception",
-												'name' => "Perception",
-												'type' => "field",
-												'value' => "1"
-										),
-										'1' => array(
-												'id' => "inteligence",
-												'name' => "Inteligence",
-												'type' => "field",
-												'value' => "3"
-										),
-										'2' => array(
-												'id' => "wits",
-												'name' => "Wits",
-												'type' => "field",
-												'value' => "3"
-										)
-								)
-						),
-						'2' => array(
-								'id' => "abilities",
-								'name' => "Abilities",
-								'type' => "group",
-								'0' => array(
-										'id' => "talents",
-										'name' => "Talents",
-										'type' => "group",
-										'0' => array(
-												'id' => "acting",
-												'name' => "Acting",
-												'type' => "field",
-												'value' => "1"
-										),
-										'1' => array(
-												'id' => "alertness",
-												'name' => "Alertness",
-												'type' => "field",
-												'value' => "1"
-										),
-										'2' => array(
-												'id' => "athletics",
-												'name' => "Athletics",
-												'type' => "field",
-												'value' => "3"
-										)
-								),
-								'1' => array(
-										'id' => "skills",
-										'name' => "Skills",
-										'type' => "group",
-										'0' => array(
-												'id' => "animal_ken",
-												'name' => "Animal Ken",
-												'type' => "field",
-												'value' => "0"
-										),
-										'1' => array(
-												'id' => "drive",
-												'name' => "Drive",
-												'type' => "field",
-												'value' => "0"
-										),
-										'2' => array(
-												'id' => "etiquette",
-												'name' => "Etiquette",
-												'type' => "field",
-												'value' => "1"
-										)
-								),
-								'2' => array(
-										'id' => "knowledge",
-										'name' => "Knowledge",
-										'type' => "group",
-										'0' => array(
-												'id' => "bureaucracy",
-												'name' => "Bureaucracy",
-												'type' => "field",
-												'value' => "1"
-										),
-										'1' => array(
-												'id' => "computer",
-												'name' => "Computer",
-												'type' => "field",
-												'value' => "5"
-										),
-										'2' => array(
-												'id' => "finance",
-												'name' => "Finance",
-												'type' => "field",
-												'value' => "1"
-										)
-								)
-						)
-				)
-		);
-	}
-	
-	private function getCharacterSheetsFromUserMiguel () {
-		return array(
-				'0' => array(
-						'character_sheet_settings' => array(
-								'character_sheet_id' => "2",
-								'character_sheet_template_version' => "1",
-								'character_sheet_version' => "1",
-								'character_sheet_name' => "My first vampire",
-								'rol_game' => "Vampire 20",
-								'rol_game_version' => "1",
-								'user_username' => "Miguel"
-						),
-						'0' => array(
-								'id' => "basic_info",
-								'name' => null,
-								'type' => "group",
-								'0' => array(
-										'id' => "character_name",
-										'name' => "Name",
-										'type' => "field",
-										'value' => "Cornel"
-								),
-								'1' => array(
-										'id' => "user_username",
-										'name' => "Player",
-										'type' => "field",
-										'value' => "Miguel"
-								),
-								'2' => array(
-										'id' => "chronicle",
-										'name' => "Chronicle",
-										'type' => "field",
-										'value' => "The First Game"
-								),
-								'3' => array(
-										'id' => "nature",
-										'name' => "Nature",
-										'type' => "field",
-										'value' => "My nature"
-								),
-								'4' => array(
-										'id' => "conduct",
-										'name' => "Conduct",
-										'type' => "field",
-										'value' => "My conduct"
-								),
-								'5' => array(
-										'id' => "concept",
-										'name' => "Concept",
-										'type' => "field",
-										'value' => "My concept"
-								),
-								'6' => array(
-										'id' => "clan",
-										'name' => "Clan",
-										'type' => "field",
-										'value' => "LaSombra"
-								),
-								'7' => array(
-										'id' => "generation",
-										'name' => "Generation",
-										'type' => "field",
-										'value' => "7ª"
-								),
-								'8' => array(
-										'id' => "sire",
-										'name' => "Sire",
-										'type' => "field",
-										'value' => "Kupala"
-								),
-						),
-						'1' => array(
-								'id' => "atributtes",
-								'name' => "Atributtes",
-								'type' => "group",
-								'0' => array(
-										'id' => "physical",
-										'name' => "Physical",
-										'type' => "group",
-										'0' => array(
-												'id' => "strength",
-												'name' => "Strength",
-												'type' => "field",
-												'value' => "5"
-										),
-										'1' => array(
-												'id' => "dexterity",
-												'name' => "Dexterity",
-												'type' => "field",
-												'value' => "3"
-										),
-										'2' => array(
-												'id' => "stamina",
-												'name' => "Stamina",
-												'type' => "field",
-												'value' => "2"
-										)
-								),
-								'1' => array(
-										'id' => "social",
-										'name' => "Social",
-										'type' => "group",
-										'0' => array(
-												'id' => "charisma",
-												'name' => "Charisma",
-												'type' => "field",
-												'value' => "4"
-										),
-										'1' => array(
-												'id' => "manipulation",
-												'name' => "Manipulation",
-												'type' => "field",
-												'value' => "2"
-										),
-										'2' => array(
-												'id' => "apperance",
-												'name' => "Apperance",
-												'type' => "field",
-												'value' => "3"
-										)
-								),
-								'2' => array(
-										'id' => "mental",
-										'name' => "Mental",
-										'type' => "group",
-										'0' => array(
-												'id' => "perception",
-												'name' => "Perception",
-												'type' => "field",
-												'value' => "2"
-										),
-										'1' => array(
-												'id' => "inteligence",
-												'name' => "Inteligence",
-												'type' => "field",
-												'value' => "2"
-										),
-										'2' => array(
-												'id' => "wits",
-												'name' => "Wits",
-												'type' => "field",
-												'value' => "4"
-										)
-								)
-						),
-						'2' => array(
-								'id' => "abilities",
-								'name' => "Abilities",
-								'type' => "group",
-								'0' => array(
-										'id' => "talents",
-										'name' => "Talents",
-										'type' => "group",
-										'0' => array(
-												'id' => "acting",
-												'name' => "Acting",
-												'type' => "field",
-												'value' => "0"
-										),
-										'1' => array(
-												'id' => "alertness",
-												'name' => "Alertness",
-												'type' => "field",
-												'value' => "2"
-										),
-										'2' => array(
-												'id' => "athletics",
-												'name' => "Athletics",
-												'type' => "field",
-												'value' => "2"
-										)
-								),
-								'1' => array(
-										'id' => "skills",
-										'name' => "Skills",
-										'type' => "group",
-										'0' => array(
-												'id' => "animal_ken",
-												'name' => "Animal Ken",
-												'type' => "field",
-												'value' => "0"
-										),
-										'1' => array(
-												'id' => "drive",
-												'name' => "Drive",
-												'type' => "field",
-												'value' => "1"
-										),
-										'2' => array(
-												'id' => "etiquette",
-												'name' => "Etiquette",
-												'type' => "field",
-												'value' => "0"
-										)
-								),
-								'2' => array(
-										'id' => "knowledge",
-										'name' => "Knowledge",
-										'type' => "group",
-										'0' => array(
-												'id' => "bureaucracy",
-												'name' => "Bureaucracy",
-												'type' => "field",
-												'value' => "2"
-										),
-										'1' => array(
-												'id' => "computer",
-												'name' => "Computer",
-												'type' => "field",
-												'value' => "4"
-										),
-										'2' => array(
-												'id' => "finance",
-												'name' => "Finance",
-												'type' => "field",
-												'value' => "2"
-										)
-								)
-						)
-				),
-				'1' => array(
-						'character_sheet_settings' => array(
-								'character_sheet_id' => "3",
-								'character_sheet_template_version' => "1",
-								'character_sheet_version' => "1",
-								'character_sheet_name' => "My second vampire",
-								'rol_game' => "Vampire 20",
-								'rol_game_version' => "1",
-								'user_username' => "Miguel"
-						),
-						'0' => array(
-								'id' => "basic_info",
-								'name' => null,
-								'type' => "group",
-								'0' => array(
-										'id' => "character_name",
-										'name' => "Name",
-										'type' => "field",
-										'value' => "Babayaga"
-								),
-								'1' => array(
-										'id' => "user_username",
-										'name' => "Player",
-										'type' => "field",
-										'value' => "Miguel"
-								),
-								'2' => array(
-										'id' => "chronicle",
-										'name' => "Chronicle",
-										'type' => "field",
-										'value' => "The First Game"
-								),
-								'3' => array(
-										'id' => "nature",
-										'name' => "Nature",
-										'type' => "field",
-										'value' => "My nature"
-								),
-								'4' => array(
-										'id' => "conduct",
-										'name' => "Conduct",
-										'type' => "field",
-										'value' => "My conduct"
-								),
-								'5' => array(
-										'id' => "concept",
-										'name' => "Concept",
-										'type' => "field",
-										'value' => "My concept"
-								),
-								'6' => array(
-										'id' => "clan",
-										'name' => "Clan",
-										'type' => "field",
-										'value' => "LaSombra"
-								),
-								'7' => array(
-										'id' => "generation",
-										'name' => "Generation",
-										'type' => "field",
-										'value' => "8ª"
-								),
-								'8' => array(
-										'id' => "sire",
-										'name' => "Sire",
-										'type' => "field",
-										'value' => "Drácula"
-								),
-						),
-						'1' => array(
-								'id' => "atributtes",
-								'name' => "Atributtes",
-								'type' => "group",
-								'0' => array(
-										'id' => "physical",
-										'name' => "Physical",
-										'type' => "group",
-										'0' => array(
-												'id' => "strength",
-												'name' => "Strength",
-												'type' => "field",
-												'value' => "4"
-										),
-										'1' => array(
-												'id' => "dexterity",
-												'name' => "Dexterity",
-												'type' => "field",
-												'value' => "4"
-										),
-										'2' => array(
-												'id' => "stamina",
-												'name' => "Stamina",
-												'type' => "field",
-												'value' => "1"
-										)
-								),
-								'1' => array(
-										'id' => "social",
-										'name' => "Social",
-										'type' => "group",
-										'0' => array(
-												'id' => "charisma",
-												'name' => "Charisma",
-												'type' => "field",
-												'value' => "5"
-										),
-										'1' => array(
-												'id' => "manipulation",
-												'name' => "Manipulation",
-												'type' => "field",
-												'value' => "1"
-										),
-										'2' => array(
-												'id' => "apperance",
-												'name' => "Apperance",
-												'type' => "field",
-												'value' => "4"
-										)
-								),
-								'2' => array(
-										'id' => "mental",
-										'name' => "Mental",
-										'type' => "group",
-										'0' => array(
-												'id' => "perception",
-												'name' => "Perception",
-												'type' => "field",
-												'value' => "1"
-										),
-										'1' => array(
-												'id' => "inteligence",
-												'name' => "Inteligence",
-												'type' => "field",
-												'value' => "3"
-										),
-										'2' => array(
-												'id' => "wits",
-												'name' => "Wits",
-												'type' => "field",
-												'value' => "3"
-										)
-								)
-						),
-						'2' => array(
-								'id' => "abilities",
-								'name' => "Abilities",
-								'type' => "group",
-								'0' => array(
-										'id' => "talents",
-										'name' => "Talents",
-										'type' => "group",
-										'0' => array(
-												'id' => "acting",
-												'name' => "Acting",
-												'type' => "field",
-												'value' => "1"
-										),
-										'1' => array(
-												'id' => "alertness",
-												'name' => "Alertness",
-												'type' => "field",
-												'value' => "1"
-										),
-										'2' => array(
-												'id' => "athletics",
-												'name' => "Athletics",
-												'type' => "field",
-												'value' => "3"
-										)
-								),
-								'1' => array(
-										'id' => "skills",
-										'name' => "Skills",
-										'type' => "group",
-										'0' => array(
-												'id' => "animal_ken",
-												'name' => "Animal Ken",
-												'type' => "field",
-												'value' => "0"
-										),
-										'1' => array(
-												'id' => "drive",
-												'name' => "Drive",
-												'type' => "field",
-												'value' => "0"
-										),
-										'2' => array(
-												'id' => "etiquette",
-												'name' => "Etiquette",
-												'type' => "field",
-												'value' => "1"
-										)
-								),
-								'2' => array(
-										'id' => "knowledge",
-										'name' => "Knowledge",
-										'type' => "group",
-										'0' => array(
-												'id' => "bureaucracy",
-												'name' => "Bureaucracy",
-												'type' => "field",
-												'value' => "1"
-										),
-										'1' => array(
-												'id' => "computer",
-												'name' => "Computer",
-												'type' => "field",
-												'value' => "5"
-										),
-										'2' => array(
-												'id' => "finance",
-												'name' => "Finance",
-												'type' => "field",
-												'value' => "1"
-										)
-								)
-						)
-				)
-		);
 	}
 	
 	private function getCharacterSheetsFromUserPablo () {
@@ -2147,7 +1301,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 			case "individual":
 				$throwing = json_decode($event['throwing']);
 // 				$result = getIndividualResult($throwing);
-				$result = "Ha sacado un 20 en la tirada";
+
+                $random = rand(0, 10);
+				$result = "The result is ".$random." hits";
 				
 				$date = new \DateTime();
 				$date = $date->format('H:i:s');
