@@ -421,7 +421,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 			$client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
 			$client_connection['connection']->event($topic->getId(), [
 					'section' => 'chat',
-					'username_sender' => null,
+			        'option' => 'add_text',
+					'sender' => 'system',
 					'text' => $message_translated,
 					'date' => self::getDateFormattedToChat()
 			]);
@@ -447,24 +448,118 @@ class GameSessionTopic extends Controller implements TopicInterface
 			$client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
 			$client_connection['connection']->event($topic->getId(), [
 					'section' => 'chat',
-					'username_sender' => null,
-					'text' => $message_translated,
+			        'option' => 'add_text',
+					'sender' => 'system',
+			        'text' => $message_translated,
 					'date' => self::getDateFormattedToChat()
 			]);
 		}
 	}
 	
-	private function onPublishChat (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+	private function whisperAnotherUser(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event)
+	{
+	    $users_username = self::getUsersUsernameToTheRoom($topic);
+	    $message_array = explode(' ', $event["msg"]);
+        if(!isset($message_array[1])) {
+            $connection->event($topic->getId(), [
+                'section' => 'chat',
+                'option' => 'whisper',
+                'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+                'text' => "There is no target user",
+                'date' => self::getDateFormattedToChat()
+            ]);
+            return true;
+        }
+        $user_tarjet = $message_array[1];
+
+	    foreach ($users_username as $user_username) {
+	        if ($user_tarjet == $user_username) {
+	            array_shift($message_array);array_shift($message_array);
+	            if ($message_array != null) {
+	                $whisper_target_user = $this->clientManipulator->findByUsername($topic, $user_username);
+	                $whisper_target_user['connection']->event($topic->getId(), [
+	                    'section' => 'chat',
+	                    'option' => 'whisper',
+	                    'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+	                    'text' => implode(" ", $message_array),
+	                    'date' => self::getDateFormattedToChat(),
+	                ]);
+	                $connection->event($topic->getId(), [
+	                    'section' => 'chat',
+	                    'option' => 'whisper',
+	                    'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+	                    'text' => "To ".$user_tarjet.": ".implode(" ", $message_array),
+	                    'date' => self::getDateFormattedToChat()
+	                ]);
+	                return true;
+	            }
+	            $connection->event($topic->getId(), [
+                    'section' => 'chat',
+                    'option' => 'whisper',
+	                'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+	                'text' => "To ".$user_tarjet.": There are not message to send",
+	                'date' => self::getDateFormattedToChat()
+	            ]);
+	            return true;
+	        }
+	    }
+	    $connection->event($topic->getId(), [
+	        'section' => 'chat',
+	        'option' => 'whisper',
+	        'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+	        'text' => "The user ".$user_tarjet." is not in the game session",
+	        'date' => self::getDateFormattedToChat()
+	    ]);
+	    return true;
+	}
+	
+	private function chatCommands(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event)
+	{
+	    if (isset($event["msg"][1])) {
+	        $command = $event["msg"][1];
+	        switch ($command) {
+	            case 'w':
+	                self::whisperAnotherUser($connection, $topic, $request, $event);
+	                break;
+	            default:
+	                $connection->event($topic->getId(), [
+	                    'section' => 'chat',
+	                    'option' => 'whisper',
+	                    'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+	                    'text' => "The command ".$command." does not exist.",
+	                    'date' => self::getDateFormattedToChat()
+	                ]);
+	                break;
+	        }
+	    }
+	    else {
+            $connection->event($topic->getId(), [
+                'section' => 'chat',
+                'option' => 'whisper',
+                'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+                'text' => "You must insert a command",
+                'date' => self::getDateFormattedToChat()
+            ]);
+	    }
+	}
+	
+	private function onPublishChat(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
 		if ($event["msg"] != '') {
-		
-			$topic->broadcast([
-					'section' => "chat",
-					'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
-					'text' => $event["msg"],
-					'date' => self::getDateFormattedToChat(),
-			]);
-		}
+		    
+		    if($event["msg"][0] == '/') {
+		        self::chatCommands($connection, $topic, $request, $event);
+		    }
+    		else {
+        			$topic->broadcast([
+        					'section' => 'chat',
+        			        'option' => 'add_text',
+        					'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+        					'text' => $event["msg"],
+        					'date' => self::getDateFormattedToChat(),
+        			]);
+        		}
+    		}
 	}
 	
 	private function getDateFormattedToChat () 
@@ -491,9 +586,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 					
 					$client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
 					$client_connection['connection']->event($topic->getId(), [
-							'section' => "chat",
-							'option' => 'throw',
-							'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+							'section' => 'chat',
+							'option' => 'throw_dice',
+							'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 							'text' => $dice_result_message,
 							'date' => self::getDateFormattedToChat(),
 					]);
@@ -1310,7 +1405,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 				
 				$topic->broadcast([
 						'section' => "chat",
-						'username_sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+				        'option' => 'add_text',
+						'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 						'text' => $result,
 						'date' => $date,
 				]);

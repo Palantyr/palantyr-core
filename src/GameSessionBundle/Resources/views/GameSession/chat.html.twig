@@ -5,100 +5,119 @@
  			addTextToChat(payload);
  		}
  	}
-			
- 	function addTextToChat(payload){
 
- 		if (payload.username_sender != null) {
-
-			if (payload.option == 'throw') {
-	 	 		if (payload.username_sender == user_username) {
-	 				$ ( '#chat' ).append(' \
-	 					<li class="right clearfix"> \
-	 						<span class="chat-img pull-right"> \
-		 				 		'+"{% image "@GameSessionBundle/Resources/public/images/throw-me.png" output="images/throw-me.png" %}"+' \
-		 				 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
-		 				 		'+"{% endimage %}"+' \
-	 			    		</span> \
-	 			    		<div class="chat-body clearfix"> \
-	 			    	        <div class="header"> \
-	                               	<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
-	                               	<strong class="pull-right primary-font">'+payload.username_sender+'</strong> \
-	 			    	        </div> \
-	 			    	        <p>'+payload.text+'</p> \
-	 			    	    </div> \
-	 			    	</li>');
-	 	 	 	}
-	 	 		else {
-	 				$ ( '#chat' ).append(' \
-	 					<li class="left clearfix"> \
-	 						<span class="chat-img pull-left"> \
-		 				 		'+"{% image "@GameSessionBundle/Resources/public/images/throw-other.png" output="images/throw-other.png" %}"+' \
-		 				 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
-		 				 		'+"{% endimage %}"+' \
-	 			    		</span> \
-	 			    		<div class="chat-body clearfix"> \
-	 			    	        <div class="header"> \
-	 			    	            <strong class="primary-font">'+payload.username_sender+'</strong> <small class="pull-right text-muted"> \
-	 			    	            <span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
-	 			    	        </div> \
-	 			    	        <p>'+payload.text+'</p> \
-	 			    	    </div> \
-	 			    	</li>');
-	 	 	 	}
+ 	function addTextToChat(payload)
+ 	{
+		switch(payload.option) {
+		case 'throw_dice':
+			if(payload.sender == user_username) {
+    			var picture = 
+    				'<span class="chat-img pull-right"> \
+    					'+"{% image "@GameSessionBundle/Resources/public/images/throw-me.png" output="images/throw-me.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show);
 			}
 			else {
-	 	 		if (payload.username_sender == user_username) {
-	 				$ ( '#chat' ).append(' \
-	 					<li class="right clearfix"> \
-	 						<span class="chat-img pull-right"> \
-		 				 		'+"{% image "@GameSessionBundle/Resources/public/images/chat-me.png" output="images/chat-me.png" %}"+' \
-		 				 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
-		 				 		'+"{% endimage %}"+' \
-	 			    		</span> \
-	 			    		<div class="chat-body clearfix"> \
-	 			    	        <div class="header"> \
-	                               	<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
-	                               	<strong class="pull-right primary-font">'+payload.username_sender+'</strong> \
-	 			    	        </div> \
-	 			    	        <p>'+payload.text+'</p> \
-	 			    	    </div> \
-	 			    	</li>');
-	 	 	 	}
-	 	 		else {
-	 				$ ( '#chat' ).append(' \
-	 					<li class="left clearfix"> \
-	 						<span class="chat-img pull-left"> \
-		 				 		'+"{% image "@GameSessionBundle/Resources/public/images/chat-other.png" output="images/chat-me.png" %}"+' \
-		 				 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
-		 				 		'+"{% endimage %}"+' \
-	 			    		</span> \
-	 			    		<div class="chat-body clearfix"> \
-	 			    	        <div class="header"> \
-	 			    	            <strong class="primary-font">'+payload.username_sender+'</strong> <small class="pull-right text-muted"> \
-	 			    	            <span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
-	 			    	        </div> \
-	 			    	        <p>'+payload.text+'</p> \
-	 			    	    </div> \
-	 			    	</li>');
-	 	 	 	}
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@GameSessionBundle/Resources/public/images/throw-other.png" output="images/throw-other.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show);
 			}
- 		}
- 		else {
-			$ ( '#chat' ).append(' \
- 				<li class="left clearfix"> \
- 					<span class="chat-img pull-left"> \
-	 			 		'+"{% image "@GameSessionBundle/Resources/public/images/chat-system.png" output="images/chat-me.png" %}"+' \
-	 			 		<img src="{{ asset_url }}" alt="User Avatar" class="img-circle"> \
-	 			 		'+"{% endimage %}"+' \
- 			   		</span> \
- 			   		<div class="chat-body clearfix"> \
- 			   	        <div class="header"> \
- 			   	            <span class="glyphicon glyphicon-time"></span>'+payload.date+'</small> \
- 			   	        </div> \
- 			   	        <p>'+payload.text+'</p> \
- 			   	    </div> \
- 			   	</li>');
- 	 	}
+			break;
+
+		case 'whisper':
+			if(payload.sender == user_username) {
+				var text_class = 'whisper';
+    			var picture = 
+    				'<span class="chat-img pull-right"> \
+    					'+"{% image "@GameSessionBundle/Resources/public/images/chat-me.png" output="images/chat-me.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show, text_class);
+			}
+			else {
+				var text_class = 'whisper';
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@GameSessionBundle/Resources/public/images/chat-other.png" output="images/chat-other.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show, text_class);
+			}
+			break;
+
+		case 'add_text':
+			switch(payload.sender) {
+			case 'system':
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@GameSessionBundle/Resources/public/images/chat-system.png" output="images/chat-system.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, '');
+				break;
+			case user_username: //himself
+				var picture = 
+					'<span class="chat-img pull-right"> \
+						'+"{% image "@GameSessionBundle/Resources/public/images/chat-me.png" output="images/chat-me.png" %}"+' \
+	    		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+	    		 		'+"{% endimage %}"+' \
+	    			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show);
+				break;
+
+			default:
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@GameSessionBundle/Resources/public/images/chat-other.png" output="images/chat-other.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show);
+				break;
+			}
+		}
  	}
 
+	function addTextToChatFormatted(payload, picture, head_to_show, text_class)
+	{
+	    if (text_class === undefined) {
+	    	text_class = '';
+	    }
+
+	    var new_text = ' \
+			<li class="right clearfix"> \
+					'+picture+' \
+	    		<div class="chat-body clearfix"> \
+	    	        <div class="header"> \
+                       	<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>'+payload.date+'</small>';
+                		if (head_to_show !== undefined && head_to_show != null && head_to_show != '') {
+                			new_text = new_text.concat('<a role="button" tabindex="0"><strong id="chat-head-to-show" class="pull-right primary-font">'+head_to_show+'</strong></a>');
+                		}
+					new_text = new_text.concat('</div> \
+        	   		<span class="'+text_class+'">'+payload.text+'</span> \
+       			</div> \
+        	</li>');
+
+		$ ( '#chat' ).append(new_text);
+	}
+
+	$(' #chat ').on('click', '#chat-head-to-show', function() {
+		$('#chat_new_text').val('/w '+$(this).text()+' ');
+	});
 </script>
