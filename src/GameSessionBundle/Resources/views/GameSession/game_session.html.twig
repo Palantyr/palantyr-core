@@ -136,7 +136,7 @@
 
 	 	$(document).keypress(function(e) {
 	 	    if(e.which == 13) {
-	 	 	    if (last_id_from_input == 'chat_new_text') {
+	 	 	    if ($("#chat_new_text").is(":focus")) {
 	 				var newText = $( "#chat_new_text" ).val();
 	 				if (newText != '') {
 		 				session.publish(route_game_session, {
@@ -144,6 +144,7 @@
 		 					msg: newText
 		 				});
 		 				$( "#chat_new_text" ).val('');
+		 				$('.panel-body').animate({scrollTop: $('.panel-body').prop('scrollHeight')});
 	 				}
 				}
 	 	    }
@@ -364,12 +365,12 @@
 		$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(text);
 	}
 
-	var last_id_from_input;
-	$(function() {
-	    $("input").on("click", function() {
-	    	last_id_from_input = $(this).attr("id");
-	    });
-	});
+// 	var last_id_from_input;
+// 	$(function() {
+// 	    $("input").on("click", function() {
+// 	    	last_id_from_input = $(this).attr("id");
+// 	    });
+// 	});
 // OTHER
  </script>
 

@@ -3,6 +3,9 @@
  	function subscribeChat(payload) {
  		if (payload.text != null) {
  			addTextToChat(payload);
+ 			if (payload.sender && payload.sender == user_username) {
+ 	 			$('.panel-body').animate({scrollTop: $('.panel-body').prop('scrollHeight')});
+ 	 		}
  		}
  	}
 
@@ -28,7 +31,8 @@
         		 		'+"{% endimage %}"+' \
         			</span>';
         		head_to_show = payload.sender;
-				addTextToChatFormatted(payload, picture, head_to_show);
+        		head_class = 'chat-head-whisper';
+				addTextToChatFormatted(payload, picture, head_to_show, head_class);
 			}
 			break;
 
@@ -42,7 +46,7 @@
         		 		'+"{% endimage %}"+' \
         			</span>';
         		head_to_show = payload.sender;
-				addTextToChatFormatted(payload, picture, head_to_show, text_class);
+				addTextToChatFormatted(payload, picture, head_to_show, '', text_class);
 			}
 			else {
 				var text_class = 'whisper';
@@ -53,7 +57,8 @@
         		 		'+"{% endimage %}"+' \
         			</span>';
         		head_to_show = payload.sender;
-				addTextToChatFormatted(payload, picture, head_to_show, text_class);
+        		head_class = 'chat-head-whisper';
+				addTextToChatFormatted(payload, picture, head_to_show, head_class, text_class);
 			}
 			break;
 
@@ -66,9 +71,9 @@
         		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
         		 		'+"{% endimage %}"+' \
         			</span>';
-        		head_to_show = payload.sender;
-				addTextToChatFormatted(payload, picture, '');
+				addTextToChatFormatted(payload, picture);
 				break;
+				
 			case user_username: //himself
 				var picture = 
 					'<span class="chat-img pull-right"> \
@@ -88,16 +93,20 @@
         		 		'+"{% endimage %}"+' \
         			</span>';
         		head_to_show = payload.sender;
-				addTextToChatFormatted(payload, picture, head_to_show);
+        		head_class = 'chat-head-whisper';
+				addTextToChatFormatted(payload, picture, head_to_show, head_class);
 				break;
 			}
 		}
  	}
 
-	function addTextToChatFormatted(payload, picture, head_to_show, text_class)
+	function addTextToChatFormatted(payload, picture, head_to_show, head_class, text_class)
 	{
 	    if (text_class === undefined) {
 	    	text_class = '';
+	    }
+	    if (head_class === undefined) {
+	    	head_class = '';
 	    }
 
 	    var new_text = ' \
@@ -107,7 +116,12 @@
 	    	        <div class="header"> \
                        	<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>'+payload.date+'</small>';
                 		if (head_to_show !== undefined && head_to_show != null && head_to_show != '') {
-                			new_text = new_text.concat('<a role="button" tabindex="0"><strong id="chat-head-to-show" class="pull-right primary-font">'+head_to_show+'</strong></a>');
+                    		if (head_class == 'chat-head-whisper') {
+                    			new_text = new_text.concat('<a role="button" tabindex="0"><strong class="pull-right primary-font '+head_class+'">'+head_to_show+'</strong></a>');
+                        	}
+                    		else {
+                    			new_text = new_text.concat('<strong class="pull-right primary-font '+head_class+'">'+head_to_show+'</strong>');
+                        	}
                 		}
 					new_text = new_text.concat('</div> \
         	   		<span class="'+text_class+'">'+payload.text+'</span> \
@@ -117,7 +131,8 @@
 		$ ( '#chat' ).append(new_text);
 	}
 
-	$(' #chat ').on('click', '#chat-head-to-show', function() {
+	$(' #chat ').on('click', '.chat-head-whisper', function() {
 		$('#chat_new_text').val('/w '+$(this).text()+' ');
+		$( "#chat_new_text" ).focus();
 	});
 </script>
