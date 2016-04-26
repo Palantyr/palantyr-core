@@ -27,8 +27,8 @@ GameSessionBundle\Entity\CharacterSheetData:
             length: 50
             nullable: TRUE
         value:
-            type: string
-            length: 50
+            type: json_array
+#            length: 50
             nullable: TRUE
     manyToOne:
         character_sheet:

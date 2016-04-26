@@ -140,11 +140,18 @@ class CharacterSheetController extends Controller
                     'error_message' => $error_message 
             ));
         }
-        
 
-        
         $character_sheet = new CharacterSheet();
-        self::vampireCharacterSheet($character_sheet);
+        switch ($rol_game_name) {
+            case 'Vampire The Masquerade':
+                self::vampireCharacterSheet($character_sheet);
+                break;
+                
+            case 'Pathfinder':
+                self::pathfinderCharacterSheet($character_sheet);
+                break;
+        }
+        
 //         $character_sheet->getCharacterSheetData()->add($base);
         
 
@@ -245,5 +252,51 @@ class CharacterSheetController extends Controller
         $dexterity->setDisplayName('Dexterity');
         $dexterity->setCharacterSheetDataGroup($physical);
         $physical->addCharacterSheetDatum($dexterity);
+    }
+    
+    private function pathfinderCharacterSheet(CharacterSheet $character_sheet)
+    {
+        $attributes = new CharacterSheetData();
+        $attributes->setCharacterSheet($character_sheet);
+        $attributes->setName('attributes');
+        $attributes->setDatatype('group');
+        $attributes->setDisplayName('Attributes');
+        $character_sheet->addCharacterSheetDatum($attributes);
+        
+        $strengrh_actual = new CharacterSheetData();
+        $strengrh_actual->setName('strength_actual');
+        $strengrh_actual->setDatatype('group');
+        $strengrh_actual->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($strengrh_actual);
+        
+        $strength_actual_score = new CharacterSheetData();
+        $strength_actual_score->setName('strength_actual_value');
+        $strength_actual_score->setDatatype('field');
+        $strength_actual_score->setDisplayName('Strength actual value');
+        $strength_actual_score->setCharacterSheetDataGroup($strengrh_actual);
+        $strengrh_actual->addCharacterSheetDatum($strength_actual_score);
+        
+        
+//         $strength_actual_modifier_value = array(
+//             'type' => 'integer_division_by_low',
+//             'value' => array(
+//                 'dividend' => array(
+//                     'type' => 'field',
+//                     'value' => 'strength_actual_value'),
+//                 'divider' => array(
+//                     'type' => 'numeric',
+//                     'value' => '2'
+//                 )
+//             )
+//         );
+//         $strength_actual_modifier_value_json = json_encode($strength_actual_modifier_value);
+        
+        $strength_actual_modifier = new CharacterSheetData();
+        $strength_actual_modifier->setName('strength_actual_modifier');
+        $strength_actual_modifier->setDatatype('derived');
+        $strength_actual_modifier->setDisplayName('Strength actual Modifier');
+//         $strength_actual_modifier->setValue($strength_actual_modifier_value_json);
+        $strength_actual_modifier->setCharacterSheetDataGroup($strengrh_actual);
+        $strengrh_actual->addCharacterSheetDatum($strength_actual_modifier);
     }
 }

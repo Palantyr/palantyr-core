@@ -7,11 +7,17 @@
 	<h1>{% trans %}add_character_sheet.title{% endtrans %}</h1>
 	</br>
 	
+{# 	{{ dump(form.character_sheet_data) }}#}
+{# 	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'novalidate': 'novalidate'} }) }}#}
     {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_character_sheet_rol_game', 'novalidate': 'novalidate'} }) }}
-{#         {{ form_row(form.rol_game, { 'label': 'character_sheet.rol_game', 'label_col': 2, 'widget_col': 4}) }}	#}
-	    {{ form_widget(form) }}
+        {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
+    {% javascripts
+        '@GameSessionBundle/Resources/public/js/pathfinder_create_character.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

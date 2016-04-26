@@ -762,9 +762,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 		}
 	}
 	
-	private function getCharacterSheets($user_id)
+	private function getCharacterSheets($user_id, $rol_game_id)
 	{
-        return $this->em->getRepository('GameSessionBundle:CharacterSheet')->findBy(array('user' => $user_id));
+	    $templates_character_sheet = $this->em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findBy(array('rol_game' => $rol_game_id));
+        return $this->em->getRepository('GameSessionBundle:CharacterSheet')->findBy(array('user' => $user_id, 'character_sheet_template' => $templates_character_sheet));
 	}
 	    
 	private function getFormattedCharacterSheets($character_sheets, $connection)
@@ -829,7 +830,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function getFormattedCharacterSheetsNoStored($room, $connection)
 	{
 	    $user_id = $this->clientManipulator->getClient($connection)->getId();
-	    $character_sheets = self::getCharacterSheets($user_id);
+	    $game_session = $this->em->getRepository('GameSessionBundle:GameSession')->find($room);
+	    $rol_game_id = $game_session->getRolGame();
+
+	    $character_sheets = self::getCharacterSheets($user_id, $rol_game_id);
 
 	    $character_sheets_stored = self::getFormattedCharacterSheets($character_sheets, $connection);
 	    $character_sheets_to_send = array();
@@ -1298,88 +1302,88 @@ class GameSessionTopic extends Controller implements TopicInterface
 		);
 	}
 		
-		private function getVampireFunctionality () {
-			return array(
-					'0' => array(
-							'id' => "strength",
-							'name' => "Strenght",
-							'character_sheet_id' => "0",
-							'value_list' => array(
-									'value' => "value"
-							),
-							'result_type' => array(
-									'type' => "number_of_successes",
-									'name' => "Difficulty",
-									'value' => 6
-							)
-					),
-					'1' => array(
-							'id' => "dexterity",
-							'name' => "Dexterity",
-							'character_sheet_id' => "0",
-							'value_list' => array(
-									'value' => "value"
-							),
-							'result_type' => array(
-									'type' => "number_of_successes",
-									'name' => "Difficulty",
-									'value' => 6
-							)
-					),
-					'2' => array(
-							'id' => "stamina",
-							'name' => "Stamina",
-							'character_sheet_id' => "0",
-							'value_list' => array(
-									'value' => "value"
-							),
-							'result_type' => array(
-									'type' => "number_of_successes",
-									'name' => "Difficulty",
-									'value' => 6
-							)
-					),
-					'3' => array(
-							'id' => "acting",
-							'name' => "Acting",
-							'character_sheet_id' => "0",
-							'value_list' => array(
-									'value' => "value"
-							),
-							'result_type' => array(
-									'type' => "number_of_successes",
-									'name' => "Difficulty",
-									'value' => 6
-							)
-					),
-					'4' => array(
-							'id' => "alertness",
-							'name' => "Alertness",
-							'character_sheet_id' => "0",
-							'value_list' => array(
-									'value' => "value"
-							),
-							'result_type' => array(
-									'type' => "number_of_successes",
-									'name' => "Difficulty",
-									'value' => 6
-							)
-					),
-					'5' => array(
-							'id' => "athletics",
-							'name' => "Athletics",
-							'character_sheet_id' => "0",
-							'value_list' => array(
-									'value' => "value"
-							),
-							'result_type' => array(
-									'type' => "number_of_successes",
-									'name' => "Difficulty",
-									'value' => 6
-							)
-					)
-			);
-	}
+// 		private function getVampireFunctionality () {
+// 			return array(
+// 					'0' => array(
+// 							'id' => "strength",
+// 							'name' => "Strenght",
+// 							'character_sheet_id' => "0",
+// 							'value_list' => array(
+// 									'value' => "value"
+// 							),
+// 							'result_type' => array(
+// 									'type' => "number_of_successes",
+// 									'name' => "Difficulty",
+// 									'value' => 6
+// 							)
+// 					),
+// 					'1' => array(
+// 							'id' => "dexterity",
+// 							'name' => "Dexterity",
+// 							'character_sheet_id' => "0",
+// 							'value_list' => array(
+// 									'value' => "value"
+// 							),
+// 							'result_type' => array(
+// 									'type' => "number_of_successes",
+// 									'name' => "Difficulty",
+// 									'value' => 6
+// 							)
+// 					),
+// 					'2' => array(
+// 							'id' => "stamina",
+// 							'name' => "Stamina",
+// 							'character_sheet_id' => "0",
+// 							'value_list' => array(
+// 									'value' => "value"
+// 							),
+// 							'result_type' => array(
+// 									'type' => "number_of_successes",
+// 									'name' => "Difficulty",
+// 									'value' => 6
+// 							)
+// 					),
+// 					'3' => array(
+// 							'id' => "acting",
+// 							'name' => "Acting",
+// 							'character_sheet_id' => "0",
+// 							'value_list' => array(
+// 									'value' => "value"
+// 							),
+// 							'result_type' => array(
+// 									'type' => "number_of_successes",
+// 									'name' => "Difficulty",
+// 									'value' => 6
+// 							)
+// 					),
+// 					'4' => array(
+// 							'id' => "alertness",
+// 							'name' => "Alertness",
+// 							'character_sheet_id' => "0",
+// 							'value_list' => array(
+// 									'value' => "value"
+// 							),
+// 							'result_type' => array(
+// 									'type' => "number_of_successes",
+// 									'name' => "Difficulty",
+// 									'value' => 6
+// 							)
+// 					),
+// 					'5' => array(
+// 							'id' => "athletics",
+// 							'name' => "Athletics",
+// 							'character_sheet_id' => "0",
+// 							'value_list' => array(
+// 									'value' => "value"
+// 							),
+// 							'result_type' => array(
+// 									'type' => "number_of_successes",
+// 									'name' => "Difficulty",
+// 									'value' => 6
+// 							)
+// 					)
+// 			);
+// 	}
 // 	IMPORT CHARACTER SHEET
 
 // 	FUNCTIONALITY CHARACTER SHEET

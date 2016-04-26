@@ -32,7 +32,8 @@
  		}
  	}
 
- 	function deleteCharacterSheet (character_sheet_id, option, username_sender) {
+ 	function deleteCharacterSheet (character_sheet_id, option, username_sender)
+ 	{
  		var character_sheet_location;
 		
  		switch(option) {
@@ -183,11 +184,12 @@
  		}
  	}
 
- 	function typeGroupOfCharacterSheet(group, father_div_identification) {
+ 	function typeGroupOfCharacterSheet(group, father_div_identification) 
+ 	{
  		$( father_div_identification ).append( 
  			"<div id="+group.id+"></div>" );
  		if(group.name) {
- 			$( father_div_identification+" > #"+group.id ).append( 
+ 			$( father_div_identification+" > #"+group.id ).append(
  				"<span id='name'>"+group.name+"</span>" );
  		}
 		
@@ -195,34 +197,56 @@
  			count_group_sections < Object.keys(group).length; //-3 Less id, name and type
  			count_group_sections++) {
 
- 			if (group[count_group_sections]) { // != undefined
+ 			if (group[count_group_sections] && group[count_group_sections].type.length) { // != undefined
 
-     			if (group[count_group_sections].type.length && group[count_group_sections].type == "group") {
-     				typeGroupOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
-     			}		
-     			else if (group[count_group_sections].type.length && group[count_group_sections].type == "field") {
-     				typeFieldOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
-     			}
+ 				switch(group[count_group_sections].type) {
+ 				case 'field':
+ 					typeFieldOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
+ 	 				break;
+
+ 				case 'group':
+ 					typeGroupOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
+ 	 				break;
+
+ 				case 'derived':
+ 					typeDerivedOfCharacterSheet(group[count_group_sections], father_div_identification+" > #"+group.id);
+ 	 				break;
+ 				}
  			}
  		}
  	}
 
- 	function typeFieldOfCharacterSheet(field, father_div_identification){
+ 	function typeFieldOfCharacterSheet(field, father_div_identification) 
+ 	{
 		var new_class = '';
 		if ($.isNumeric(field.value)) {
 			new_class = 'functional';
 		}
  		
- 		$( father_div_identification ).append( 
- 				"<div id="+field.id+" class="+new_class+"><span id='name'>"+field.name+
- 				"</span><span id='value'>"+field.value+"</span></div>" );
+ 		$( father_div_identification ).append(
+			'<div id='+field.id+' class='+new_class+'> \
+				<span id="name">'+field.name+'</span> \
+				<span id="value">'+field.value+'</span> \
+			</div>' );
  	}
 
- 	function getCharacterSheetId (character_sheet) {
+ 	function typeDerivedOfCharacterSheet(field, father_div_identification)
+ 	{
+ 	 	alert(JSON.stringify(field));
+ 		$( father_div_identification ).append(
+			'<div id='+field.id+'> \
+				<span id="name">'+field.name+'</span> \
+				<span id="value">'+field.value+'</span> \
+			</div>' );
+ 	}
+
+ 	function getCharacterSheetId (character_sheet) 
+ 	{
  		return character_sheet['character_sheet_settings']['character_sheet_id'];
  	}
 
- 	function getUserUsernameFromCharacterSheet (character_sheet) {
+ 	function getUserUsernameFromCharacterSheet (character_sheet) 
+ 	{
  		return character_sheet['character_sheet_settings']['user_username'];
  	}
 

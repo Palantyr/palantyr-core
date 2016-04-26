@@ -54,12 +54,22 @@ class CharacterSheetDataType extends AbstractType
             switch ($character_sheet_data->getDatatype()) {
                 case 'group':
                     $form->add('character_sheet_data', CollectionType::class, array(
-                        'entry_type' => CharacterSheetDataType::class
+                        'attr' => array('id-form' => $character_sheet_data->getName()),
+                        'entry_type' => CharacterSheetDataType::class,
+                        'label_attr' => array('id' => $character_sheet_data->getName())
                     ));
                     break;
                 case 'field':
                     $form->add('value', TextType::class, array(
-                    'attr' => array('label_col' => 2, 'widget_col' => 3)
+                        'attr' => array('id-form' => $character_sheet_data->getName(), 'label_col' => 2, 'widget_col' => 3),
+                        'label_attr' => array('id' => $character_sheet_data->getName())
+                    ));
+                    break;
+                case 'derived':
+                    $form->add('value', TextType::class, array(
+                        'read_only' => true,
+                        'attr' => array('id-form' => $character_sheet_data->getName(), 'class' => 'asdasd', 'label_col' => 2, 'widget_col' => 3),
+                        'label_attr' => array('id' => $character_sheet_data->getName())
                     ));
                     break;
             }
@@ -69,7 +79,7 @@ class CharacterSheetDataType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'GameSessionBundle\Entity\CharacterSheetData',
+            'data_class' => 'GameSessionBundle\Entity\CharacterSheetData'
         ));
     }
 }
