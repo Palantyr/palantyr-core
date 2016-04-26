@@ -1,7 +1,3 @@
-rules:
-    resource: "@RulesBundle/Resources/config/routing.yml"
-    prefix:   /
-
 game_session:
     resource: "@GameSessionBundle/Resources/config/routing.yml"
     prefix:   /

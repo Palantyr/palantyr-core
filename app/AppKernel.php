@@ -24,7 +24,6 @@ class AppKernel extends Kernel
         	new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
         	new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
         	new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new RulesBundle\RulesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

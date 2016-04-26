@@ -1,3 +1,0 @@
-app_index_homepage:
-    path:     /reglas
-    defaults: { _controller: RulesBundle:Rules:index }
