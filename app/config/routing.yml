@@ -1,3 +1,7 @@
+gaming_platform:
+    resource: "@GamingPlatformBundle/Resources/config/routing.yml"
+    prefix:   /
+
 game_session:
     resource: "@GameSessionBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,19 @@
+# src/GameSessionBundle/Resources/config/doctrine/RolGame.orm.yml
+JJSR\Bundle\GameSessionBundle\Entity\RolGame:
+    type: entity
+    repositoryClass: JJSR\Bundle\GameSessionBundle\Entity\RolGameRepository
+    table: rol_game
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 255
+        active:
+            type: boolean
+    oneToMany:
+        character_sheet_templates:
+            targetEntity: CharacterSheetTemplate
+            mappedBy: rol_game

@@ -1,0 +1,56 @@
+game_session:
+#    join:
+#        submit: Join
+#        title: Join game session
+#    login:
+#        submit: Login
+#        title: Login game session
+#        incorrect_password: Incorrect password
+#    re_login:
+#        title: Re log in
+#        message: Sorry, you need to re log in
+#    edit:
+#        title: Edit game session
+#        submit: Edit
+#    remove:
+#        submit: Remove
+    not_exist:
+        title: Game session not exist
+        message: The game session not exist
+#    disconnected:
+#        title: Disconnected
+#        message: You have been disconnected from the game session
+#    leave:
+#        confirmation_message: Are you sure you want to leave?
+#    request_character_sheets:
+#        title: Request character sheets
+#        not_to_import: You haven\'t any character sheet to import
+#        import_button: Import character
+#        delete_button: Delete character
+#    throw_dice:
+#        title: Throw dice
+#        throw_button: Throw
+#game_session.throw_dice.partial_message %die_type%: 'The d%die_type% result is: '
+#
+#secondary_menu:
+#    settings:
+#        title: Settings
+#        manage_users:
+#            title: Manage users
+#            no_other_users_connected: There are no other users connected
+#            remove_button: Kick out
+#        exit:
+#            title: Exit
+#
+#navigation_sidebar:
+#    request_character_sheets: Request character sheets 
+#    dice: Dados
+#
+#chat:
+#    send_button: Send
+#    placeholder: Type your message here...
+#chat.user_is_online %user_username%: %user_username% is online
+#chat.user_is_offline %user_username%: %user_username% is offline
+#
+#spanish: español
+#english: english

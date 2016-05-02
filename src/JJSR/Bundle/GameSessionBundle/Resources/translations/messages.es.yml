@@ -1,0 +1,84 @@
+game_session:
+    name: Nombre
+    password: Contraseña
+    rol_game: Juego de rol
+    language: Idioma
+    comments: Comentarios
+    gamemaster: Director de juego
+    creation_date: Fecha de creación
+    create:
+        submit: Crear
+        title: Crear sessión de juego
+        choose_rol_game: Elegir juego de rol
+        choose_language: Elegir idioma
+    join:
+        submit: Unirse
+        title: Unirse a sesión de juego
+    login:
+        submit: Acceder
+        title: Acceder a sesión de juego
+        incorrect_password: Contraseña incorrecta
+    re_login:
+        title: Volver a acceder
+        message: Lo siento, necesita volver a acceder
+    edit:
+        title: Editar sesión de juego
+        submit: Editar
+    remove:
+        submit: Eliminar
+    disconnected:
+        title: Desconectado
+        message: Has sido desconectado de la sesión de juego
+    leave:
+        confirmation_message: Are you sure you want to leave?
+    request_character_sheets:
+        title: Pedir fichas de personaje
+        not_to_import: No tienes ninguna ficha de personaje para importar
+        import_button: Importar personaje
+        delete_button: Eliminar personaje
+    throw_dice:
+        title: Lanzar dados
+        throw_button: Lanzar
+game_session.throw_dice.partial_message %die_type%: 'El resultado de d%die_type% es: '
+
+add_character_sheet_template:
+    title: Añadir plantilla de hoja de personaje
+    name: Nombre
+    version: Versión
+    rol_game: Juego de rol
+    submit: Añadir
+
+add_character_sheet:
+    title: Añadir ficha de personaje
+    rol_game: Juego de rol
+    character_sheet_template: Plantilla de hoja de personaje
+    continue: Continuar
+    error:
+        title: Error añadiendo ficha de personaje
+add_character_sheet.error.message %rol_game_name% %character_sheet_template_name%: Lo sentimos, pero la ficha "character_sheet_template_name" del juego de rol "rol_game_name" no puede ser creada. Contacte con el administrador.
+
+secondary_menu:
+    settings:
+        title: Ajustes
+        manage_users:
+            title: Gestión de usuarios
+            no_other_users_connected: No hay otros usuarios conectados
+            remove_button: Expulsar
+        exit:
+            title: Salir
+
+navigation_sidebar:
+    request_character_sheets: Pedir fichas de personaje
+    dice: Dados
+
+chat:
+    send_button: Enviar
+    placeholder: Escribe aquí tu mensaje...
+chat.user_is_online %user_username%: %user_username% está en línea
+chat.user_is_offline %user_username%: %user_username% se ha desconectado
+
+spanish: español
+english: english
+
+Vampire The Masquerade: Vampiro La Mascarada
+Legend of Five Rings: La Leyenda de los Cinco Anillos

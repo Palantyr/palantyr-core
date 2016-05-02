@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{{ game_session.getName() }}{% endblock %}</title>
+        
+        {% block bootstrap_stylesheets %}
+        	<link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+        {% endblock %}
+        
+        {% block stylesheets %}
+			<link href="{{ asset('css/game_session.css') }}" rel="stylesheet" media="screen">
+        	<link href="{{ asset('css/navigation_sidebar.css') }}" rel="stylesheet" media="screen">
+        {% endblock %}
+        
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+    	{% block main_menu %}
+    	
+	    	<div class="navbar-default header-menu">
+				<div class="container-fluid">
+					{# Brand and toggle get grouped for better mobile display #}
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a id="game_session_name" class="navbar-brand">{% block main_menu_name %}{{ game_session.getName() }}{% endblock %}</a>
+					</div>
+			
+					{# Collect the nav links, forms, and other content for toggling #}
+					<div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
+						{{ knp_menu_render('GamingPlatformBundle:MenuBuilder:mainMenu', {'currentClass': 'active', 'template': 'WebBundle:Menu:knp_menu.html.twig'}) }}
+						{{ knp_menu_render('GamingPlatformBundle:MenuBuilder:secondaryMenu', {'currentClass': 'active', 'template': 'WebBundle:Menu:knp_menu.html.twig'}) }}
+					</div>
+				</div>
+			</div>
+		{{ include('GamingPlatformBundle:GameSession:navigation_sidebar.html.twig') }}
+		
+    	{% endblock %}
+    	
+    	{% block jquery_javascripts %}
+        	{% javascripts '../vendor/components/jquery/jquery.js' %}
+    			<script src="{{ asset_url }}"></script>
+			{% endjavascripts %}
+        {% endblock %}
+        
+        <div class="main-container">
+			{% block body %}{% endblock %}
+			<div class="middle-row">
+				<div class="col-md-6 middle-col box-border-up-left">
+					{% block up_left %}{% endblock %}
+				</div>
+				<div class="col-md-6 middle-col box-border-up-right">
+					{% block up_right %}{% endblock %}
+				</div>
+			</div>
+			<div class="middle-row">
+			<div class="col-md-6 middle-col"> {#box-border-down-left#}
+					{% block down_left %}{% endblock %}
+				</div>
+				<div class="col-md-6 middle-col box-border-down-right">
+					{% block down_right %}{% endblock %}
+				</div>
+			</div>
+    	</div>
+        
+        {% block bootstrap_javascripts %}
+        	<script src="{{ asset('js/bootstrap.js') }}"></script>
+        {% endblock %}
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

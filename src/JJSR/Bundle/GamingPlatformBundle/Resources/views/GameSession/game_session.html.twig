@@ -1,0 +1,377 @@
+{% extends 'GamingPlatformBundle:GameSession:base_game_session.html.twig' %}
+
+{% block body %}
+	{{ include('GamingPlatformBundle:GameSession:base_popup.html.twig') }}
+	{{ ws_client() }}
+{% endblock %}
+
+{% block up_left %}
+	<div id="other_users_connected" class="other-users-connected"></div>
+{% endblock %}
+
+{% block up_right %}{% endblock %}
+
+{% block down_left %}
+	<div id="{{ app.user.username }}" class="standard-size">
+		<div class="character_sheets"></div>
+	</div>
+{% endblock %}
+
+{% block down_right %}
+	<div class="full-square">
+		<div class="panel-body">
+			<ul id="chat" class="chat"></ul>
+		</div>
+		<div class="panel-footer">
+			<div class="input-group">
+				<input id="chat_new_text" type="text" class="form-control input-sm" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
+				<span class="input-group-btn">
+					<button id="chat_send_button" class="btn btn-warning btn-sm">{% trans %}chat.send_button{% endtrans %}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+
+{% block javascripts %}
+
+<script>
+	var rol_game_name = "{{ rol_game.getName() }}";
+// 	GLOBAL VARIABLES FROM TWIG 
+	var user_username = "{{ app.user.username }}";
+	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
+	var websocket = WS.connect(_WS_URI);
+// 	GLOBAL VARIABLES FROM TWIG 
+
+	var room = "{{ game_session.getId() }}";
+// ||||||||||||||||||||||||||||||||||||| WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
+	websocket.on("socket/connect", function(session){
+
+		var route_game_session = "gameSession/";
+		route_game_session = route_game_session.concat(room);
+		session.subscribe(route_game_session, function(uri, payload){
+
+// 			alert(JSON.stringify(payload_json));
+		    switch(payload.section) {
+		    case 'connection':
+			    subscribeConnection(payload);
+			    break;
+		    case 'settings':
+			    subscribeSettings(payload);
+			    break;
+		    case 'chat':
+		    	subscribeChat(payload);
+			    break;
+		    case 'utilities':
+// 			    suscribeUtilities(payload);
+		    	break;
+		    case "import_character_sheet":
+		    	subscribeImportCharacterSheet(payload);
+			    break;
+		    case 'functionality_character_sheet':
+		    	subscribeFunctionalityCharacterSheet(payload);
+			    break;
+		    }
+		});
+		
+// SETTINGS
+		$( "#game_session_edit_button" ).on('click', function() {
+			session.publish(route_game_session, {
+				section: "settings",
+				option: "game_session_request_edit"
+			});
+		});
+
+		$( '#myModal' ).on('click', '.modal-dialog > .modal-content > .modal-footer > #game_session_edit_submit_button', function() {
+	 		var game_session_edited = JSON.stringify($(this).parent().siblings('.modal-body').children('#form_edit_game_session').serializeArray());
+			session.publish(route_game_session, {
+				section: "settings",
+				option: "game_session_edit",
+				game_session_edited: game_session_edited
+			});
+		});
+
+		$( '#myModal' ).on('click', '.modal-dialog > .modal-content > .modal-footer > #game_session_remove_submit_button', function() {
+			session.publish(route_game_session, {
+				section: "settings",
+				option: "remove_game_session"
+			});
+		});
+
+		$( "#manage_users_button" ).on('click', function() {
+			session.publish(route_game_session, {
+				section: "settings",
+				option: "manage_users_request"
+			});
+		});
+
+		$( '#myModal' ).on('click', '.modal-dialog > .modal-content > .modal-body > #form > #remove_user > button', function() {
+			session.publish(route_game_session, {
+				section: "settings",
+				option: "remove_user",
+				user_username_to_remove: $(this).attr('id')
+			});
+			closePopup();
+			setTimeout(function () {
+				session.publish(route_game_session, {
+					section: "settings",
+					option: "manage_users_request"
+			});}, 1000);
+		});
+// SETTINGS
+
+
+// CHAT
+		$( "#chat_send_button" ).click(function() {
+			var newText = $( "#chat_new_text" ).val();
+			if (newText != '') {
+				session.publish(route_game_session, {
+					section:"chat", 
+					msg: newText
+				});
+				$( "#chat_new_text" ).val('');
+			}
+		});
+
+	 	$(document).keypress(function(e) {
+	 	    if(e.which == 13) {
+	 	 	    if ($("#chat_new_text").is(":focus")) {
+	 				var newText = $( "#chat_new_text" ).val();
+	 				if (newText != '') {
+		 				session.publish(route_game_session, {
+		 					section:"chat", 
+		 					msg: newText
+		 				});
+		 				$( "#chat_new_text" ).val('');
+		 				$('.panel-body').animate({scrollTop: $('.panel-body').prop('scrollHeight')});
+	 				}
+				}
+	 	    }
+	 	});
+// CHAT
+
+
+// IMPORT CHARACTER SHEET
+		$( "#"+user_username ).on("click", "#import_character_sheet > #request_character_sheet_button", function() {
+			session.publish(route_game_session, {
+				section:"import_character_sheet", 
+				option: "request"
+			});
+		});
+
+		$( '#request_character_sheet_button' ).on("click", function() {
+			session.publish(route_game_session, {
+				section:"import_character_sheet", 
+				option: "request"
+			});
+		});
+
+		$( '#myModal' ).on('click', '#import_character_sheet_button', function() {
+			var character_sheet_id = getCharacterSheetIdFromElement($(this));
+			closePopup();
+			session.publish(route_game_session, {
+				section:"import_character_sheet",
+				option: "import_own", 
+				character_sheet_id: character_sheet_id});
+ 		});
+
+ 		$( "#"+user_username ).on("click", "#import_character_sheet_delete_button", function() {
+ 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
+		
+ 			session.publish(route_game_session, {
+ 				section:"import_character_sheet",
+ 				option: "delete", 
+ 				character_sheet_id: character_sheet_id});
+ 		});
+// IMPORT CHARACTER SHEET
+
+
+// FUNCTIONALITY CHARACTER SHEET
+ 		$( "#"+user_username ).on("click", "#individual_functionality_panel > #individual_functionality_panel_throw_button", function() {
+
+ 			var elements = $("#individual_functionality_panel > div").toArray();
+ 			var throwing = [];
+ 			for (var count_elements = 0;
+ 					count_elements < elements.length; 
+ 					count_elements++) {
+ 				//alert(JSON.stringify(elements[count_elements].id));
+ 				switch (elements[count_elements].id) {
+ 				case "result_type":
+ 					var sub_element = { 
+ 						    result_type: {type: $("#individual_functionality_panel > #"+elements[count_elements].id+" #type").text(),
+ 							    			name: $("#individual_functionality_panel > #"+elements[count_elements].id+" #name").text(),
+ 							    			value: $("#individual_functionality_panel > #"+elements[count_elements].id+" #value").val()}
+ 						};
+ 					throwing.push(sub_element);
+ 					break;
+
+ 				default:
+ 					var sub_element = {};
+ 					sub_element[elements[count_elements].id] = {
+ 							value: $("#individual_functionality_panel > #"+elements[count_elements].id+" #value").val()
+ 					}
+ 					throwing.push(sub_element);
+ 					break;
+ 				}
+ 			}
+ 			deleteFunctionalityPanel();
+
+ 			var sheet_id = {sheet_id: individual_functionality_actual_character_sheet_id}
+ 			throwing.push(sheet_id);
+ 			var throwing_json = JSON.stringify(throwing);
+
+ 			var functionality_character_sheet_option = "individual";
+ 			session.publish(route_game_session, {
+ 				section:"functionality_character_sheet",
+ 				option: functionality_character_sheet_option, 
+ 				throwing: throwing_json
+ 			});
+ 		});
+
+ 		$( "#"+user_username ).on("click", "#individual_functionality_panel > #individual_functionality_panel_cancel_button", function() {
+ 			deleteFunctionalityPanel();
+ 		});
+// FUNCTIONALITY CHARACTER SHEET
+
+
+// UTILITIES
+		$( '#myModal' ).on('click', '#throw_dice', function() {
+
+			var dice_to_roll = {};
+
+			$( '.select-dice' ).each(function() {
+				var dice_value = $(this).attr('value');
+				var number_of_dice = $(this).children('input').val();
+				dice_to_roll[dice_value] = number_of_dice;
+			});
+			dice_to_roll_json = JSON.stringify(dice_to_roll);
+			
+ 			session.publish(route_game_session, {
+ 				section: 'utilities',
+ 				option: 'throw_dice', 
+ 				dice_to_roll_json: dice_to_roll_json
+ 			});
+
+ 			closePopup();
+		});
+// UTILITIES
+ 	});
+ 	websocket.on("socket/disconnect", function(error){ //CHANGE
+ 	    $( "#chat #written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
+ 	    $( "#chat #written-text" ).append("&#10;");
+ 	}); 
+ // ||||||||||||||||||||||||||||||||||||| END WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
+</script>
+
+
+{# CONNECTION #}
+	{{ include('GamingPlatformBundle:GameSession:connection.html.twig') }}
+{# CONNECTION #}
+ 
+ 
+{# SETTINGS #}
+	{{ include('GamingPlatformBundle:GameSession:settings.html.twig') }}
+{# SETTINGS #}
+
+
+{# IMPORT CHARACTER SHEET #}
+	{{ include('GamingPlatformBundle:GameSession:import_character_sheet.html.twig') }}
+{# IMPORT CHARACTER SHEET #}
+
+
+{# FUNCTIONALITY CHARACTER SHEET #}
+	{{ include('GamingPlatformBundle:GameSession:functionality_character_sheet.html.twig') }}
+{# FUNCTIONALITY CHARACTER SHEET #}
+	
+
+{# CHAT #}
+	{{ include('GamingPlatformBundle:GameSession:chat.html.twig') }}
+{# CHAT #}
+
+
+{# Utilities #}
+	{{ include('GamingPlatformBundle:GameSession:utilities.html.twig') }}
+{# Utilities #}
+
+<script>
+// OTHER
+ 	function getCharacterSheetIdFromElement(element) {
+ 		var is_only_number = /^\d+$/;
+		
+ 		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
+ 				element.parent().attr('id') == 'other_users_connected' ||
+ 				element.parent().attr('id') == 'myModal') { 
+ 			return false;
+ 		}
+ 		else if (is_only_number.test(element.parent().attr("id"))) {
+ 			return element.parent().attr("id");
+ 		}
+ 		else {
+ 			return getCharacterSheetIdFromElement(element.parent());
+ 		}
+ 	}
+
+	function usePopup (title, body, footer) {
+
+		if ($('#myModal').is(':visible')) {
+			var executed = false;
+			$('#myModal').on('hidden.bs.modal', function (oneTime) {
+				if (executed == false) {
+					$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
+					$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
+					$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
+					$('#myModal').modal('show');
+				}
+				executed = true;
+			})
+		}
+		else {
+			$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
+			$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
+			$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
+	        $('#myModal').modal('show');
+		}
+	}
+
+	function closePopup () {
+		$('#myModal').modal('hide');
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').empty();
+	}
+
+	function getModalTitle() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html();
+	}
+
+	function setModalTitle(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(text);
+	}
+
+	function getModalBody() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-body').html();
+	}
+
+	function setModalBody(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').html(text);
+	}
+	
+	function getModalFooter() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-footer').html();
+	}
+
+	function setModalFooter(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(text);
+	}
+
+// 	var last_id_from_input;
+// 	$(function() {
+// 	    $("input").on("click", function() {
+// 	    	last_id_from_input = $(this).attr("id");
+// 	    });
+// 	});
+// OTHER
+ </script>
+
+{% endblock %}

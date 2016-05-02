@@ -54,7 +54,7 @@ knp_menu:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles: [ WebBundle, GameSessionBundle ]
+    bundles: [ WebBundle, GameSessionBundle, GamingPlatformBundle ]
     #java: /usr/bin/java
     filters:
         lessphp:
@@ -138,7 +138,7 @@ gos_web_socket:
         host: "%gos_web_socket.host%"   #The host ip to bind to
         router:
             resources:
-                - @GameSessionBundle/Resources/config/pubsub/routing.yml
+                - @GamingPlatformBundle/Resources/config/pubsub/routing.yml
     client:
         firewall: main #can be an array of firewalls
         session_handler: @session.handler.pdo

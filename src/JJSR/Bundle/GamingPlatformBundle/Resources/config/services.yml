@@ -1,0 +1,12 @@
+services:
+    game_session.topic:
+        class: JJSR\Bundle\GamingPlatformBundle\Topic\GameSessionTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments: 
+            - @gos_web_socket.websocket.client_manipulator
+            - @doctrine.orm.entity_manager
+            - @form.factory
+            - @validator.builder
+            - @translator.default
+#           - @gos_web_socket.client_storage

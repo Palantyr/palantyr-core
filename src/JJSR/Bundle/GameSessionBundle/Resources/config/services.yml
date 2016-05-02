@@ -1,0 +1,6 @@
+services:
+    add_character_sheet_menu_type.service:
+        class: JJSR\Bundle\GameSessionBundle\Form\Type\AddCharacterSheetMenuType
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @translator.default

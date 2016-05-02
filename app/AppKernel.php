@@ -19,11 +19,12 @@ class AppKernel extends Kernel
         	new FOS\UserBundle\FOSUserBundle(),
             new WebBundle\WebBundle(),
             new UserBundle\UserBundle(),
-            new GameSessionBundle\GameSessionBundle(),
         	new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
         	new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
         	new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
         	new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new JJSR\Bundle\GamingPlatformBundle\GamingPlatformBundle(),
+            new JJSR\Bundle\GameSessionBundle\GameSessionBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

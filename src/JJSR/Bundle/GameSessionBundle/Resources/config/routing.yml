@@ -1,0 +1,58 @@
+# GameSessionController
+create_game_session:
+    path:     /{_locale}/game/create-game-session
+    defaults:  
+        _controller: GameSessionBundle:GameSession:createGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+#edit_game_sessions:
+#    path:     /{_locale}/game/session/edit/{game_session_id}
+#    defaults:  
+#        _controller: GameSessionBundle:GameSession:editGameSession
+#        _locale: %app.locale_default%
+#    requirements:
+#        _locale: %app.locales_string%
+
+# AdministrationController
+administration_game_session_homepage:
+    path:     /{_locale}/game/administration
+    defaults:  
+        _controller: GameSessionBundle:Administration:index
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+add_character_sheet_template:
+    path:     /{_locale}/game/administration/add-character-sheet-template
+    defaults:  
+        _controller: GameSessionBundle:Administration:addCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+# CharacterSheetController
+character_sheets_homepage:
+    path:     /{_locale}/game/character-sheets
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:index
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+              
+add_character_sheet_menu:
+    path:     /{_locale}/game/add-character-sheet
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:addCharacterSheetMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+add_character_sheet:
+    path:     /{_locale}/game/add-character-sheet/{rol_game_name}/{character_sheet_template_name}
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:addCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
