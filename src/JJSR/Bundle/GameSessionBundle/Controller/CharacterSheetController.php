@@ -8,80 +8,10 @@ use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetTemplate;
 use JJSR\Bundle\GameSessionBundle\Form\Type\CharacterSheetType;
 use JJSR\Bundle\GameSessionBundle\Entity\RolGame;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CharacterSheetController extends Controller
-{
-    public function indexAction(Request $request)
-    {
-        $translator = $this->get('translator');
-//         $character_sheet_data = new CharacterSheetData();
-//         $character_sheet_data->setName('prueba1');
-//         $character_sheet_data->setDisplayName('show prueba');
-//         $character_sheet_data->setType('individual');
-//         $character_sheet_data->setValue('33');
-        
-        $character_sheet = new CharacterSheet();
-        
-        $character_sheet_data1 = new CharacterSheetData();
-        $character_sheet_data1->setName('prueba1');
-        $character_sheet_data1->setDisplayName('Prueba1');
-        $character_sheet_data1->setType('individual');
-        $character_sheet_data1->setCharacterSheet($character_sheet);
-        $character_sheet->getCharacterSheetData()->add($character_sheet_data1);
-        
-        $character_sheet_data2 = new CharacterSheetData();
-        $character_sheet_data2->setName('prueba2');
-        $character_sheet_data2->setDisplayName('Prueba2');
-        $character_sheet_data2->setType('colectiva');
-        $character_sheet_data2->setCharacterSheet($character_sheet);
-        $character_sheet->getCharacterSheetData()->add($character_sheet_data2);
-        
-        $form = $this->createForm(CharacterSheetType::class, $character_sheet);
-        $form->add('character_sheet_template', 'entity', array(
-            'required'    => true,
-            'placeholder' => $translator->trans('character_sheet.create.choose_template'),
-            'class'    => 'GameSessionBundle:CharacterSheetTemplate',
-            'property' => 'name',
-            'choices' => $this->getDoctrine()
-            ->getRepository('GameSessionBundle:CharacterSheetTemplate')
-            ->findAll()
-        ))
-        ->add('submit_button', 'submit');
-        
-//         $form = $this->createFormBuilder($character_sheet)
-//         ->add('name', 'text')
-//         ->add('character_sheet_template', 'entity', array(
-//             'required'    => true,
-//             'placeholder' => $translator->trans('character_sheet.create.choose_template'),
-//             'class'    => 'GameSessionBundle:CharacterSheetTemplate',
-//             'property' => 'name',
-//             'choices' => $this->getDoctrine()
-//             ->getRepository('GameSessionBundle:CharacterSheetTemplate')
-//             ->findAll()
-//         ))
-//         ->add('submit_button', 'submit')
-//         ->getForm();
-        
-        $form->handleRequest($request);
-         
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            
-//             $character_sheet_data->setCharacterSheet($character_sheet);
-//             $em->persist($character_sheet_data);
-            
-            $character_sheet->setUser($this->getUser());
-//             $character_sheet->addCharacterSheetDatum($character_sheet_data);
-            $em->persist($character_sheet);
-            $em->flush();
-            return $this->redirect($this->generateUrl('character_sheets_homepage'));
-        }
-        
-        return $this->render('GameSessionBundle:CharacterSheet:main_menu.html.twig', array(
-    			'form' => $form->createView()
-    	));
-    }
-    
+{  
     public function addCharacterSheetMenuAction(Request $request)
     {
         $add_character_sheet_service = $this->get('add_character_sheet_menu_type.service');
@@ -107,8 +37,12 @@ class CharacterSheetController extends Controller
     
     public function addCharacterSheetAction(Request $request)
     {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return self::handleAjax($request);
+        }
+
         $translator = $this->get('translator');
-        
+
         $rol_game_name = str_replace("-", " ", $request->get('rol_game_name'));
         $character_sheet_template_name = str_replace("-", " ", $request->get('character_sheet_template_name'));
         
@@ -140,24 +74,11 @@ class CharacterSheetController extends Controller
                 self::pathfinderCharacterSheet($character_sheet);
                 break;
         }
-        
-//         $character_sheet->getCharacterSheetData()->add($base);
+        $requestDerivationFields = self::requestDerivationFields($character_sheet_template->getId());
         
 
         $form = $this->createForm(CharacterSheetType::class, $character_sheet);
 
-//         $rol_games_actives = null;
-//         $form = $this->createFormBuilder($rol_games_actives)
-//             ->add('rol_game', 'entity', array(
-//                 'required'    => true,
-//                 'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
-//                 'class'    => 'GameSessionBundle:RolGame',
-//                 'property' => 'name',
-//                 'choices' => $this->getDoctrine()
-//                 ->getRepository('GameSessionBundle:RolGame')
-//                 ->findAllActives()
-//             ))
-//             ->getForm();
 
         $form->add(
             'submit_button',
@@ -175,16 +96,111 @@ class CharacterSheetController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($character_sheet);
             $em->flush();
-    
-//             return $this->redirect($this->generateUrl(
-//                 'admin_post_show',
-//                 array('id' => $post->getId())
-//             ));
         }
-            
+
         return $this->render('GameSessionBundle:CharacterSheet:add_character_sheet.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'request_derivation_fields' => $requestDerivationFields
         ));
+    }
+    
+    private function getFieldsModificated($id_modified)
+    {
+        $fields_modificated = array();
+        
+        if ($id_modified == 'strength_actual_score') {
+            $fields_modificated['strength_actual_modifier'] = 13;
+        }
+        elseif ($id_modified == 'strength_temporary_score') {
+            $fields_modificated['strength_temporary_modifier'] = 25;
+        }
+        
+        return $fields_modificated;
+    }
+    
+    private function handleAjax(Request $request)
+    {
+        $character_sheet_template_name = str_replace("-", " ", $request->get('character_sheet_template_name'));
+        $character_sheet_template = $this->getDoctrine()->getRepository('GameSessionBundle:CharacterSheetTemplate')->findOneBy(array('name' => $character_sheet_template_name));
+
+        $character_sheet = self::getCharacterSheetFormAjax($request, $character_sheet_template);
+        
+        $id_modified = $request->request->get('id_modified');
+        $fields_modificated = self::getFieldsModificated($id_modified);
+
+        return new JsonResponse($fields_modificated);
+    }
+    
+    private function getCharacterSheetFormAjax(Request $request, $character_sheet_template)
+    {
+        $request = $this->get('request');
+        $data = $request->request->all();
+        $character_sheet_array = $data['character_sheet'];
+        $character_sheet = new CharacterSheet();
+        $character_sheet->setCharacterSheetTemplate($character_sheet_template);
+        
+        foreach ($character_sheet_array['character_sheet_data'] as $character_sheet_data_array) {
+            $character_sheet_data = new CharacterSheetData();
+            
+            $character_sheet_data->setName($character_sheet_data_array['name']);
+            $character_sheet_data->setDatatype($character_sheet_data_array['datatype']);
+            
+            if (isset($character_sheet_data_array['display_name'])) {
+                $character_sheet_data->setDisplayName($character_sheet_data_array['display_name']);
+            }
+            
+            switch ($character_sheet_data_array['datatype']) {
+            case 'group':
+                if (isset($character_sheet_data_array['character_sheet_data'])) {
+                    foreach ($character_sheet_data_array['character_sheet_data'] as $character_sheet_data_own_array) {
+                        self::getCharacterSheetDataFormAjax($character_sheet_data_own_array, $character_sheet_data);
+                    }
+                }
+                break;
+            }
+            
+            $character_sheet->addCharacterSheetDatum($character_sheet_data);
+        }
+    }
+    
+    private function getCharacterSheetDataFormAjax($character_sheet_data_array, $father)
+    {
+        $character_sheet_data = new CharacterSheetData();
+        $father->addCharacterSheetDatum($character_sheet_data);
+    
+        $character_sheet_data->setName($character_sheet_data_array['name']);
+        $character_sheet_data->setDatatype($character_sheet_data_array['datatype']);
+        $character_sheet_data->setCharacterSheetDataGroup($father);
+    
+        if (isset($character_sheet_data_array['display_name'])) {
+            $character_sheet_data->setDisplayName($character_sheet_data_array['display_name']);
+        }
+    
+        switch ($character_sheet_data_array['datatype']) {
+            case 'group':
+                if (isset($character_sheet_data_array['character_sheet_data'])) {
+                    foreach ($character_sheet_data_array['character_sheet_data'] as $character_sheet_data_own_array) {
+                        self::getCharacterSheetDataFormAjax($character_sheet_data_own_array, $character_sheet_data);
+                    }
+                }
+                break;
+    
+            case 'field':
+                if (isset($character_sheet_data_array['value'])) {
+                    $character_sheet_data->setValue($character_sheet_data_array['value']);
+                }
+                break;
+        }
+    }
+    
+    private function requestDerivationFields($character_sheet_template_id)
+    {
+        $requestDerivationFields = array();
+        
+        $requestDerivationFields[] = 'strength_actual_score';
+        $requestDerivationFields[] = 'strength_temporary_score';
+        
+        return $requestDerivationFields;
     }
     
     private function vampireCharacterSheet(CharacterSheet $character_sheet)
@@ -245,6 +261,13 @@ class CharacterSheetController extends Controller
     
     private function pathfinderCharacterSheet(CharacterSheet $character_sheet)
     {
+        $main_data = new CharacterSheetData();
+        $main_data->setCharacterSheet($character_sheet);
+        $main_data->setName('main_data');
+        $main_data->setDatatype('group');
+        $main_data->setDisplayName('Main Data');
+        $character_sheet->addCharacterSheetDatum($main_data);
+        
         $attributes = new CharacterSheetData();
         $attributes->setCharacterSheet($character_sheet);
         $attributes->setName('attributes');
@@ -259,9 +282,9 @@ class CharacterSheetController extends Controller
         $attributes->addCharacterSheetDatum($strengrh_actual);
         
         $strength_actual_score = new CharacterSheetData();
-        $strength_actual_score->setName('strength_actual_value');
+        $strength_actual_score->setName('strength_actual_score');
         $strength_actual_score->setDatatype('field');
-        $strength_actual_score->setDisplayName('Strength actual value');
+        $strength_actual_score->setDisplayName('Strength actual score');
         $strength_actual_score->setCharacterSheetDataGroup($strengrh_actual);
         $strengrh_actual->addCharacterSheetDatum($strength_actual_score);
         
@@ -283,9 +306,29 @@ class CharacterSheetController extends Controller
         $strength_actual_modifier = new CharacterSheetData();
         $strength_actual_modifier->setName('strength_actual_modifier');
         $strength_actual_modifier->setDatatype('derived');
-        $strength_actual_modifier->setDisplayName('Strength actual Modifier');
+        $strength_actual_modifier->setDisplayName('Strength actual modifier');
 //         $strength_actual_modifier->setValue($strength_actual_modifier_value_json);
         $strength_actual_modifier->setCharacterSheetDataGroup($strengrh_actual);
         $strengrh_actual->addCharacterSheetDatum($strength_actual_modifier);
+        
+        $strengrh_temporary = new CharacterSheetData();
+        $strengrh_temporary->setName('strength_temporary');
+        $strengrh_temporary->setDatatype('group');
+        $strengrh_temporary->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($strengrh_temporary);
+        
+        $strength_temporary_score = new CharacterSheetData();
+        $strength_temporary_score->setName('strength_temporary_score');
+        $strength_temporary_score->setDatatype('field');
+        $strength_temporary_score->setDisplayName('Strength temporary score');
+        $strength_temporary_score->setCharacterSheetDataGroup($strengrh_temporary);
+        $strengrh_temporary->addCharacterSheetDatum($strength_temporary_score);
+        
+        $strength_temporary_modifier = new CharacterSheetData();
+        $strength_temporary_modifier->setName('strength_temporary_modifier');
+        $strength_temporary_modifier->setDatatype('derived');
+        $strength_temporary_modifier->setDisplayName('Strength temporary modifier');
+        $strength_temporary_modifier->setCharacterSheetDataGroup($strengrh_temporary);
+        $strengrh_temporary->addCharacterSheetDatum($strength_temporary_modifier);
     }
 }

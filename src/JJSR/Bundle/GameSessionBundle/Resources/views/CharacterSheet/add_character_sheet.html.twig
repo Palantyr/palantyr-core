@@ -6,18 +6,37 @@
 
 	<h1>{% trans %}add_character_sheet.title{% endtrans %}</h1>
 	</br>
-	
-{# 	{{ dump(form.character_sheet_data) }}#}
+
 {# 	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'novalidate': 'novalidate'} }) }}#}
-    {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_character_sheet_rol_game', 'novalidate': 'novalidate'} }) }}
+    {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form', 'novalidate': 'novalidate'} }) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-        '@GameSessionBundle/Resources/public/js/pathfinder_create_character.js'
-    %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+	<script>
+        function getJSonObject(value) {
+            return $.parseJSON(value.replace(/&quot;/ig, '"'));
+        }
+        var request_derivation_fields = getJSonObject("{{request_derivation_fields|json_encode()}}");
+
+        $.each( request_derivation_fields, function( key, value ) {
+        	$('[id-form="'+value+'"]').change(function(){
+
+        		data = $('#form').serialize() + "&id_modified=" + value;
+
+                $.ajax({
+                    url : window.location.href,
+                    type: 'POST',
+                    dataType : 'json',
+                    data : JSON.parse(JSON.stringify(data) ),
+                    success: function(data) {
+                        for (datum in data) {
+                        	$('[id-form="'+datum+'"]').val(data[datum]);
+                        }
+                    }
+                });
+        	})
+        });
+	</script>
 {% endblock %}

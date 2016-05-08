@@ -44,7 +44,7 @@ class AddCharacterSheetMenuType extends AbstractType
                 'choice_translation_domain' => true
             ));
         
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
+//         $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
     }
     
@@ -72,6 +72,19 @@ class AddCharacterSheetMenuType extends AbstractType
             ));
     }
     
+//     public function onPreSetData(FormEvent $event)
+//     {
+//         $data = $event->getData();
+//         $rol_game = $data;
+//         $form = $event->getForm();
+    
+//         $character_sheet_templates = null === $rol_game ? array() : $rol_game->getCharacterSheetTemplates();
+    
+//         if ($character_sheet_templates != null) {
+//             $this->addElements($form, $character_sheet_templates);
+//         }
+//     }
+    
     public function onPreSubmit(FormEvent $event)
     {
         $data = $event->getData();
@@ -82,18 +95,5 @@ class AddCharacterSheetMenuType extends AbstractType
         
         $character_sheet_templates = null === $rol_game ? array() : $rol_game->getCharacterSheetTemplates();
         $this->addElements($form, $character_sheet_templates);    
-    }
-
-    public function onPreSetData(FormEvent $event) 
-    {
-        $data = $event->getData();
-        $rol_game = $data;
-        $form = $event->getForm();
-
-        $character_sheet_templates = null === $rol_game ? array() : $rol_game->getCharacterSheetTemplates();
-        
-        if ($character_sheet_templates != null) {
-            $this->addElements($form, $character_sheet_templates);
-        }
     }
 }

@@ -32,15 +32,7 @@ add_character_sheet_template:
     requirements:
         _locale: %app.locales_string%
         
-# CharacterSheetController
-character_sheets_homepage:
-    path:     /{_locale}/game/character-sheets
-    defaults:  
-        _controller: GameSessionBundle:CharacterSheet:index
-        _locale: %app.locale_default%
-    requirements:
-        _locale: %app.locales_string%
-              
+# CharacterSheetController              
 add_character_sheet_menu:
     path:     /{_locale}/game/add-character-sheet
     defaults:  
