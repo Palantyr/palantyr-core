@@ -1,11 +1,11 @@
 <?php
-namespace WebBundle\Menu;
+namespace JJSR\Bundle\WebPlatformBundle\Menu;
+
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class MenuBuilder extends ContainerAware
 {
-	
     public function mainMenu(FactoryInterface $factory, array $options)
     {
     	$translator = $this->container->get('translator');

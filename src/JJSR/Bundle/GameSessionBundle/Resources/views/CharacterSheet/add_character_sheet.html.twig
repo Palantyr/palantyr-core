@@ -7,7 +7,6 @@
 	<h1>{% trans %}add_character_sheet.title{% endtrans %}</h1>
 	</br>
 
-{# 	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'novalidate': 'novalidate'} }) }}#}
     {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form', 'novalidate': 'novalidate'} }) }}
         {{ form_widget(form) }}
     {{ form_end(form) }}
@@ -22,20 +21,25 @@
 
         $.each( request_derivation_fields, function( key, value ) {
         	$('[id-form="'+value+'"]').change(function(){
+        		var is_only_number = /^\d+$/;
+        		if (is_only_number.test( $('[id-form="'+value+'"]').val()) ) {
+            		data = $('#form').serialize() + "&id_modified=" + value;
 
-        		data = $('#form').serialize() + "&id_modified=" + value;
-
-                $.ajax({
-                    url : window.location.href,
-                    type: 'POST',
-                    dataType : 'json',
-                    data : JSON.parse(JSON.stringify(data) ),
-                    success: function(data) {
-                        for (datum in data) {
-                        	$('[id-form="'+datum+'"]').val(data[datum]);
+                    $.ajax({
+                        url : window.location.href,
+                        type: 'POST',
+                        dataType : 'json',
+                        data : JSON.parse(JSON.stringify(data) ),
+                        success: function(data) {
+                            for (datum in data) {
+                            	$('[id-form="'+datum+'"]').val(data[datum]);
+                            }
                         }
-                    }
-                });
+                    });
+            	}
+        		else {
+        			$('[id-form="'+value+'"]').val('');
+            	}
         	})
         });
 	</script>

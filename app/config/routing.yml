@@ -1,3 +1,7 @@
+web_platform:
+    resource: "@WebPlatformBundle/Resources/config/routing.yml"
+    prefix:   /
+
 gaming_platform:
     resource: "@GamingPlatformBundle/Resources/config/routing.yml"
     prefix:   /
@@ -14,10 +18,6 @@ game_session:
 #app:
 #    resource: "@AppBundle/Controller/"
 #    type:     annotation
-
-web:
-    resource: "@WebBundle/Resources/config/routing.yml"
-    prefix: /
 
 #In order to use the built-in email functionality (confirmation of the account, 
 #resetting of the password), you must activate and configure the SwiftmailerBundle.

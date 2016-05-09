@@ -24,17 +24,17 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href={{ path('homepage') }}>{% block main_menu_name %}Palantir{% endblock %}</a>
+						<a class="navbar-brand" href={{ path('web_platform_homepage') }}>{% block main_menu_name %}Palantir{% endblock %}</a>
 					</div>
 			
 					{# Collect the nav links, forms, and other content for toggling #}
 					<div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
 						 {% if app.user %}
-							{{ knp_menu_render('WebBundle:MenuBuilder:mainMenu', {'currentClass': 'active', 'template': 'WebBundle:Menu:knp_menu.html.twig'}) }}
-							{{ knp_menu_render('WebBundle:MenuBuilder:userMenu', {'currentClass': 'active', 'template': 'WebBundle:Menu:knp_menu.html.twig'}) }}	 
+							{{ knp_menu_render('WebPlatformBundle:MenuBuilder:mainMenu', {'currentClass': 'active', 'template': 'WebPlatformBundle:Menu:knp_menu.html.twig'}) }}
+							{{ knp_menu_render('WebPlatformBundle:MenuBuilder:userMenu', {'currentClass': 'active', 'template': 'WebPlatformBundle:Menu:knp_menu.html.twig'}) }}	 
 						 {% else %}
-							{{ knp_menu_render('WebBundle:MenuBuilder:userUnregisteredMainMenu', {'currentClass': 'active', 'template': 'WebBundle:Menu:knp_menu.html.twig'}) }}
-							{{ knp_menu_render('WebBundle:MenuBuilder:userUnregisteredMenu', {'currentClass': 'active', 'template': 'WebBundle:Menu:knp_menu.html.twig'}) }}	
+							{{ knp_menu_render('WebPlatformBundle:MenuBuilder:userUnregisteredMainMenu', {'currentClass': 'active', 'template': 'WebPlatformBundle:Menu:knp_menu.html.twig'}) }}
+							{{ knp_menu_render('WebPlatformBundle:MenuBuilder:userUnregisteredMenu', {'currentClass': 'active', 'template': 'WebPlatformBundle:Menu:knp_menu.html.twig'}) }}	
 						 {% endif %}
 					</div>
 				</div>

@@ -1,5 +1,6 @@
 <?php
-namespace WebBundle\Menu;
+namespace JJSR\Bundle\WebPlatformBundle\Menu;
+
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

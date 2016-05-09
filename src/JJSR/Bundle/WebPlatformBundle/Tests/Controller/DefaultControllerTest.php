@@ -1,6 +1,6 @@
 <?php
 
-namespace WebBundle\Tests\Controller;
+namespace JJSR\Bundle\WebPlatformBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

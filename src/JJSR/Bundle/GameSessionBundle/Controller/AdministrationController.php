@@ -9,7 +9,6 @@ use JJSR\Bundle\GameSessionBundle\Entity\GameSession;
 use FOS\UserBundle\Util\UserManipulator as UserManipulator;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetTemplate;
 
-
 class AdministrationController extends Controller
 {
     public function indexAction(Request $request)

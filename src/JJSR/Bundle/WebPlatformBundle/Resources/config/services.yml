@@ -1,0 +1,6 @@
+services:
+#    web.menu.voter.request:
+#        class: WebPlatformBundle\Menu\RequestVoter
+#        tags:
+#            - { name: knp_menu.voter }
+#        arguments: [ @request_stack ]

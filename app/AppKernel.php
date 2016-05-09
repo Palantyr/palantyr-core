@@ -17,7 +17,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         	new FOS\UserBundle\FOSUserBundle(),
-            new WebBundle\WebBundle(),
             new UserBundle\UserBundle(),
         	new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
         	new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
@@ -25,6 +24,7 @@ class AppKernel extends Kernel
         	new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new JJSR\Bundle\GamingPlatformBundle\GamingPlatformBundle(),
             new JJSR\Bundle\GameSessionBundle\GameSessionBundle(),
+            new JJSR\Bundle\WebPlatformBundle\WebPlatformBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

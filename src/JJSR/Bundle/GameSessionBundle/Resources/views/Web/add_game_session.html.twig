@@ -15,11 +15,3 @@
 	{{ form_end(form) }}
 	
 {% endblock %}
-
-{% block javascripts %}
-
-	{% javascripts '@GameSessionBundle/Resources/public/js/* '%}
-	    <script src="{{ asset_url }}"></script>
-	{% endjavascripts %}
-	
-{% endblock %}

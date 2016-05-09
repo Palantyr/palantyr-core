@@ -52,7 +52,7 @@ class GameSessionController extends Controller
     		return $this->redirect($this->generateUrl('join_game_session', array('game_session_id' => $game_session->getId())));
     	}
 
-    	return $this->render('GameSessionBundle:Web:create.html.twig', array(
+    	return $this->render('GameSessionBundle:Web:add_game_session.html.twig', array(
     			'form' => $form->createView()
     	));
     }
@@ -65,12 +65,6 @@ class GameSessionController extends Controller
         $em->persist($game_session);
         $em->flush();
     }
-    
-//     private function gameSessionExist($game_session_id)
-//     {
-//         $em = $this->getDoctrine()->getManager();
-//         return (boolean)$em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
-//     }
     
     /*
     public function editGameSessionAction (Request $request, $game_session_id)

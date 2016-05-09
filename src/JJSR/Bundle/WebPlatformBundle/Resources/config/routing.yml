@@ -1,7 +1,7 @@
-homepage:     
+web_platform_homepage:
     path: /{_locale}
     defaults:  
-        _controller: WebBundle:Main:index
+        _controller: WebPlatformBundle:Web:homepage
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
