@@ -7,14 +7,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class CharacterSheetType extends AbstractType
+class CharacterSheetEditableType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 //         $translator = $this->get('translator');
         
         $builder->add('name', TextType::class, array(
-            'label' => 'add_character_sheet.name',
+            'label' => 'character_sheet.title',
             'attr' => array('label_col' => 2, 'widget_col' => 4)
         ));
 //         $builder->add('character_sheet_template', 'entity', array(
@@ -28,7 +28,7 @@ class CharacterSheetType extends AbstractType
 //         ));
 
         $builder->add('character_sheet_data', CollectionType::class, array(
-            'entry_type' => CharacterSheetDataType::class
+            'entry_type' => CharacterSheetDataEditableType::class
         ));
     }
 

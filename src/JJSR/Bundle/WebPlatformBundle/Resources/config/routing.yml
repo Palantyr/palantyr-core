@@ -5,3 +5,11 @@ web_platform_homepage:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
+        
+web_platform_insufficient_permissions:
+    path: /{_locale}/insufficient-permissions
+    defaults:  
+        _controller: WebPlatformBundle:Web:insufficientPermissions
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%

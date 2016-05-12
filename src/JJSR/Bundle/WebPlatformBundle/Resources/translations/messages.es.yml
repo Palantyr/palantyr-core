@@ -13,5 +13,6 @@ secondary_menu:
         logout: Desconectarse
     sign_in: Acceder
     register: Registrarse
+    character_sheet_list: Fichas de personaje
 
 secondary_menu.welcome %user_username%: Bienvenido %user_username%

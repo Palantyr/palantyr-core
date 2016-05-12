@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData;
 
-class CharacterSheetDataType extends AbstractType
+class CharacterSheetDataEditableType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -56,7 +56,7 @@ class CharacterSheetDataType extends AbstractType
                 case 'group':                    
                     $form->add('character_sheet_data', CollectionType::class, array(
                         'attr' => array('id-form' => $character_sheet_data->getName()),
-                        'entry_type' => CharacterSheetDataType::class,
+                        'entry_type' => CharacterSheetDataEditableType::class,
 //                         'label_attr' => array('id' => $character_sheet_data->getName())
                     ));
                     break;

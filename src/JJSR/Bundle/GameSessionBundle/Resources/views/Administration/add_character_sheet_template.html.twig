@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% trans %}add_character_sheet_template.title{% endtrans %}{% endblock %}
+{% block title %}{% trans %}character_sheet_template.add.title{% endtrans %}{% endblock %}
 
 {% block body %}
 
-	<h1>{% trans %}add_character_sheet_template.title{% endtrans %}</h1>
+	<h1>{% trans %}character_sheet_template.add.title{% endtrans %}</h1>
 	</br>
 	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_character_sheet_template', 'novalidate': 'novalidate'} }) }}
-        {{ form_row(form.name, { 'label': 'add_character_sheet_template.name', 'label_col': 2, 'widget_col': 3}) }}	
-        {{ form_row(form.version, { 'label': 'add_character_sheet_template.version', 'label_col': 2, 'widget_col': 1}) }}
-        {{ form_row(form.rol_game, { 'label': 'add_character_sheet_template.rol_game', 'label_col': 2, 'widget_col': 3}) }}		
-        {{ form_row(form.submit_button, {'label': 'add_character_sheet_template.submit'}) }}
+        {{ form_row(form.name, { 'label': 'character_sheet_template.name', 'label_col': 2, 'widget_col': 3}) }}	
+        {{ form_row(form.version, { 'label': 'character_sheet_template.version', 'label_col': 2, 'widget_col': 1}) }}
+        {{ form_row(form.rol_game, { 'label': 'character_sheet_template.rol_game', 'label_col': 2, 'widget_col': 3}) }}		
+        {{ form_row(form.submit_button, {'label': 'character_sheet_template.add.submit'}) }}
 	{{ form_end(form) }}
 {% endblock %}

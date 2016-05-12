@@ -24,6 +24,6 @@ JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet:
                 referencedColumnName: id
     oneToMany:
         character_sheet_data:
-          targetEntity: CharacterSheetData
-          mappedBy: character_sheet
-          cascade: ["persist"]
+            targetEntity: CharacterSheetData
+            mappedBy: character_sheet
+            cascade: ["persist", "remove"]

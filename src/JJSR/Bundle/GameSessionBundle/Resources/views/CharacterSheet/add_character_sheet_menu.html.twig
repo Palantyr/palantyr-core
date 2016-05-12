@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% trans %}main_menu.add_character_sheet.title{% endtrans %}{% endblock %}
+{% block title %}{% trans %}character_sheet.add.title{% endtrans %}{% endblock %}
 
 {% block body %}
 
-	<h1>{% trans %}main_menu.add_character_sheet.title{% endtrans %}</h1>
+	<h1>{% trans %}character_sheet.add.title{% endtrans %}</h1>
 	</br>
     {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form', 'novalidate': 'novalidate'} }) }}
-{#         {{ form_row(form.rol_game, { 'id': 'form_rol_game', 'label_col': 2, 'widget_col': 3}) }}		#}
-{#         {{ form_widget(form) }}#}
+        {{ form_rest(form) }}
     {{ form_end(form) }}
 {% endblock %}
 
@@ -19,7 +18,6 @@
 		var form = $(this).closest('form');
 		
         var data = rol_game_id.serialize();
-// 		alert(JSON.stringify($('#form_rol_game')));
 
         $.ajax({
             url : form.attr('action'),

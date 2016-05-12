@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetTemplate;
-use JJSR\Bundle\GameSessionBundle\Form\Type\CharacterSheetType;
+use JJSR\Bundle\GameSessionBundle\Form\Type\CharacterSheetEditableType;
 use JJSR\Bundle\GameSessionBundle\Entity\RolGame;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -52,16 +52,17 @@ class CharacterSheetController extends Controller
         if (!$rol_game || !$character_sheet_template) {
             
             $error_message = $translator->trans(
-                'add_character_sheet.error.message %rol_game_name% %character_sheet_template_name%',
+                'character_sheet.add.error.message %rol_game_name% %character_sheet_template_name%',
                 array(
                     'rol_game_name' => $rol_game_name,
-                    'character_sheet_template_name' => $character_sheet_template_name));
+                    'character_sheet_template_name' => $character_sheet_template_name
+                ));
             
             return $this->render(
                 'GameSessionBundle:CharacterSheet:add_character_sheet_error.html.twig',
                 array(
-                    'error_message' => $error_message 
-            ));
+                    'error_message' => $error_message
+                ));
         }
 
         $character_sheet = new CharacterSheet();
@@ -76,15 +77,13 @@ class CharacterSheetController extends Controller
         }
         $requestDerivationFields = self::requestDerivationFields($character_sheet_template->getId());
         
-
-        $form = $this->createForm(CharacterSheetType::class, $character_sheet);
-
+        $form = $this->createForm(CharacterSheetEditableType::class, $character_sheet);
 
         $form->add(
             'submit_button',
             'submit',
             array(
-                'label' => 'add_character_sheet.continue'
+                'label' => 'character_sheet.add.create'
             ));
        
         $form->handleRequest($request);
@@ -96,6 +95,12 @@ class CharacterSheetController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($character_sheet);
             $em->flush();
+            
+            return $this->redirect($this->generateUrl(
+                'edit_character_sheet',
+                array(
+                    'character_sheet_id' => $character_sheet->getId())
+            ));
         }
 
         return $this->render('GameSessionBundle:CharacterSheet:add_character_sheet.html.twig', array(
@@ -109,10 +114,10 @@ class CharacterSheetController extends Controller
         $fields_modificated = array();
         
         if ($id_modified == 'strength_actual_score') {
-            $fields_modificated['strength_actual_modifier'] = 13;
+            $fields_modificated['strength_actual_modifier'] = rand(1, 10);
         }
         elseif ($id_modified == 'strength_temporary_score') {
-            $fields_modificated['strength_temporary_modifier'] = 25;
+            $fields_modificated['strength_temporary_modifier'] = rand(1, 10);
         }
         
         return $fields_modificated;
@@ -191,6 +196,79 @@ class CharacterSheetController extends Controller
                 }
                 break;
         }
+    }
+    
+    public function deleteCharacterSheetAction(Request $request)
+    {
+        $character_sheet_id = $request->get('character_sheet_id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $character_sheet = $em->getRepository('GameSessionBundle:CharacterSheet')->find($character_sheet_id);
+        
+        if (!isset($character_sheet) || $this->getUser() != $character_sheet->getUser()) {
+            return $this->redirect($this->generateUrl('web_platform_insufficient_permissions'));
+        }
+        
+        $em->remove($character_sheet);
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('character_sheets_list'));
+    }
+    
+    public function characterSheetListAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $character_sheets = $em->getRepository('GameSessionBundle:CharacterSheet')->findBy(array('user' => $this->getUser()));
+        
+        return $this->render('GameSessionBundle:CharacterSheet:character_sheets_list.html.twig', array(
+            'character_sheets' => $character_sheets
+        ));
+    }
+    
+    public function editCharacterSheetAction(Request $request)
+    {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return self::handleAjax($request);
+        }
+        
+        $character_sheet_id = $request->get('character_sheet_id');
+        
+        $em = $this->getDoctrine()->getManager();
+        $character_sheet = $em->getRepository('GameSessionBundle:CharacterSheet')->find($character_sheet_id);
+
+        if (!isset($character_sheet) || $this->getUser() != $character_sheet->getUser()) {
+            return $this->redirect($this->generateUrl('web_platform_insufficient_permissions'));
+        }
+        
+        $form = $this->createForm(CharacterSheetEditableType::class, $character_sheet);
+
+        $form->add(
+            'submit_button',
+            'submit',
+            array(
+                'label' => 'character_sheet.edit.submit'
+            ));
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {        
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($character_sheet);
+            $em->flush();
+        
+            return $this->redirect($this->generateUrl(
+                'edit_character_sheet',
+                array(
+                    'character_sheet_id' => $character_sheet->getId())
+                ));
+        }
+
+        $requestDerivationFields = self::requestDerivationFields($character_sheet->getCharacterSheetTemplate()->getId());
+        
+        return $this->render('GameSessionBundle:CharacterSheet:edit_character_sheet.html.twig', array(
+            'form' => $form->createView(),
+            'request_derivation_fields' => $requestDerivationFields
+        ));
     }
     
     private function requestDerivationFields($character_sheet_template_id)

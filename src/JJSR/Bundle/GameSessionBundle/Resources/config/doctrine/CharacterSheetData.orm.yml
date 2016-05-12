@@ -27,8 +27,9 @@ JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData:
             length: 50
             nullable: TRUE
         value:
-            type: json_array
-#            length: 50
+            type: string
+#            type: json_array
+            length: 50
             nullable: TRUE
     manyToOne:
         character_sheet:
@@ -47,4 +48,4 @@ JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData:
         character_sheet_data:
             targetEntity: JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData
             mappedBy: character_sheet_data_group
-            cascade: ["persist"]
+            cascade: ["persist", "remove"]

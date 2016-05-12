@@ -48,3 +48,27 @@ add_character_sheet:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
+        
+delete_character_sheet:
+    path:     /{_locale}/game/delete-character-sheet/{character_sheet_id}
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:deleteCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+character_sheets_list:
+    path:     /{_locale}/game/character-sheets-list
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:characterSheetList
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+edit_character_sheet:
+    path:     /{_locale}/game/character-sheet/edit/{character_sheet_id}
+    defaults:  
+        _controller: GameSessionBundle:CharacterSheet:editCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%

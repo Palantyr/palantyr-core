@@ -36,7 +36,7 @@ class AddCharacterSheetMenuType extends AbstractType
                 'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
                 'property' => 'name',
                 'constraints' => array(new NotBlank()),
-                'label' => 'add_character_sheet.rol_game',
+                'label' => 'character_sheet.rol_game',
                 'attr' => array('label_col' => 2, 'widget_col' => 3),
                 'choices' => $this->em
                 ->getRepository('GameSessionBundle:RolGame')
@@ -58,7 +58,7 @@ class AddCharacterSheetMenuType extends AbstractType
                 'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
                 'property' => 'name',
                 'constraints' => array(new NotBlank()),
-                'label' => 'add_character_sheet.character_sheet_template',
+                'label' => 'character_sheet.character_sheet_template',
                 'attr' => array('label_col' => 2, 'widget_col' => 3),
                 'choices' => $character_sheet_templates,
                 'choice_translation_domain' => true
@@ -68,7 +68,7 @@ class AddCharacterSheetMenuType extends AbstractType
             'submit_button', 
             'submit',
             array(
-                'label' => 'add_character_sheet.continue'
+                'label' => 'character_sheet.add.continue'
             ));
     }
     

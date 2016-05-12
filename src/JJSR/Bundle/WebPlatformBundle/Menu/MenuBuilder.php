@@ -45,6 +45,10 @@ class MenuBuilder extends ContainerAware
 				array('route' => 'fos_user_profile_show'))
 			->setAttribute('icon', 'fa fa-edit');
 		
+		$menu['user']->addChild($translator->trans('secondary_menu.character_sheet_list'),
+		    array('route' => 'character_sheets_list'))
+		    ->setAttribute('icon', 'fa fa-edit');
+		
 		$menu['user']->addChild($translator->trans('secondary_menu.user.logout'),
 				array('route' => 'fos_user_security_logout'))
 			->setAttribute('icon', 'fa fa-edit');

@@ -13,6 +13,7 @@ secondary_menu:
         logout: Logout
     sign_in: Sign in
     register: Register
+    character_sheet_list: Character sheets
 
 secondary_menu:
     welcome %user_username%: Welcome %user_username%

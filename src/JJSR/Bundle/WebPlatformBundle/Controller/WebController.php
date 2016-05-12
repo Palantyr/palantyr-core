@@ -9,4 +9,9 @@ class WebController extends Controller
     {
         return $this->render('WebPlatformBundle:Web:homepage.html.twig');
     }
+    
+    public function insufficientPermissionsAction()
+    {
+        return $this->render('WebPlatformBundle:Security:insufficient_permissions.html.twig');
+    }
 }
