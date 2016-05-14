@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit character sheet template{% endblock %}
+
+{% block body %}
+
+	<h1>Edit character sheet template</h1>
+	</br>
+	{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_character_sheet_template', 'novalidate': 'novalidate'} }) }}
+        {{ form_row(form.name, { 'label': 'character_sheet_template.name', 'label_col': 2, 'widget_col': 3}) }}	
+        {{ form_row(form.version, { 'label': 'character_sheet_template.version', 'label_col': 2, 'widget_col': 1}) }}
+        {{ form_row(form.rol_game, { 'label': 'character_sheet_template.rol_game', 'label_col': 2, 'widget_col': 3}) }}		
+        {{ form_row(form.submit_button, {'label': 'Edit'}) }}
+	{{ form_end(form) }}
+{% endblock %}

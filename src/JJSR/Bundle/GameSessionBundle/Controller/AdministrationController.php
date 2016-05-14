@@ -11,80 +11,204 @@ use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetTemplate;
 
 class AdministrationController extends Controller
 {
-    public function indexAction(Request $request)
+    /*
+     / DB configuration:
+     // a:0:{}
+     // a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}
+     $userManager = $this->get('fos_user.user_manager');
+     $userManipulator = new UserManipulator($userManager);
+     $userManipulator->promote($this->getUser()->getUsername());
+     $user = $this->getUser()->getRoles();
+     var_dump($user);die();
+     */
+    public function administrationMenuAction(Request $request)
     {
-    	/* 
-    	/ DB configuration:
-    	// a:0:{}
-    	// a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}
-    	$userManager = $this->get('fos_user.user_manager');
-    	$userManipulator = new UserManipulator($userManager);
-    	$userManipulator->promote($this->getUser()->getUsername());
-    	$user = $this->getUser()->getRoles();
-    	var_dump($user);die();
-		*/
-    	
-    	$data = array();
-    	$form = $this->createFormBuilder($data)
-    		->add('add_all_to_test', 'submit', array('label' => 'Add all to test'))
-    		->add('add_languages', 'submit', array('label' => 'Add Languages'))
-    		->add('add_rol_games', 'submit', array('label' => 'Add Rol Games'))
-    		->add('delete_all_to_test', 'submit', array('label' => 'Delete all to test'))
-    		->add('delete_languages', 'submit', array('label' => 'Delete Languages'))
-    		->add('delete_rol_games', 'submit', array('label' => 'Delete Rol Games'))
-    		->add('delete_game_sessions', 'submit', array('label' => 'Delete Game Sessions'))
-    		->add('delete_user_game_sessions_association', 'submit', array('label' => 'Delete User Game Sessions Association'))
-    		->add('add_character_sheet_template', 'submit', array('label' => 'Add Character Sheet Template'))
-    		->getForm();
-    	
-    	$form->handleRequest($request);
-    	
-    	$petition_text = "";
-    	
-    	if ($form->isValid()) {
-    	   	if ($form->get('add_all_to_test')->isClicked()) {
-    	   		self::addLanguages();
-    	   		self::addRolGames();
-    		}
-    		elseif ($form->get('add_languages')->isClicked()) {
-				self::addLanguages();
-    		}
-    		elseif ($form->get('add_rol_games')->isClicked()) {
-				self::addRolGames();
-    		}
-    		elseif ($form->get('delete_all_to_test')->isClicked()) {
-    			self::deleteLanguages();
-    			self::deleteRolGames();
-    		}
-    		elseif ($form->get('delete_languages')->isClicked()) {
-    			 self::deleteLanguages();
-    		}
-    		elseif ($form->get('delete_rol_games')->isClicked()) {
-    			 self::deleteRolGames();
-    		}
-    		elseif ($form->get('delete_game_sessions')->isClicked()) {
-    			self::deleteGameSessions();
-    		}
-    		elseif ($form->get('delete_user_game_sessions_association')->isClicked()) {
-    			self::deleteUserGameSessionAssociation();
-    		}
-    		elseif ($form->get('add_character_sheet_template')->isClicked()) {
-    		    return $this->redirect($this->generateUrl('add_character_sheet_template'));
-    		}
-    		$petition_text = "Operation completed successfully";
-    	}
+        $data = array();
+        $default_data_form = $this->createFormBuilder($data)
+        ->add(
+            'add_all_default_data', 
+            'submit', 
+            array(
+                'label' => 'Add all default data', 
+                'attr' => array('class' => 'btn btn-success')
+            ))
+        ->add(
+            'delete_all_default_data', 
+            'submit',
+            array(
+                'label' => 'Delete all default data',
+                'attr' => array('class' => 'btn btn-danger')
+            ))
+        ->getForm();
+         
+        $default_data_form->handleRequest($request);
+        
+        if ($default_data_form->isSubmitted() && $default_data_form->isValid()) {
+            $flash = $this->get('braincrafted_bootstrap.flash');
+            
+            if ($default_data_form->get('add_all_default_data')->isClicked()) {
+                if (self::addAllDefaultDataAction() == true) {
+                    $flash->success('Operation completed successfully.');
+                }
+                else {
+                    $flash->error('Error. There is some data in the database, remove it first.');
+                }                
+            }
+            
+            elseif ($default_data_form->get('delete_all_default_data')->isClicked()) {
+                if (self::deleteAllDefaultDataAction() == true) {
+                    $flash->success('Operation completed successfully.');
+                }
+                else {
+                    $flash->error('Error. User game session connection in the database, remove it first.');
+                }
+            }
+        }
+        
+        return $this->render('GameSessionBundle:Administration:main_menu.html.twig',
+            array(
+                'default_data_form' => $default_data_form->createView()
+            ));
+    }
+    
+    public function addAllDefaultDataAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
+        $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
+        $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
+        if (!$languages && !$rol_games && !$character_sheet_templates) {
+            self::addLanguages();
+            self::addRolGames();
+            self::addCharacterSheetTemplates();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public function deleteAllDefaultDataAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $languages = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')->findAll();
+        if (!$languages) {
+            self::deleteGameSessions();
+            self::deleteCharacterSheetTemplates();
+            self::deleteRolGames();
+    		self::deleteLanguages();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public function addLanguages()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $language_names = array("spanish", "english");
+        
+        foreach ($language_names as $languages_name) {
+            $language = new Language();
+            $language->setName($languages_name);
+            $em->persist($language);
+        }
+        $em->flush();
+    }
+    
+    public function addRolGames()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $rol_game_names = array("Pathfinder", "Vampire The Masquerade", "Werewolf", "Star Wars");
+        $rol_game_actives = array(1, 1, 0, 0);
 
-        return $this->render('GameSessionBundle:Administration:main_menu.html.twig', 
-        		array('form' => $form->createView(), 
-        			'petition_text' => $petition_text));
+        for ($i = 0 ; $i < count($rol_game_names) ; $i++) {
+            $rol_game = new RolGame();
+            $rol_game->setName($rol_game_names[$i]);
+            $rol_game->setActive($rol_game_actives[$i]);
+            $em->persist($rol_game);
+        }
+        $em->flush();
+    }
+    
+    public function addCharacterSheetTemplates()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $character_sheet_template = new CharacterSheetTemplate();
+        $character_sheet_template->setName('Vampire character');
+        $rol_game = $em->getRepository('GameSessionBundle:RolGame')->findOneBy(array('name' => 'Vampire The Masquerade'));
+        $character_sheet_template->setRolGame($rol_game);
+        $character_sheet_template->setVersion(1);
+        $em->persist($character_sheet_template);
+        
+        $character_sheet_template = new CharacterSheetTemplate();
+        $character_sheet_template->setName('Pathfinder character');
+        $rol_game = $em->getRepository('GameSessionBundle:RolGame')->findOneBy(array('name' => 'Pathfinder'));
+        $character_sheet_template->setRolGame($rol_game);
+        $character_sheet_template->setVersion(1);
+        $em->persist($character_sheet_template);
+        
+        $em->flush();
+    }
+    
+    public function deleteLanguages() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
+        
+        foreach ($languages as $language) {
+            $em->remove($language);
+        }
+        $em->flush();
+    }
+    
+    public function deleteRolGames() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
+
+        foreach ($rol_games as $rol_game) {
+            $em->remove($rol_game);
+        }
+        $em->flush();
+    }
+    
+    public function deleteCharacterSheetTemplates() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
+    
+        foreach ($character_sheet_templates as $character_sheet_template) {
+            $em->remove($character_sheet_template);
+        }
+        $em->flush();
+    }
+    
+    public function deleteGameSessions() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $game_sessions = $em->getRepository('GameSessionBundle:GameSession')->findAll();
+    
+        foreach ($game_sessions as $game_session) {
+            $em->remove($game_session);
+        }
+        $em->flush();
+    }
+    
+    public function manageCharacterSheetTemplatesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
+        
+        return $this->render('GameSessionBundle:Administration:manage_character_sheet_templates.html.twig', array(
+            'character_sheet_templates' => $character_sheet_templates
+        ));
     }
     
     public function addCharacterSheetTemplateAction(Request $request)
     {
         $translator = $this->get('translator');
-        
+    
         $character_sheet_template = new CharacterSheetTemplate();
-
+    
         $form = $this->createFormBuilder($character_sheet_template)
         ->add('name', 'text')
         ->add('version', 'text')
@@ -97,101 +221,81 @@ class AdministrationController extends Controller
             ->getRepository('GameSessionBundle:RolGame')
             ->findAllActives()
         ))
-        ->add('submit_button', 'submit')
+        ->add(
+            'submit_button',
+            'submit',
+            array(
+                'attr' => array('class' => 'btn btn-success')
+            ))
         ->getForm();
-        
+
         $form->handleRequest($request);
          
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($character_sheet_template);
             $em->flush();
-            return $this->redirect($this->generateUrl('add_character_sheet_template'));
+            return $this->redirectToRoute('manage_character_sheet_templates');
         }
-        
+    
         return $this->render('GameSessionBundle:Administration:add_character_sheet_template.html.twig', array(
             'form' => $form->createView()
         ));
     }
     
-    public function addLanguages() {
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$languages_names = array("spanish", "english");
-    	$languages_names_count = count($languages_names);
-    	for ($i = 0 ; $i < $languages_names_count ; $i++) {
-    		$language = new Language();
-    		$language->setName($languages_names[$i]);
-    		$em->persist($language);
-    	}
-    	$em->flush();
+    public function removeCharacterSheetTemplateAction(Request $request)
+    {
+        $character_sheet_template_id = $request->get('character_sheet_template_id');
+        $em = $this->getDoctrine()->getEntityManager();
+        $character_sheet_template = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
+        
+        if (isset($character_sheet_template)) {
+                $em->remove($character_sheet_template);
+                $em->flush();
+        }
+
+        return $this->redirectToRoute('manage_character_sheet_templates');
     }
     
-    public function addRolGames() {
-    	$em = $this->getDoctrine()->getEntityManager();
-    	$rol_games_names = array("Pathfinder", "D&D 3.5", "Vampire The Masquerade", "Werewolf", "Anima", "Legend of Five Rings", "Star Wars");
-    	$rol_game_actives = array(1, 1, 1, 0, 0, 1, 1);
-    	$rol_games_names_count = count($rol_games_names);
-    	for ($i = 0 ; $i < $rol_games_names_count ; $i++) {
-    		$rol_game = new RolGame();
-    		$rol_game->setName($rol_games_names[$i])->setActive($rol_game_actives[$i]);
-    		$em->persist($rol_game);
-    	}
-    	$em->flush();
-    }
+    public function editCharacterSheetTemplateAction(Request $request)
+    {
+        $translator = $this->get('translator');
     
-    public function deleteLanguages() {
-    	$em = $this->getDoctrine()->getEntityManager();
-    	
-    	$languages = $this->getDoctrine()
-    		->getRepository('GameSessionBundle:Language')
-    		->findAll();
-    	
-    	$languages_count = count($languages); 
-    	for ($i = 0 ; $i < $languages_count ; $i++) {
-    		$em->remove($languages[$i]);
-    	}
-    	$em->flush();
-    }
+        $character_sheet_template_id = $request->get('character_sheet_template_id');
+        $em = $this->getDoctrine()->getEntityManager();
+        $character_sheet_template = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
     
-    public function deleteRolGames() {
-    	$em = $this->getDoctrine()->getEntityManager();
-    	 
-    	$rol_games = $this->getDoctrine()
-    	->getRepository('GameSessionBundle:RolGame')
-    	->findAll();
-    	 
-    	$rol_games_count = count($rol_games);
-    	for ($i = 0 ; $i < $rol_games_count ; $i++) {
-    		$em->remove($rol_games[$i]);
-    	}
-    	$em->flush();
-    }
+        $form = $this->createFormBuilder($character_sheet_template)
+        ->add('name', 'text')
+        ->add('version', 'text')
+        ->add('rol_game', 'entity', array(
+            'required'    => true,
+            'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
+            'class'    => 'GameSessionBundle:RolGame',
+            'property' => 'name',
+            'choices' => $this->getDoctrine()
+            ->getRepository('GameSessionBundle:RolGame')
+            ->findAllActives()
+        ))
+        ->add(
+            'submit_button',
+            'submit',
+            array(
+                'attr' => array('class' => 'btn btn-success')
+            ))
+            ->getForm();
     
-    public function deleteGameSessions() {
-    	$em = $this->getDoctrine()->getEntityManager();
-    
-    	$game_sessions = $this->getDoctrine()
-    	->getRepository('GameSessionBundle:GameSession')
-    	->findAll();
-    
-    	$game_sessions_count = count($game_sessions);
-    	for ($i = 0 ; $i < $game_sessions_count ; $i++) {
-    		$em->remove($game_sessions[$i]);
-    	}
-    	$em->flush();
-    }
-    
-    public function deleteUserGameSessionAssociation () {
-    	$em = $this->getDoctrine()->getEntityManager();
-    	
-    	$user_game_session_association = $this->getDoctrine()
-    	->getRepository('GameSessionBundle:UserGameSessionAssociation')
-    	->findAll();
-    	
-    	$user_game_session_association_count = count($user_game_session_association);
-    	for ($i = 0 ; $i < $user_game_session_association_count ; $i++) {
-    		$em->remove($user_game_session_association[$i]);
-    	}
-    	$em->flush();
+        $form->handleRequest($request);
+         
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($character_sheet_template);
+            $em->flush();
+            return $this->redirectToRoute('manage_character_sheet_templates');
+        }
+
+        return $this->render('GameSessionBundle:Administration:edit_character_sheet_template.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }

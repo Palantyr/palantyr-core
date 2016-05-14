@@ -18,7 +18,7 @@ class MenuBuilder extends ContainerAware
 		$user_permissions = $this->container->get('security.authorization_checker');
 		if ($user_permissions->isGranted('ROLE_SUPER_ADMIN')){
 			$menu->addChild($translator->trans('main_menu.administration'), 
-					array('route' => 'administration_game_session_homepage'))
+					array('route' => 'web_platform_administration_menu'))
 				->setAttribute('icon', 'fa fa-list');
 				
 		}

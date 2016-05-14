@@ -16,22 +16,62 @@ create_game_session:
 #        _locale: %app.locales_string%
 
 # AdministrationController
-administration_game_session_homepage:
-    path:     /{_locale}/game/administration
+game_session_administration_main_menu:
+    path:     /{_locale}/administration/game-session-bundle
     defaults:  
-        _controller: GameSessionBundle:Administration:index
+        _controller: GameSessionBundle:Administration:administrationMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+game_session_add_all_default_data:
+    path:     /{_locale}/administration/game-session-bundle/add-all-default-data
+    defaults:  
+        _controller: GameSessionBundle:Administration:addAllDefaultData
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+game_session_delete_all_default_data:
+    path:     /{_locale}/administration/game-session-bundle/delete-all-default-data
+    defaults:  
+        _controller: GameSessionBundle:Administration:deleteAllDefaultData
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+manage_character_sheet_templates:
+    path:     /{_locale}/administration/game-session-bundle/character-sheet-templates
+    defaults:  
+        _controller: GameSessionBundle:Administration:manageCharacterSheetTemplates
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
         
 add_character_sheet_template:
-    path:     /{_locale}/game/administration/add-character-sheet-template
+    path:     /{_locale}/administration/game-session-bundle/add-character-sheet-template
     defaults:  
         _controller: GameSessionBundle:Administration:addCharacterSheetTemplate
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
         
+remove_character_sheet_template:
+    path:     /{_locale}/administration/game-session-bundle/remove-character-sheet-template/{character_sheet_template_id}
+    defaults:  
+        _controller: GameSessionBundle:Administration:removeCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+edit_character_sheet_template:
+    path:     /{_locale}/administration/game-session-bundle/edit-character-sheet-template/{character_sheet_template_id}
+    defaults:  
+        _controller: GameSessionBundle:Administration:editCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+              
 # CharacterSheetController              
 add_character_sheet_menu:
     path:     /{_locale}/game/add-character-sheet

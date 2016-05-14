@@ -14,4 +14,9 @@ class WebController extends Controller
     {
         return $this->render('WebPlatformBundle:Security:insufficient_permissions.html.twig');
     }
+    
+    public function administrationMenuAction()
+    {
+            return $this->render('WebPlatformBundle:Web:administration_main_menu.html.twig');
+    }
 }

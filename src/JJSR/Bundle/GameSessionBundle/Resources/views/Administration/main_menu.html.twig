@@ -4,30 +4,64 @@
 
 {% block body %}
 
-	<h1>Administration games index</h1>
+	<h1>Administration GameSessionBundle</h1>
 	</br>
 	
-	{{ petition_text }}
+	{% if alert_type is defined %}
+    	<div class="alert alert-{{ alert_type }}" role="alert">{{ alert_message }}</div>
+    {% endif %}
+    {% include 'BraincraftedBootstrapBundle::flash.html.twig' %}
 	
-	{{ form_start(form, {'method': 'POST'}) }}
-	
-	{{ form_widget(form.add_all_to_test) }}
-	</br></br>&nbsp;&nbsp;
-	{{ form_widget(form.add_languages) }}
-	</br></br>&nbsp;&nbsp; 
-	{{ form_widget(form.add_rol_games) }}
-	</br></br></br>
-	{{ form_widget(form.delete_all_to_test) }}
-	</br></br>&nbsp;&nbsp;
-	{{ form_widget(form.delete_languages) }}
-	</br></br>&nbsp;&nbsp;
-	{{ form_widget(form.delete_rol_games) }}
-	</br></br></br> 
-	{{ form_widget(form.delete_game_sessions) }}
-	</br></br></br> 
-	{{ form_widget(form.delete_user_game_sessions_association) }}
-	</br></br></br> 
-	{{ form_widget(form.add_character_sheet_template) }}
-	{{ form_end(form) }}
+    <div class="row">
+    	<div class="col-sm-6 col-md-4">
+    		<div class="thumbnail">
+    			<div class="caption">
+    				<h3>Default data</h3> 
+    				<p>Languages, rol games and character sheet templates.</p>
+    				<p>
+    				{{ form_start(default_data_form, { 'method': 'POST', 'style': 'inline', 'attr': {'onclick': 'return confirm("Are you sure?")'} }) }}
+    					{{ form_widget(default_data_form.add_all_default_data) }}
+    					{{ form_widget(default_data_form.delete_all_default_data) }}
+    					{{ form_widget(default_data_form) }}
+    				{{ form_end(default_data_form) }}
+    				</p>
+    			</div> 
+    		</div> 
+    	</div>
+    	<div class="col-sm-6 col-md-4">
+    		<div class="thumbnail">
+    			<div class="caption">
+    				<h3>Character Sheet templates</h3> 
+    				<p>
+    					<a href="{{ path('manage_character_sheet_templates') }}" class="btn btn-primary" role="button">Manage character sheet templates</a>
+    				</p> 
+    			</div> 
+    		</div> 
+    	</div>
+    	<div class="col-sm-6 col-md-4">
+    		<div class="thumbnail">
+    			<div class="caption">
+    				<h3>Game sessions</h3> 
+    				<p>
+    					<a href="#" class="btn btn-primary" role="button">Manage game sessions</a>
+    				</p> 
+    			</div> 
+    		</div> 
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-sm-6 col-md-4">
+    		<div class="thumbnail">
+    			<div class="caption">
+    				<h3>Character sheets</h3> 
+    				<p>
+    					<a href="#" class="btn btn-primary" role="button">Manage character sheets</a>
+    				</p> 
+    			</div> 
+    		</div> 
+    	</div>
+    </div>
 
 {% endblock %}
+

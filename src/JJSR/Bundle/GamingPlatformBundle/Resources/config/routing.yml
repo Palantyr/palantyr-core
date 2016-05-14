@@ -1,3 +1,4 @@
+# ConnectionController
 game_sessions:
     path:     /{_locale}/game/sessions
     defaults:  
@@ -42,6 +43,15 @@ game_session_not_exist:
     path:     /{_locale}/game/not-exist/{game_session_id}
     defaults:  
         _controller: GamingPlatformBundle:Connection:gameSessionNotExist
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+        
+# AdministrationController
+gaming_platform_administration_main_menu:
+    path:     /{_locale}/administration/gaming-platform-bundle
+    defaults:  
+        _controller: GamingPlatformBundle:Administration:administrationMenu
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
