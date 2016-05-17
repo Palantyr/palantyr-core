@@ -140,7 +140,7 @@ class CharacterSheetController extends Controller
     {
         $request = $this->get('request');
         $data = $request->request->all();
-        $character_sheet_array = $data['character_sheet'];
+        $character_sheet_array = $data['character_sheet_editable'];
         $character_sheet = new CharacterSheet();
         $character_sheet->setCharacterSheetTemplate($character_sheet_template);
         
@@ -345,6 +345,13 @@ class CharacterSheetController extends Controller
         $main_data->setDatatype('group');
         $main_data->setDisplayName('Main Data');
         $character_sheet->addCharacterSheetDatum($main_data);
+        
+        $character_name = new CharacterSheetData();
+        $character_name->setName('character_name');
+        $character_name->setDatatype('field');
+        $character_name->setDisplayName('Character name');
+        $character_name->setCharacterSheetDataGroup($main_data);
+        $main_data->addCharacterSheetDatum($character_name);
         
         $attributes = new CharacterSheetData();
         $attributes->setCharacterSheet($character_sheet);

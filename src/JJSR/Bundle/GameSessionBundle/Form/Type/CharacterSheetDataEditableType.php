@@ -57,6 +57,7 @@ class CharacterSheetDataEditableType extends AbstractType
                     $form->add('character_sheet_data', CollectionType::class, array(
                         'attr' => array('id-form' => $character_sheet_data->getName()),
                         'entry_type' => CharacterSheetDataEditableType::class,
+//                         'label' => false
 //                         'label_attr' => array('id' => $character_sheet_data->getName())
                     ));
                     break;

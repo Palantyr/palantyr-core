@@ -6,10 +6,9 @@
 
 	<h1>{% trans %}character_sheet.add.title{% endtrans %}</h1>
 	</br>
+	
+	{{ include('GameSessionBundle:CharacterSheet:character_sheet_editable_form.html.twig', {'form': form}, with_context = false) }}
 
-    {{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form', 'novalidate': 'novalidate'} }) }}
-        {{ form_widget(form) }}
-    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}

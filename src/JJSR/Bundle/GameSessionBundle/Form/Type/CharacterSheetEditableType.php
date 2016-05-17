@@ -28,7 +28,8 @@ class CharacterSheetEditableType extends AbstractType
 //         ));
 
         $builder->add('character_sheet_data', CollectionType::class, array(
-            'entry_type' => CharacterSheetDataEditableType::class
+            'entry_type' => CharacterSheetDataEditableType::class,
+//             'label' => false
         ));
     }
 
