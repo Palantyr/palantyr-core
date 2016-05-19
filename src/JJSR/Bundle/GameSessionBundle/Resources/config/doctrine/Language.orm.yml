@@ -11,3 +11,6 @@ JJSR\Bundle\GameSessionBundle\Entity\Language:
         name:
             type: string
             length: 255
+        display_name:
+            type: string
+            length: 255

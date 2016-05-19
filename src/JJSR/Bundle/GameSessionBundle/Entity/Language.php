@@ -46,4 +46,32 @@ class Language
     {
         return $this->name;
     }
+    /**
+     * @var string
+     */
+    private $display_name;
+
+
+    /**
+     * Set display_name
+     *
+     * @param string $displayName
+     * @return Language
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->display_name = $displayName;
+
+        return $this;
+    }
+
+    /**
+     * Get display_name
+     *
+     * @return string 
+     */
+    public function getDisplayName()
+    {
+        return $this->display_name;
+    }
 }

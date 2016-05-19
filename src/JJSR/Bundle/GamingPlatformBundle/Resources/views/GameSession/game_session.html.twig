@@ -37,7 +37,7 @@
 {% block javascripts %}
 
 <script>
-	var rol_game_name = "{{ rol_game.getName() }}";
+	var rol_game_name = "{{ game_session.getRolGame.getName() }}";
 // 	GLOBAL VARIABLES FROM TWIG 
 	var user_username = "{{ app.user.username }}";
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";

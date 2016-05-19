@@ -94,6 +94,7 @@ class AdministrationController extends Controller
         $languages = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')->findAll();
         if (!$languages) {
             self::deleteGameSessions();
+            self::deleteCharacterSheets();
             self::deleteCharacterSheetTemplates();
             self::deleteRolGames();
     		self::deleteLanguages();
@@ -107,11 +108,16 @@ class AdministrationController extends Controller
     public function addLanguages()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $language_names = array("spanish", "english");
+        $language_names = array("es", "en");
+        $language_display_names = array("spanish", "english");
         
-        foreach ($language_names as $languages_name) {
+        for ($count_languages = 0;
+        $count_languages < count($language_names);
+        $count_languages++) {
+        
             $language = new Language();
-            $language->setName($languages_name);
+            $language->setName($language_names[$count_languages]);
+            $language->setDisplayName($language_display_names[$count_languages]);
             $em->persist($language);
         }
         $em->flush();
@@ -153,7 +159,8 @@ class AdministrationController extends Controller
         $em->flush();
     }
     
-    public function deleteLanguages() {
+    public function deleteLanguages()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
         
@@ -163,7 +170,8 @@ class AdministrationController extends Controller
         $em->flush();
     }
     
-    public function deleteRolGames() {
+    public function deleteRolGames()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
 
@@ -173,7 +181,19 @@ class AdministrationController extends Controller
         $em->flush();
     }
     
-    public function deleteCharacterSheetTemplates() {
+    public function deleteCharacterSheets()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $character_sheets = $em->getRepository('GameSessionBundle:CharacterSheet')->findAll();
+        
+        foreach ($character_sheets as $character_sheet) {
+            $em->remove($character_sheet);
+        }
+        $em->flush();
+    }
+    
+    public function deleteCharacterSheetTemplates()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
     
@@ -183,7 +203,8 @@ class AdministrationController extends Controller
         $em->flush();
     }
     
-    public function deleteGameSessions() {
+    public function deleteGameSessions()
+    {
         $em = $this->getDoctrine()->getEntityManager();
         $game_sessions = $em->getRepository('GameSessionBundle:GameSession')->findAll();
     

@@ -15,21 +15,13 @@ login_game_session:
     requirements:
         _locale: %app.locales_string%
 
-#login_game_session:
-#    path:     /{_locale}/game/login/{game_session_id}
+#login_game_session_rejected:
+#    path:     /{_locale}/game/login/rejected/{game_session_id}
 #    defaults:  
-#        _controller: GamingPlatformBundle:Connection:loginGameSession
+#        _controller: GamingPlatformBundle:Connection:loginGameSessionRejected
 #        _locale: %app.locale_default%
 #    requirements:
 #        _locale: %app.locales_string%
-
-login_game_session_rejected:
-    path:     /{_locale}/game/login/rejected/{game_session_id}
-    defaults:  
-        _controller: GamingPlatformBundle:Connection:loginGameSessionRejected
-        _locale: %app.locale_default%
-    requirements:
-        _locale: %app.locales_string%
 
 game_session_disconnected:
     path:     /{_locale}/game/disconected/{game_session_id}
@@ -38,6 +30,14 @@ game_session_disconnected:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
+
+game_session_already_connected:
+    path:     /{_locale}/game/already-connected/{game_session_id}
+    defaults:  
+        _controller: GamingPlatformBundle:Connection:alreadyConnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%  
 
 game_session_not_exist:
     path:     /{_locale}/game/not-exist/{game_session_id}

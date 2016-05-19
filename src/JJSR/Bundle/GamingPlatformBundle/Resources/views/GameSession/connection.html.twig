@@ -47,13 +47,13 @@
  	 	
  	 	switch(option) {
  	 	case 'already_connected':
- 	 		new_route = "{{ path('login_game_session_rejected', { 'game_session_id': game_session.getId() }) }}";
+ 	 		new_route = "{{ path('game_session_already_connected', { 'game_session_id': game_session.getId() }) }}";
  	 	 	break;
  	 	case 'remove_user':
  	 		new_route = "{{ path('game_session_disconnected', { 'game_session_id': game_session.getId() }) }}";
  	 	 	break;
  	 	case 'remove_game_session':
- 	 		new_route = "{{ path('game_session_not_exist', { 'game_session_id': game_session.getId() }) }}";
+ 	 		new_route = "{{ path('game_session_disconnected', { 'game_session_id': game_session.getId() }) }}";
  	 	 	break;
  	 	}
  		$(window).attr('location', new_route);

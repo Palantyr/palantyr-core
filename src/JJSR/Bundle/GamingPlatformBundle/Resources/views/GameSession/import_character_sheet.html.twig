@@ -159,7 +159,7 @@
  					<div class="content"></div> \
 					<div class="action-bar"></div> \
  				</div>' );
- 		
+
  		for (var key_sections in character_sheet) {
  	 		switch (key_sections) {
 	 			case 'character_sheet_settings':
@@ -232,9 +232,13 @@
 
  	function typeDerivedOfCharacterSheet(field, father_div_identification)
  	{
- 	 	alert(JSON.stringify(field));
+		var new_class = '';
+		if ($.isNumeric(field.value)) {
+			new_class = 'functional';
+		}
+		
  		$( father_div_identification ).append(
-			'<div id='+field.id+'> \
+			'<div id='+field.id+' class='+new_class+'> \
 				<span id="name">'+field.name+'</span> \
 				<span id="value">'+field.value+'</span> \
 			</div>' );

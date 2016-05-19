@@ -24,7 +24,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	protected $translator;
 
 	public $character_sheets_in_game = array();
-	public $users_language = array();
+	public $users_language = array(); //better $users_locale
 	
 	/**
 	 * @param ClientManipulatorInterface $clientManipulator
@@ -115,61 +115,61 @@ class GameSessionTopic extends Controller implements TopicInterface
 // 	CONNECTION SECURITY
 	private function onSuscribeConectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-		if ($this->clientManipulator->getClient($connection)->getId()) { // maybe require != false || != null
-				
-			$room = $request->getAttributes()->get('room');
-			
-			// If game session not exist
-			if(!self::gameSessionExist($room)) {
-				self::gameSessionRemovedKickPlayer($connection, $topic, $request);
-				return false;
-			}
-			
-			$user = $this->clientManipulator->getClient($connection);
-			$game_session = $this->em->getRepository('GameSessionBundle:GameSession')->find($room);
-			
-			$user_game_session_connection = $this->em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
-			->findOneBy(array('user' => $user, 'game_session' => $game_session));
-			
-			
-			if ($this->em->refresh($user_game_session_connection) != null) {
-			    $this->em->refresh($user_game_session_connection);
-			}
-			
-			if (!$user_game_session_connection) {
-			    $connection->event($topic->getId(), [
-			        'section' => "connection",
-			        'option' => "already_connected"]); //not granted
-			    $connection->close();
-			}
-			else {
-			    switch ($user_game_session_connection->getConnectionOption()) {
-			        case 'access_denied':
-			            $connection->event($topic->getId(), [
-			                'section' => "connection",
-			                'option' => "already_connected"]); //not granted
-			            $connection->close();
-			            return false;
-			            break;
-			            
-			        case 'access_granted':
-			            $user_game_session_connection->setConnectionOption('connected');
-			            $this->em->persist($user_game_session_connection);
-			            $this->em->flush();
-			            return true;
-			            break;
-			            
-			        case 'connected':
-			            $connection->event($topic->getId(), [
-			                'section' => "connection",
-			                'option' => "already_connected"]); //already connected
-			            $connection->close();
-			            return false;
-			            break;
-			    }
-			}
+	    if (!isset($this->clientManipulator->getClient($connection))) { // maybe require != false || != null
+	        return false;
+	    }
+
+		$room = $request->getAttributes()->get('room');
+		
+		// If game session not exist
+		if(!isset(self::gameSessionExist($room))) {
+			self::removedUserBecauseGameSessionRemoved($connection, $topic, $request);
+			return false;
 		}
-		return false;
+		
+		$user = $this->clientManipulator->getClient($connection);
+		$game_session = $this->em->getRepository('GameSessionBundle:GameSession')->find($room);
+		
+		$user_game_session_connection = $this->em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
+		->findOneBy(array('user' => $user, 'game_session' => $game_session));
+		
+		
+		if ($this->em->refresh($user_game_session_connection) != null) {
+		    $this->em->refresh($user_game_session_connection);
+		}
+		
+		if (!$user_game_session_connection) {
+		    $connection->event($topic->getId(), [
+		        'section' => "connection",
+		        'option' => "already_connected"]); //not granted
+		    $connection->close();
+		}
+		else {
+		    switch ($user_game_session_connection->getConnectionOption()) {
+		        case 'no_access':
+		            $connection->event($topic->getId(), [
+		                'section' => "connection",
+		                'option' => "already_connected"]); //not granted
+		            $connection->close();
+		            return false;
+		            break;
+		            
+		        case 'access_granted':
+		            $user_game_session_connection->setConnectionOption('connected');
+		            $this->em->persist($user_game_session_connection);
+		            $this->em->flush();
+		            return true;
+		            break;
+		            
+		        case 'connected':
+		            $connection->event($topic->getId(), [
+		                'section' => "connection",
+		                'option' => "already_connected"]); //already connected
+		            $connection->close();
+		            return false;
+		            break;
+		    }
+		}
 	}
 	
 	private function onUnSubscribeConnectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request)
@@ -185,7 +185,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	       $this->em->refresh($user_game_session_connection);
 		}
 		
-		$user_game_session_connection->setConnectionOption('access_denied');
+		$user_game_session_connection->setConnectionOption('no_access');
 		$this->em->persist($user_game_session_connection);
 		$this->em->flush();
 	}
@@ -195,7 +195,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		return (boolean)$this->em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
 	}
 	
-	private function gameSessionRemovedKickPlayer(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+	private function removedUserBecauseGameSessionRemoved(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{	
 		$connection->event($topic->getId(), [
 				'section' => "connection",
@@ -253,11 +253,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 	
 	private function setUserLanguage (ConnectionInterface $connection, $room, $user_id)
 	{
-	    //Must be changed
-		$user_game_session_association = $this->em->getRepository('GameSessionBundle:UserGameSessionAssociation')
-		->findByUserAndGameSession($this->clientManipulator->getClient($connection)->getId(), $room);
-	
-		$language = $user_game_session_association->getLanguage();
+	    $user_game_session_connection = $this->em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
+	    ->findOneBy(array('user' => $this->clientManipulator->getClient($connection)->getId(), 'game_session' => $room));
+	    
+	    $language = $user_game_session_connection->getLanguage()->getName();
 		$this->users_language[$room][$user_id] = $language;
 	}
 	
@@ -282,6 +281,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$array_game_session['comments'] = $game_session->getComments();
 				$array_game_session_json = json_encode($array_game_session);
 				
+				var_dump($array_game_session);
 				$connection->event($topic->getId(), [
 						'section' => "settings",
 						'option' => "game_session_request_edit",
@@ -375,14 +375,15 @@ class GameSessionTopic extends Controller implements TopicInterface
 				]);
 				self::onUnSubscribe($connection, $topic, $request);
 				
+				$user_game_session_connections = $this->em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
+				->findBy(array('game_session' => $room));
+				foreach ($user_game_session_connections as &$user_game_session_connection) {
+					$this->em->remove($user_game_session_connection);
+				}
+				
 				$game_session = $this->em->getRepository("GameSessionBundle:GameSession")->find($room);
 				$this->em->remove($game_session);
 				
-				// Must be changed
-				$users_game_session_association = $this->em->getRepository("GameSessionBundle:UserGameSessionAssociation")->findByGameSession($room);
-				foreach ($users_game_session_association as &$user_game_session_association) {
-					$this->em->remove($user_game_session_association);
-				}
 				$this->em->flush();
 				
 				break;
@@ -408,7 +409,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$client_to_remove = $this->clientManipulator->findByUsername($topic, $user_username_to_remove);
 
 				if ($client_to_remove !== false) {
-					self::gameSessionRemovedKickPlayer($client_to_remove['connection'], $topic, $request);
+// 				    removedUserBecauseGameSessionRemoved
+					self::removedUserBecauseGameSessionRemoved($client_to_remove['connection'], $topic, $request);
 				}
 		}
 	}
@@ -841,6 +843,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 	           break;
 	             
             case 'field':
+                $formatted_character_sheet_data['value'] = $character_sheet_data->getValue();
+                break;
+            case 'derived':
                 $formatted_character_sheet_data['value'] = $character_sheet_data->getValue();
                 break;
 	    }
@@ -1465,7 +1470,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	}
 	
 	private function isOwner (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
-		return ($this->clientManipulator->getClient($connection)->getId() == self::getGameSessionOwner($request));
+	    return ($this->clientManipulator->getClient($connection)->getId() == self::getGameSessionOwner($request)->getId());
 	}
 	
 	private function getUsersUsernameToTheRoom (Topic $topic)

@@ -3,7 +3,6 @@ namespace JJSR\Bundle\GameSessionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use JJSR\Bundle\GameSessionBundle\Entity\GameSession;
 use JJSR\Bundle\GameSessionBundle\Entity\RolGame;
 
@@ -34,7 +33,7 @@ class GameSessionController extends Controller
     		'required'    => true,
     		'placeholder' => $translator->trans('game_session.create.choose_language'),
 		    'class'    => 'GameSessionBundle:Language',
-		    'property' => 'name',
+		    'property' => 'display_name',
     		'choices' => $this->getDoctrine()
     					->getRepository('GameSessionBundle:Language')
     					->findAll(),
@@ -49,7 +48,7 @@ class GameSessionController extends Controller
     	
     	if ($form->isValid()) {
     		$this->addGameSession($game_session);
-    		return $this->redirect($this->generateUrl('join_game_session', array('game_session_id' => $game_session->getId())));
+    		return $this->redirect($this->generateUrl('login_game_session', array('game_session_id' => $game_session->getId())));
     	}
 
     	return $this->render('GameSessionBundle:Web:add_game_session.html.twig', array(
@@ -65,35 +64,4 @@ class GameSessionController extends Controller
         $em->persist($game_session);
         $em->flush();
     }
-    
-    /*
-    public function editGameSessionAction (Request $request, $game_session_id)
-    {
-    	$game_session = $this->getDoctrine()->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
-    	
-    	$form = $this->createFormBuilder($game_session)
-    	->add('name', 'text')
-    	->add('password', 'password')
-    	->add('comments', 'textarea', array(
-        	'required' => false))
-//         ->add('submit_button', 'submit')
-        ->add('submit_button', SubmitType::class, array(
-        		'attr' => array('class' => 'submit'),
-        ))
-    	->getForm();
-    	
-//     	$form->handleRequest($request);
-
-    	if ($form->isValid()) {
-    		var_dump("patata");die();
-			self::updateGameSession($game_session);
-//     		$this->addGameSession($game_session);
-//     		return $this->redirect($this->generateUrl('join_game_session', array('game_session_id' => $game_session->getId())));
-    	}
-
-    	return $this->render('GameSessionBundle:GameSession:edit_popup_game_session.html.twig', array(
-    			'form' => $form->createView()
-		));
-    }
-    */
 }

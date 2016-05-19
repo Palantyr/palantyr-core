@@ -3,12 +3,12 @@
 {% block title %}{% trans %}game_session.login.title{% endtrans %}{% endblock %}
 
 {% block body %}
-	<h1>{{ game_session['array_gameSession'].getName() }}</h1>
-	<p>{% trans %}game_session.gamemaster{% endtrans %}: <b>{{ game_session['user_username'] }}</b> </p>
-	<p>{% trans %}game_session.creation_date{% endtrans %}: <b>{{ game_session['array_gameSession'].getStartDate().date }}</b> </p>
-	<p>{% trans %}game_session.rol_game{% endtrans %}: <b>{{ game_session['rolGame_name'] }}</b> </p>
-	<p>{% trans %}game_session.language{% endtrans %}: <b>{{ game_session['language_name']|trans }}</b> </p>
-	<p>{% trans %}game_session.comments{% endtrans %}: <b>{{ game_session['array_gameSession'].getComments() }}</b> </p>
+	<h1>{{ game_session.getName() }}</h1>
+	<p>{% trans %}game_session.gamemaster{% endtrans %}: <b>{{ game_session.getOwner.getUsername() }}</b> </p>
+	<p>{% trans %}game_session.creation_date{% endtrans %}: <b>{{ game_session.getStartDate().date }}</b> </p>
+	<p>{% trans %}game_session.rol_game{% endtrans %}: <b>{{ game_session.getRolGame().getName()|trans }}</b> </p>
+	<p>{% trans %}game_session.language{% endtrans %}: <b>{{ game_session.getLanguage().getDisplayName()|trans|capitalize }}</b> </p>
+	<p>{% trans %}game_session.comments{% endtrans %}: <b>{{ game_session.getComments() }}</b> </p>
 	
 	</br>
 	<h3>{% trans %}game_session.login.title{% endtrans %}</h3>

@@ -7,7 +7,7 @@
 	<h1>{% trans %}game_session.join.title{% endtrans %}</h1>
 	
 	</br>
-	
+
 	<div class="table-responsive">
 		<table class="table table-striped">
 			<thead>
@@ -20,14 +20,14 @@
 				</tr>
 			</thead>
 			<tbody>
-			{% for game_session_actives in game_sessions_actives %}
+			{% for game_session in game_sessions %}
 				    <tr>
-						<td>{{ game_session_actives['array_gameSession'].getName() }}</td>
-						<td>{{ game_session_actives['rolGame_name']|trans }}</td>
-						<td>{{ game_session_actives['user_username'] }}</td>
-						<td>{{ game_session_actives['language_name']|trans|capitalize }}</td>
+						<td>{{ game_session.getName() }}</td>
+						<td>{{ game_session.getRolGame().getName()|trans }}</td>
+						<td>{{ game_session.getOwner().getUsername() }}</td>
+						<td>{{ game_session.getLanguage().getDisplayName()|trans|capitalize }}</td>
 						<td>
-							<form action="{{ path('login_game_session', {'game_session_id': game_session_actives['array_gameSession'].getId()}) }}">
+							<form action="{{ path('login_game_session', {'game_session_id': game_session.getId()}) }}">
 					    		<input class="btn btn-primary" type="submit" value={% trans %}game_session.join.submit{% endtrans %}>
 							</form>	
 						</td>

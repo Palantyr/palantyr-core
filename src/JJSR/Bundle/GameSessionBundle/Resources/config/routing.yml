@@ -6,14 +6,6 @@ create_game_session:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
-#edit_game_sessions:
-#    path:     /{_locale}/game/session/edit/{game_session_id}
-#    defaults:  
-#        _controller: GameSessionBundle:GameSession:editGameSession
-#        _locale: %app.locale_default%
-#    requirements:
-#        _locale: %app.locales_string%
 
 # AdministrationController
 game_session_administration_main_menu:
