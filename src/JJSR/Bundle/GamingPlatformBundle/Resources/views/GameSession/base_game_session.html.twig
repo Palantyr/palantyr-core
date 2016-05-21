@@ -43,7 +43,9 @@
     	{% endblock %}
     	
     	{% block jquery_javascripts %}
-        	{% javascripts '../vendor/components/jquery/jquery.js' %}
+        	{% javascripts 
+        		'../vendor/components/jquery/jquery.js'
+        		'../vendor/components/jqueryui/jquery-ui.js' %}
     			<script src="{{ asset_url }}"></script>
 			{% endjavascripts %}
         {% endblock %}

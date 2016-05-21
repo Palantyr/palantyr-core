@@ -115,14 +115,14 @@ class GameSessionTopic extends Controller implements TopicInterface
 // 	CONNECTION SECURITY
 	private function onSuscribeConectionSecurity(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
-	    if (!isset($this->clientManipulator->getClient($connection))) { // maybe require != false || != null
+	    if (!$this->clientManipulator->getClient($connection)) { // maybe require != false || != null
 	        return false;
 	    }
 
 		$room = $request->getAttributes()->get('room');
 		
 		// If game session not exist
-		if(!isset(self::gameSessionExist($room))) {
+		if(!self::gameSessionExist($room)) {
 			self::removedUserBecauseGameSessionRemoved($connection, $topic, $request);
 			return false;
 		}
