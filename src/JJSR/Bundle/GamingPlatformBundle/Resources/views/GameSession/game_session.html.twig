@@ -3,35 +3,71 @@
 {% block body %}
 	{{ include('GamingPlatformBundle:GameSession:base_popup.html.twig') }}
 	{{ ws_client() }}
-{% endblock %}
-
-{% block up_left %}
-	<div id="other_users_connected" class="other-users-connected"></div>
-{% endblock %}
-
-{% block up_right %}{% endblock %}
-
-{% block down_left %}
-	<div id="{{ app.user.username }}" class="standard-size">
-		<div class="character_sheets"></div>
-	</div>
-{% endblock %}
-
-{% block down_right %}
-	<div class="full-square">
-		<div class="panel-body">
+	
+	<div class="chat-box">
+		<div class="chat-box-body">
 			<ul id="chat" class="chat"></ul>
 		</div>
-		<div class="panel-footer">
-			<div class="input-group">
-				<input id="chat_new_text" type="text" class="form-control input-sm" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
-				<span class="input-group-btn">
-					<button id="chat_send_button" class="btn btn-warning btn-sm">{% trans %}chat.send_button{% endtrans %}</button>
-				</span>
+		<div class="chat-box-footer">
+{# 			<div class="chat-box-footer input">#}
+			<input id="chat_new_text" class="chat-box-footer input" type="text" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
+{# 			<textarea id="chat_new_text" class="chat-box-footer input" type="text" placeholder="{% trans %}chat.placeholder{% endtrans %}" /></textarea>#}
+{# 			</div>#}
+{# 			<div class="chat-box-footer button">#}
+				<button id="chat_send_button" class="chat-box-footer button">{% trans %}chat.send_button{% endtrans %}</button>
+{# 			</div>#}
+			<div class="chat-box-footer resizable">
 			</div>
 		</div>
 	</div>
+  
+{#   	<div id="resizable">#}
+{#  		<h3>Resizable</h3>#}
+{#     </div>#}
+    
+	<script type="text/javascript">
+		$( '.chat-box' ).draggable({
+		  scroll: false,
+		  containment: 'parent'
+		});
+		$( '.chat-box' ).resizable();
+
+		
+// 		$( "#resizable" ).resizable();
+
+	</script>
+	
+
+
 {% endblock %}
+
+{# {% block up_left %}#}
+{# 	<div id="other_users_connected" class="other-users-connected"></div>#}
+{# {% endblock %}#}
+
+{# {% block up_right %}{% endblock %}#}
+
+{# {% block down_left %}#}
+{# 	<div id="{{ app.user.username }}" class="standard-size">#}
+{# 		<div class="character_sheets"></div>#}
+{# 	</div>#}
+{# {% endblock %}#}
+
+{# {% block down_right %}#}
+{# 	<div class="full-square">#}
+{# 		<div class="panel-body">#}
+{# 			<ul id="chat" class="chat"></ul>#}
+{# 		</div>#}
+{# 		<div class="panel-footer">#}
+{# 			<div class="input-group">#}
+{# 				<input id="chat_new_text" type="text" class="form-control input-sm" placeholder="{% trans %}chat.placeholder{% endtrans %}" />#}
+{# 				<span class="input-group-btn">#}
+{# 					<button id="chat_send_button" class="btn btn-warning btn-sm">{% trans %}chat.send_button{% endtrans %}</button>#}
+{# 				</span>#}
+{# 			</div>#}
+{# 		</div>#}
+{# 	</div>#}
+{# {% endblock %}#}
 
 
 {% block javascripts %}
