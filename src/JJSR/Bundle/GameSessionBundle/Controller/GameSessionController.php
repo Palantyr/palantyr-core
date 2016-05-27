@@ -56,8 +56,12 @@ class GameSessionController extends Controller
     	));
     }
     
-    private function addGameSession($game_session)
+    private function addGameSession(GameSession $game_session)
     {
+        if ($game_session->getComments() == null) {
+            $game_session->setComments('');
+        }
+        
         $game_session->setOwner($this->getUser());
         $game_session->setStartDate(new \DateTime());
         $em = $this->getDoctrine()->getManager();

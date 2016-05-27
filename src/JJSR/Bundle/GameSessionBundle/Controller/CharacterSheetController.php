@@ -285,7 +285,7 @@ class CharacterSheetController extends Controller
     {
         $main_data = new CharacterSheetData();
         $main_data->setCharacterSheet($character_sheet);
-        $main_data->setName('basic_data');
+        $main_data->setName('main_data');
         $main_data->setDatatype('group');
         $character_sheet->addCharacterSheetDatum($main_data);
         

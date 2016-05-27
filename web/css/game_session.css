@@ -73,54 +73,42 @@ body .main-container {
 }
 /* Chat */
 
-
-
-
-/* body .main-container .middle-row {         */
-/*   	height: 50%; */
-/* 	width: 100%; */
-/* /*  	overflow: auto; */ */
-/*  	position: relative; */
-/* } */
-
-/* body .main-container .middle-row .middle-col { */
-/*     height: 100%; */
-/* 	width: 50%; */
-/* /* 	overflow: auto; */ */
-/*  	position: relative; */
-/*  	padding: 1px; */
-/* } */
-
-.full-square {
-  	height: 100%;
-	width: 100%;
-/* 	overflow: auto; */
- 	position: relative;
+/* Character sheet */
+.character-sheet-owner {
+	height: 120px;
+	width: 150px;
+	background-color: #CEE3F6;
+	border-style: outset;
+	display: flex;
 }
 
-/* .box-border-up-left {         */
-/*     border-style: solid; */
-/*     border-width: 0px 2px 2px 0px; */
-/*     border-color: #729fcf; */
-/* } */
-/* .box-border-up-right {         */
-/*     border-style: solid; */
-/*     border-width: 0px 0px 2px 0px; */
-/*     border-color: #729fcf; */
-/* } */
-/* .box-border-down-left {         */
-/*     border-style: solid; */
-/*     border-width: 0px 2px 0px 0px; */
-/*     border-color: #729fcf; */
-/* } */
-/* .box-border-down-right {         */
-/*     border-style: solid; */
-/* 	border-width: 0px 0px 0px 0px;	 */
-/*     border-color: #729fcf; */
-/* } */
+.character-sheet-external {
+	height: 120px;
+	width: 150px;
+	background-color: #81F79F;
+	border-style: outset;
+	display: flex;
+}
 
+.character-sheet-gamemaster {
+	height: 120px;
+	width: 150px;
+	background-color: #F78181;
+	border-style: outset;
+	display: flex;
+}
 
-/* Chat */
+.character-sheet-reduced {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+}
+
+.character-sheet-extended {
+	flex-grow: 1;
+	display: none;
+}
+
 .chat
 {
     list-style: none;

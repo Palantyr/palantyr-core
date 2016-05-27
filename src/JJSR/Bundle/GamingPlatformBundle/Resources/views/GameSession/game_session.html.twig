@@ -20,21 +20,14 @@
 			</div>
 		</div>
 	</div>
-  
-{#   	<div id="resizable">#}
-{#  		<h3>Resizable</h3>#}
-{#     </div>#}
     
 	<script type="text/javascript">
 		$( '.chat-box' ).draggable({
-		  scroll: false,
-		  containment: 'parent'
+		  	scroll: false,
+		  	containment: 'parent'
 		});
 		$( '.chat-box' ).resizable();
-
-		
-// 		$( "#resizable" ).resizable();
-
+		$( '.chat-box' ).css('position', 'absolute');
 	</script>
 	
 
@@ -73,9 +66,10 @@
 {% block javascripts %}
 
 <script>
-	var rol_game_name = "{{ game_session.getRolGame.getName() }}";
 // 	GLOBAL VARIABLES FROM TWIG 
+	var rol_game_name = "{{ game_session.getRolGame.getName() }}";
 	var user_username = "{{ app.user.username }}";
+	var gamemaster = "{{ game_session.getOwner().getUsername() }}";
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
 	var websocket = WS.connect(_WS_URI);
 // 	GLOBAL VARIABLES FROM TWIG 
@@ -212,7 +206,7 @@
 				character_sheet_id: character_sheet_id});
  		});
 
- 		$( "#"+user_username ).on("click", "#import_character_sheet_delete_button", function() {
+ 		$( ".main-container" ).on("click", "#character_sheet_delete_button", function() {
  			var character_sheet_id = getCharacterSheetIdFromElement($(this));
 		
  			session.publish(route_game_session, {
