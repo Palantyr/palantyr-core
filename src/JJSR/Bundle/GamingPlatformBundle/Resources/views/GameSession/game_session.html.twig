@@ -69,7 +69,7 @@
 // 	GLOBAL VARIABLES FROM TWIG 
 	var rol_game_name = "{{ game_session.getRolGame.getName() }}";
 	var user_username = "{{ app.user.username }}";
-	var gamemaster = "{{ game_session.getOwner().getUsername() }}";
+	var game_session_owner_username = "{{ game_session.getOwner().getUsername() }}";
 	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
 	var websocket = WS.connect(_WS_URI);
 // 	GLOBAL VARIABLES FROM TWIG 
@@ -147,7 +147,8 @@
 				session.publish(route_game_session, {
 					section: "settings",
 					option: "manage_users_request"
-			});}, 1000);
+				});
+			}, 1000);
 		});
 // SETTINGS
 
@@ -183,17 +184,17 @@
 
 
 // IMPORT CHARACTER SHEET
-		$( "#"+user_username ).on("click", "#import_character_sheet > #request_character_sheet_button", function() {
+		$( '#'+user_username ).on('click', '#import_character_sheet > #request_character_sheet_button', function() {
 			session.publish(route_game_session, {
-				section:"import_character_sheet", 
-				option: "request"
+				section:'import_character_sheet',
+				option: 'request'
 			});
 		});
 
-		$( '#request_character_sheet_button' ).on("click", function() {
+		$( '#request_character_sheet_button' ).on('click', function() {
 			session.publish(route_game_session, {
-				section:"import_character_sheet", 
-				option: "request"
+				section:'import_character_sheet',
+				option: 'request'
 			});
 		});
 
@@ -201,17 +202,17 @@
 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
 			closePopup();
 			session.publish(route_game_session, {
-				section:"import_character_sheet",
-				option: "import_own", 
+				section:'import_character_sheet',
+				option: 'import', 
 				character_sheet_id: character_sheet_id});
  		});
 
- 		$( ".main-container" ).on("click", "#character_sheet_delete_button", function() {
+ 		$( '.main-container' ).on('click', '#character_sheet_delete_button', function() {
  			var character_sheet_id = getCharacterSheetIdFromElement($(this));
 		
  			session.publish(route_game_session, {
- 				section:"import_character_sheet",
- 				option: "delete", 
+ 				section:'import_character_sheet',
+ 				option: 'delete', 
  				character_sheet_id: character_sheet_id});
  		});
 // IMPORT CHARACTER SHEET
