@@ -71,43 +71,6 @@ body .main-container {
 	width: 15px;
 	position: relative;
 }
-/* Chat */
-
-/* Character sheet */
-.character-sheet-owner {
-	height: 120px;
-	width: 150px;
-	background-color: #CEE3F6;
-	border-style: outset;
-	display: flex;
-}
-
-.character-sheet-external {
-	height: 120px;
-	width: 150px;
-	background-color: #81F79F;
-	border-style: outset;
-	display: flex;
-}
-
-.character-sheet-gamemaster {
-	height: 120px;
-	width: 150px;
-	background-color: #F78181;
-	border-style: outset;
-	display: flex;
-}
-
-.character-sheet-reduced {
-	width: 150px;
-	min-width: 150px;
-	max-width: 150px;
-}
-
-.character-sheet-extended {
-	flex-grow: 1;
-	display: none;
-}
 
 .chat
 {
@@ -186,82 +149,155 @@ body .main-container {
 }
 /* Chat */
 
+/* Character sheet */
+.character-sheet-owner {
+	height: 120px;
+	width: 150px;
+	background-color: #CEE3F6;
+	border-style: outset;
+	display: flex;
+}
+
+.character-sheet-external {
+	height: 120px;
+	width: 150px;
+	background-color: #81F79F;
+	border-style: outset;
+	display: flex;
+}
+
+.character-sheet-gamemaster {
+	height: 120px;
+	width: 150px;
+	background-color: #F78181;
+	border-style: outset;
+	display: flex;
+}
+
+.character-sheet-reduced {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+}
+
+.character-sheet-reduced .user-username {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	background-color: #F5F5F5;
+	color: #000000;
+	font-size: x-small;
+	text-align: center;
+    margin-bottom: 0px;
+}
+
+.character-sheet-reduced .character-name {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	background-color: #F5F5F5;
+	color: #000000;
+	font-size: small;
+	text-align: center;
+}
+
+.character-sheet-reduced #character_sheet_extend_button {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	text-align: center;
+}
+
+.character-sheet-reduced .private-options {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.character-sheet-extended {
+	flex-grow: 1;
+	display: none;
+}
+/* Character sheet */
 
 /* Character Sheet */
-.character_sheets {
-	height: 100%;
-	width: 100%;
- 	overflow: auto;
- 	position: relative;
- 	display: -webkit-box;
- 	display: -moz-box;
-}
-
-.character-sheet-own-box {
-  	height: 100%;
-	width: 65%;
+/* .character_sheets { */
+/* 	height: 100%; */
+/* 	width: 100%; */
 /*  	overflow: auto; */
- 	position: relative;
- 	display: -webkit-box;
- 	display: -moz-box;
-}
+/*  	position: relative; */
+/*  	display: -webkit-box; */
+/*  	display: -moz-box; */
+/* } */
 
-.character-sheet-own-box .action-bar {
-  	height: 100%;
-	width: 15%;
-	background-color: #f8f8f8;
+/* .character-sheet-own-box { */
+/*   	height: 100%; */
+/* 	width: 65%; */
+/* /*  	overflow: auto; */ */
+/*  	position: relative; */
+/*  	display: -webkit-box; */
+/*  	display: -moz-box; */
+/* } */
+
+/* .character-sheet-own-box .action-bar { */
+/*   	height: 100%; */
+/* 	width: 15%; */
+/* 	background-color: #f8f8f8; */
+/* /*  	overflow: auto; */ */
+/*  	position: relative; */
+/* } */
+
+/* .character-sheet-own-box .content { */
+/*   	height: 100%; */
+/* 	width: 85%; */
 /*  	overflow: auto; */
- 	position: relative;
-}
+/*  	position: relative; */
+/* } */
 
-.character-sheet-own-box .content {
-  	height: 100%;
-	width: 85%;
- 	overflow: auto;
- 	position: relative;
-}
-
-.other-users-connected {
-	height: 100%;
-	width: 100%;
- 	overflow: auto;
- 	position: relative;
- 	display: -webkit-box;
- 	display: -moz-box;
-}
-
-.character-sheets-external {
-  	height: 100%;
-	max-width: 85%;
+/* .other-users-connected { */
+/* 	height: 100%; */
+/* 	width: 100%; */
 /*  	overflow: auto; */
- 	position: relative;
- 	display: -webkit-box;
- 	display: -moz-box;
-}
+/*  	position: relative; */
+/*  	display: -webkit-box; */
+/*  	display: -moz-box; */
+/* } */
 
-.character-sheet-external-box {
-  	height: 100%;
-	max-width: 100%;
- 	overflow: auto;
- 	position: relative;
- 	display: -webkit-box; /*-moz-box*/
- 	display: -moz-box;
-}
+/* .character-sheets-external { */
+/*   	height: 100%; */
+/* 	max-width: 85%; */
+/* /*  	overflow: auto; */ */
+/*  	position: relative; */
+/*  	display: -webkit-box; */
+/*  	display: -moz-box; */
+/* } */
 
-.character-sheet-external-box .content {
-  	height: 100%;
-	width: 95%;
- 	overflow: auto;
- 	position: relative;
-}
-
-.character-sheet-external-box .action-bar {
-  	height: 100%;
-	width: 5%;
-	background-color: #f8f8f8;
+/* .character-sheet-external-box { */
+/*   	height: 100%; */
+/* 	max-width: 100%; */
 /*  	overflow: auto; */
- 	position: relative;
-}
+/*  	position: relative; */
+/*  	display: -webkit-box; -moz-box */
+/*  	display: -moz-box; */
+/* } */
+
+/* .character-sheet-external-box .content { */
+/*   	height: 100%; */
+/* 	width: 95%; */
+/*  	overflow: auto; */
+/*  	position: relative; */
+/* } */
+
+/* .character-sheet-external-box .action-bar { */
+/*   	height: 100%; */
+/* 	width: 5%; */
+/* 	background-color: #f8f8f8; */
+/* /*  	overflow: auto; */ */
+/*  	position: relative; */
+/* } */
 /* Character Sheet */
 
 .standard-size {

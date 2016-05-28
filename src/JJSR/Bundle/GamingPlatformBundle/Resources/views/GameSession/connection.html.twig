@@ -26,17 +26,17 @@
  		}
  	}
 		
- 	function addAllUsers(other_users_connected) {
+ 	function addAllUsers(other_users_connected) { //to delete
  		for (var other_user_connected in other_users_connected) {
  			addUser(other_users_connected[other_user_connected]);
  		}
  	}
 
- 	function addUser(user_username) {
+ 	function addUser(user_username) { //to delete
  		$( "#other_users_connected" ).append("<div id="+user_username+" class='character-sheets-external'></div> ");
  	}
 
- 	function deleteUser(user_username) {
+ 	function deleteUser(user_username) { //to delete
  		$( "#other_users_connected > #"+user_username ).remove();
  	}
 

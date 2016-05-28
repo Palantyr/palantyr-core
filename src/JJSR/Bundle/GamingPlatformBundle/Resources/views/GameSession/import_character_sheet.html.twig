@@ -128,13 +128,17 @@
  		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
 		var character_name = getCharacterName(character_sheet);
 
+		var character_sheet_extend_button_trans = '{{ 'game_session.character_sheets.extend_button'|trans }}';
 		$( "#main-container" ).append(' \
-			<div id='+character_sheet_id+' class='+character_sheet_class+'> \
+			<div id='+character_sheet_id+' class="character-sheet '+character_sheet_class+'"> \
 				<div id="character-sheet-reduced" class="character-sheet-reduced"> \
-					<label class="user_username">'+character_sheet_user_username+'</label> \
-					<br/> \
-					<label class="character_name">'+character_name+'</label> \
-					<button id="character_sheet_extend_button" title="{% trans %}game_session.character_sheets.extend_button{% endtrans %}" class="btn-sm glyphicon glyphicon-user"></button> \
+					<div class="user-username"> \
+						<label>'+character_sheet_user_username+'</label> \
+					</div> \
+					<div class="character-name"> \
+						<label>'+character_name+'</label> \
+					</div> \
+						<button id="character_sheet_extend_button" title='+character_sheet_extend_button_trans+' class="btn-sm glyphicon glyphicon-user"></button> \
 				</div> \
 		    	<div id="character-sheet-extended" class="character-sheet-extended"></div> \
 			</div> \
@@ -142,18 +146,30 @@
 
 		switch(character_sheet_permission) {
 		case 'owner':
-			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(
-	 				'<button  id="character_sheet_delete_button" title="{% trans %}game_session.character_sheets.delete_button{% endtrans %}" class="btn-lg glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button>' );
+			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheets.delete_button'|trans }}';
+			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(' \
+				<div class="private-options"> \
+ 					<button  id="character_sheet_delete_button" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button> \
+ 					<button  id="character_sheet_actions" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-menu-right" value="'+character_sheet_id+'"></button> \
+				</div>');
 			break;
 		case 'gamemaster':
-			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(
-	 				'<button  id="character_sheet_delete_button" title="{% trans %}game_session.character_sheets.delete_button{% endtrans %}" class="btn-lg glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button>' );
+			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheets.delete_button'|trans }}';
+			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(' \
+				<div class="private-options"> \
+ 					<button  id="character_sheet_delete_button" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button> \
+ 					<button  id="character_sheet_actions" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-menu-right" value="'+character_sheet_id+'"></button> \
+				</div>');
 			break; 
 		}
 
 		$( "#"+character_sheet_id ).draggable({
-		  scroll: false,
-		  containment: 'parent'
+		  	scroll: false,
+		  	containment: 'parent',
+	  		drag: function( event, ui ) {
+				$( "#main-container > .character-sheet" ).css("z-index", '');
+				$(this).css("z-index", 1);
+		  	}
 		});
 
  		for (var key_sections in character_sheet) {
@@ -186,15 +202,6 @@
 					+settings[setting]+'</span>' );
 		}
  	}
- 	
-	$( "#main-container" ).on("click", "#character_sheet_extend_button", function() {
-		if ($( this ).parent().siblings('.character-sheet-extended').css('display') == 'none') {
-			$( this ).parent().siblings('.character-sheet-extended').css('display', 'flex');
-		}
-		else {
-			$( this ).parent().siblings('.character-sheet-extended').css('display', 'none');
-		}
-	});
 
  	function typeGroupOfCharacterSheet(group, father_div_identification) 
  	{
@@ -270,4 +277,13 @@
  	{
 		return character_sheet['character_sheet_settings']['character_sheet_name'];
  	}
+
+	$( "#main-container" ).on("click", "#character_sheet_extend_button", function() {
+		if ($( this ).parent().siblings('.character-sheet-extended').css('display') == 'none') {
+			$( this ).parent().siblings('.character-sheet-extended').css('display', 'flex');
+		}
+		else {
+			$( this ).parent().siblings('.character-sheet-extended').css('display', 'none');
+		}
+	});
 </script>

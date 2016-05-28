@@ -208,12 +208,15 @@
  		});
 
  		$( '.main-container' ).on('click', '#character_sheet_delete_button', function() {
- 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
-		
- 			session.publish(route_game_session, {
- 				section:'import_character_sheet',
- 				option: 'delete', 
- 				character_sheet_id: character_sheet_id});
+ 		    if (confirm("Are you sure?")) { //need trans
+ 	 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
+ 	 			
+ 	 			session.publish(route_game_session, {
+ 	 				section:'import_character_sheet',
+ 	 				option: 'delete', 
+ 	 				character_sheet_id: character_sheet_id});
+ 		    }
+ 		    return false;
  		});
 // IMPORT CHARACTER SHEET
 

@@ -1,4 +1,6 @@
 game_session:
+    character_sheets:
+        extend_button: View #to complete
 #    join:
 #        submit: Join
 #        title: Join game session
