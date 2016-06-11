@@ -8,10 +8,6 @@
         	<link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
         {% endblock %}
         
-{#         {% image 'css/jquery-ui-darkness/images/*' %}#}
-{#    			<img src="{{ asset_url }}" alt="Example" />#}
-{#         {% endimage %}#}
-        
         {% block stylesheets %}
 			<link href="{{ asset('css/game_session.css') }}" rel="stylesheet" media="screen">
         	<link href="{{ asset('css/navigation_sidebar.css') }}" rel="stylesheet" media="screen">
@@ -58,22 +54,6 @@
         
         <div id="main-container" class="main-container">
 			{% block body %}{% endblock %}
-{# 			<div class="middle-row">#}
-{# 				<div class="col-md-6 middle-col box-border-up-left">#}
-{# 					{% block up_left %}{% endblock %}#}
-{# 				</div>#}
-{# 				<div class="col-md-6 middle-col box-border-up-right">#}
-{# 					{% block up_right %}{% endblock %}#}
-{# 				</div>#}
-{# 			</div>#}
-{# 			<div class="middle-row">#}
-{# 			<div class="col-md-6 middle-col"> {#box-border-down-left#}
-{# 					{% block down_left %}{% endblock %}#}
-{# 				</div>#}
-{# 				<div class="col-md-6 middle-col box-border-down-right">#}
-{# 					{% block down_right %}{% endblock %}#}
-{# 				</div>#}
-{# 			</div>#}
     	</div>
         
         {% block bootstrap_javascripts %}

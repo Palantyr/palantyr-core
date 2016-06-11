@@ -221,6 +221,10 @@ body .main-container {
 	flex-grow: 1;
 	display: none;
 }
+
+.character-sheet-functional-panel {
+	border-style: solid;
+}
 /* Character sheet */
 
 /* Character Sheet */
