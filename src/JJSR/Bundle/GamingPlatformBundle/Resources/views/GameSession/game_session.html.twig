@@ -184,6 +184,22 @@
 
 
 // FUNCTIONALITY CHARACTER SHEET
+     	$( "#main-container" ).on("click", "#functional_panel_throw_button", function() {
+    		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
+    		if (character_sheet_id) {
+//     			alert(JSON.stringify(character_sheets_current_functionality[character_sheet_id]));
+    			character_sheet_functionality_executed_json = JSON.stringify(character_sheets_current_functionality[character_sheet_id]);
+
+    			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
+ 	 			session.publish(route_game_session, {
+ 	 				section:'functionality_character_sheet',
+ 	 				option: 'execute_functionality', 
+ 	 				character_sheet_id: character_sheet_id,
+ 	 				character_sheet_functionality_executed_json: character_sheet_functionality_executed_json
+ 				});
+    		}
+     	});
+
  		$( "#"+user_username ).on("click", "#individual_functionality_panel > #individual_functionality_panel_throw_button", function() {
 
  			var elements = $("#individual_functionality_panel > div").toArray();

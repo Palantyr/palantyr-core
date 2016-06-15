@@ -119,6 +119,14 @@ class CharacterSheetController extends Controller
         elseif ($id_modified == 'strength_temporary_score') {
             $fields_modificated['strength_temporary_modifier'] = rand(1, 10);
         }
+        elseif ($id_modified == 'constitution_actual_score') {
+            $fields_modificated['constitution_actual_modifier'] = rand(1, 10);
+        }
+        elseif ($id_modified == 'constitution_temporary_score') {
+            $fields_modificated['constitution_temporary_modifier'] = rand(1, 10);
+            $fields_modificated['hit_points_total'] = 20 + $fields_modificated['constitution_temporary_modifier'];
+            $fields_modificated['hit_points_current'] = $fields_modificated['hit_points_total'];
+        }
         
         return $fields_modificated;
     }
@@ -277,6 +285,8 @@ class CharacterSheetController extends Controller
         
         $requestDerivationFields[] = 'strength_actual_score';
         $requestDerivationFields[] = 'strength_temporary_score';
+        $requestDerivationFields[] = 'constitution_actual_score';
+        $requestDerivationFields[] = 'constitution_temporary_score';
         
         return $requestDerivationFields;
     }
@@ -360,6 +370,7 @@ class CharacterSheetController extends Controller
         $attributes->setDisplayName('Attributes');
         $character_sheet->addCharacterSheetDatum($attributes);
         
+        
         $strengrh_actual = new CharacterSheetData();
         $strengrh_actual->setName('strength_actual');
         $strengrh_actual->setDatatype('group');
@@ -373,26 +384,10 @@ class CharacterSheetController extends Controller
         $strength_actual_score->setCharacterSheetDataGroup($strengrh_actual);
         $strengrh_actual->addCharacterSheetDatum($strength_actual_score);
         
-        
-//         $strength_actual_modifier_value = array(
-//             'type' => 'integer_division_by_low',
-//             'value' => array(
-//                 'dividend' => array(
-//                     'type' => 'field',
-//                     'value' => 'strength_actual_value'),
-//                 'divider' => array(
-//                     'type' => 'numeric',
-//                     'value' => '2'
-//                 )
-//             )
-//         );
-//         $strength_actual_modifier_value_json = json_encode($strength_actual_modifier_value);
-        
         $strength_actual_modifier = new CharacterSheetData();
         $strength_actual_modifier->setName('strength_actual_modifier');
         $strength_actual_modifier->setDatatype('derived');
         $strength_actual_modifier->setDisplayName('Strength actual modifier');
-//         $strength_actual_modifier->setValue($strength_actual_modifier_value_json);
         $strength_actual_modifier->setCharacterSheetDataGroup($strengrh_actual);
         $strengrh_actual->addCharacterSheetDatum($strength_actual_modifier);
         
@@ -415,5 +410,67 @@ class CharacterSheetController extends Controller
         $strength_temporary_modifier->setDisplayName('Strength temporary modifier');
         $strength_temporary_modifier->setCharacterSheetDataGroup($strengrh_temporary);
         $strengrh_temporary->addCharacterSheetDatum($strength_temporary_modifier);
+        
+        
+        $constitution_actual = new CharacterSheetData();
+        $constitution_actual->setName('constitution_actual');
+        $constitution_actual->setDatatype('group');
+        $constitution_actual->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($constitution_actual);
+        
+        $constitution_actual_score = new CharacterSheetData();
+        $constitution_actual_score->setName('constitution_actual_score');
+        $constitution_actual_score->setDatatype('field');
+        $constitution_actual_score->setDisplayName('Constitution actual score');
+        $constitution_actual_score->setCharacterSheetDataGroup($constitution_actual);
+        $constitution_actual->addCharacterSheetDatum($constitution_actual_score);
+        
+        $constitution_actual_modifier = new CharacterSheetData();
+        $constitution_actual_modifier->setName('constitution_actual_modifier');
+        $constitution_actual_modifier->setDatatype('derived');
+        $constitution_actual_modifier->setDisplayName('Constitution actual modifier');
+        $constitution_actual_modifier->setCharacterSheetDataGroup($constitution_actual);
+        $constitution_actual->addCharacterSheetDatum($constitution_actual_modifier);
+        
+        $constitution_temporary = new CharacterSheetData();
+        $constitution_temporary->setName('constitution_temporary');
+        $constitution_temporary->setDatatype('group');
+        $constitution_temporary->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($constitution_temporary);
+        
+        $constitution_temporary_score = new CharacterSheetData();
+        $constitution_temporary_score->setName('constitution_temporary_score');
+        $constitution_temporary_score->setDatatype('field');
+        $constitution_temporary_score->setDisplayName('Constitution temporary score');
+        $constitution_temporary_score->setCharacterSheetDataGroup($constitution_temporary);
+        $constitution_temporary->addCharacterSheetDatum($constitution_temporary_score);
+        
+        $constitution_temporary_modifier = new CharacterSheetData();
+        $constitution_temporary_modifier->setName('constitution_temporary_modifier');
+        $constitution_temporary_modifier->setDatatype('derived');
+        $constitution_temporary_modifier->setDisplayName('Constitution temporary modifier');
+        $constitution_temporary_modifier->setCharacterSheetDataGroup($constitution_temporary);
+        $constitution_temporary->addCharacterSheetDatum($constitution_temporary_modifier);
+        
+        
+        $hit_points = new CharacterSheetData();
+        $hit_points->setCharacterSheet($character_sheet);
+        $hit_points->setName('hit_points');
+        $hit_points->setDatatype('group');
+        $character_sheet->addCharacterSheetDatum($hit_points);
+        
+        $hit_points_total = new CharacterSheetData();
+        $hit_points_total->setName('hit_points_total');
+        $hit_points_total->setDatatype('derived');
+        $hit_points_total->setDisplayName('Hit points total');
+        $hit_points_total->setCharacterSheetDataGroup($hit_points);
+        $hit_points->addCharacterSheetDatum($hit_points_total);
+        
+        $hit_points_current = new CharacterSheetData();
+        $hit_points_current->setName('hit_points_current');
+        $hit_points_current->setDatatype('derived');
+        $hit_points_current->setDisplayName('Hit points current');
+        $hit_points_current->setCharacterSheetDataGroup($hit_points);
+        $hit_points->addCharacterSheetDatum($hit_points_current);
     }
 }

@@ -869,447 +869,6 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function getCharacterSheetUserUsername ($character_sheet) {
 		return $character_sheet['character_sheet_settings']['user_username'];
 	}
-	
-// 	private function getCharacterSheetsFromUserPablo () {
-// 		return array(
-// 				'0' => array(
-// 						'character_sheet_settings' => array(
-// 								'character_sheet_id' => "4",
-// 								'character_sheet_template_version' => "1",
-// 								'character_sheet_version' => "1",
-// 								'character_sheet_name' => "My first vampire",
-// 								'rol_game' => "Vampire 20",
-// 								'rol_game_version' => "1",
-// 								'user_username' => "Pablo"
-// 						),
-// 						'0' => array(
-// 								'id' => "basic_info",
-// 								'name' => null,
-// 								'type' => "group",
-// 								'0' => array(
-// 										'id' => "character_name",
-// 										'name' => "Name",
-// 										'type' => "field",
-// 										'value' => "Ryan"
-// 								),
-// 								'1' => array(
-// 										'id' => "user_username",
-// 										'name' => "Player",
-// 										'type' => "field",
-// 										'value' => "Pablo"
-// 								),
-// 								'2' => array(
-// 										'id' => "chronicle",
-// 										'name' => "Chronicle",
-// 										'type' => "field",
-// 										'value' => "The First Game"
-// 								),
-// 								'3' => array(
-// 										'id' => "nature",
-// 										'name' => "Nature",
-// 										'type' => "field",
-// 										'value' => "My nature"
-// 								),
-// 								'4' => array(
-// 										'id' => "conduct",
-// 										'name' => "Conduct",
-// 										'type' => "field",
-// 										'value' => "My conduct"
-// 								),
-// 								'5' => array(
-// 										'id' => "concept",
-// 										'name' => "Concept",
-// 										'type' => "field",
-// 										'value' => "My concept"
-// 								),
-// 								'6' => array(
-// 										'id' => "clan",
-// 										'name' => "Clan",
-// 										'type' => "field",
-// 										'value' => "LaSombra"
-// 								),
-// 								'7' => array(
-// 										'id' => "generation",
-// 										'name' => "Generation",
-// 										'type' => "field",
-// 										'value' => "7ª"
-// 								),
-// 								'8' => array(
-// 										'id' => "sire",
-// 										'name' => "Sire",
-// 										'type' => "field",
-// 										'value' => "Kupala"
-// 								),
-// 						),
-// 						'1' => array(
-// 								'id' => "atributtes",
-// 								'name' => "Atributtes",
-// 								'type' => "group",
-// 								'0' => array(
-// 										'id' => "physical",
-// 										'name' => "Physical",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "strength",
-// 												'name' => "Strength",
-// 												'type' => "field",
-// 												'value' => "5"
-// 										),
-// 										'1' => array(
-// 												'id' => "dexterity",
-// 												'name' => "Dexterity",
-// 												'type' => "field",
-// 												'value' => "3"
-// 										),
-// 										'2' => array(
-// 												'id' => "stamina",
-// 												'name' => "Stamina",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										)
-// 								),
-// 								'1' => array(
-// 										'id' => "social",
-// 										'name' => "Social",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "charisma",
-// 												'name' => "Charisma",
-// 												'type' => "field",
-// 												'value' => "4"
-// 										),
-// 										'1' => array(
-// 												'id' => "manipulation",
-// 												'name' => "Manipulation",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										),
-// 										'2' => array(
-// 												'id' => "apperance",
-// 												'name' => "Apperance",
-// 												'type' => "field",
-// 												'value' => "3"
-// 										)
-// 								),
-// 								'2' => array(
-// 										'id' => "mental",
-// 										'name' => "Mental",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "perception",
-// 												'name' => "Perception",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										),
-// 										'1' => array(
-// 												'id' => "inteligence",
-// 												'name' => "Inteligence",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										),
-// 										'2' => array(
-// 												'id' => "wits",
-// 												'name' => "Wits",
-// 												'type' => "field",
-// 												'value' => "4"
-// 										)
-// 								)
-// 						),
-// 						'2' => array(
-// 								'id' => "abilities",
-// 								'name' => "Abilities",
-// 								'type' => "group",
-// 								'0' => array(
-// 										'id' => "talents",
-// 										'name' => "Talents",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "acting",
-// 												'name' => "Acting",
-// 												'type' => "field",
-// 												'value' => "0"
-// 										),
-// 										'1' => array(
-// 												'id' => "alertness",
-// 												'name' => "Alertness",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										),
-// 										'2' => array(
-// 												'id' => "athletics",
-// 												'name' => "Athletics",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										)
-// 								),
-// 								'1' => array(
-// 										'id' => "skills",
-// 										'name' => "Skills",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "animal_ken",
-// 												'name' => "Animal Ken",
-// 												'type' => "field",
-// 												'value' => "0"
-// 										),
-// 										'1' => array(
-// 												'id' => "drive",
-// 												'name' => "Drive",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										),
-// 										'2' => array(
-// 												'id' => "etiquette",
-// 												'name' => "Etiquette",
-// 												'type' => "field",
-// 												'value' => "0"
-// 										)
-// 								),
-// 								'2' => array(
-// 										'id' => "knowledge",
-// 										'name' => "Knowledge",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "bureaucracy",
-// 												'name' => "Bureaucracy",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										),
-// 										'1' => array(
-// 												'id' => "computer",
-// 												'name' => "Computer",
-// 												'type' => "field",
-// 												'value' => "4"
-// 										),
-// 										'2' => array(
-// 												'id' => "finance",
-// 												'name' => "Finance",
-// 												'type' => "field",
-// 												'value' => "2"
-// 										)
-// 								)
-// 						)
-// 				),
-// 				'1' => array(
-// 						'character_sheet_settings' => array(
-// 								'character_sheet_id' => "5",
-// 								'character_sheet_template_version' => "1",
-// 								'character_sheet_version' => "1",
-// 								'character_sheet_name' => "My second vampire",
-// 								'rol_game' => "Vampire 20",
-// 								'rol_game_version' => "1",
-// 								'user_username' => "Pablo"
-// 						),
-// 						'0' => array(
-// 								'id' => "basic_info",
-// 								'name' => null,
-// 								'type' => "group",
-// 								'0' => array(
-// 										'id' => "character_name",
-// 										'name' => "Name",
-// 										'type' => "field",
-// 										'value' => "Dimitri"
-// 								),
-// 								'1' => array(
-// 										'id' => "user_username",
-// 										'name' => "Player",
-// 										'type' => "field",
-// 										'value' => "Pablo"
-// 								),
-// 								'2' => array(
-// 										'id' => "chronicle",
-// 										'name' => "Chronicle",
-// 										'type' => "field",
-// 										'value' => "The First Game"
-// 								),
-// 								'3' => array(
-// 										'id' => "nature",
-// 										'name' => "Nature",
-// 										'type' => "field",
-// 										'value' => "My nature"
-// 								),
-// 								'4' => array(
-// 										'id' => "conduct",
-// 										'name' => "Conduct",
-// 										'type' => "field",
-// 										'value' => "My conduct"
-// 								),
-// 								'5' => array(
-// 										'id' => "concept",
-// 										'name' => "Concept",
-// 										'type' => "field",
-// 										'value' => "My concept"
-// 								),
-// 								'6' => array(
-// 										'id' => "clan",
-// 										'name' => "Clan",
-// 										'type' => "field",
-// 										'value' => "LaSombra"
-// 								),
-// 								'7' => array(
-// 										'id' => "generation",
-// 										'name' => "Generation",
-// 										'type' => "field",
-// 										'value' => "8ª"
-// 								),
-// 								'8' => array(
-// 										'id' => "sire",
-// 										'name' => "Sire",
-// 										'type' => "field",
-// 										'value' => "Drácula"
-// 								),
-// 						),
-// 						'1' => array(
-// 								'id' => "atributtes",
-// 								'name' => "Atributtes",
-// 								'type' => "group",
-// 								'0' => array(
-// 										'id' => "physical",
-// 										'name' => "Physical",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "strength",
-// 												'name' => "Strength",
-// 												'type' => "field",
-// 												'value' => "4"
-// 										),
-// 										'1' => array(
-// 												'id' => "dexterity",
-// 												'name' => "Dexterity",
-// 												'type' => "field",
-// 												'value' => "4"
-// 										),
-// 										'2' => array(
-// 												'id' => "stamina",
-// 												'name' => "Stamina",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										)
-// 								),
-// 								'1' => array(
-// 										'id' => "social",
-// 										'name' => "Social",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "charisma",
-// 												'name' => "Charisma",
-// 												'type' => "field",
-// 												'value' => "5"
-// 										),
-// 										'1' => array(
-// 												'id' => "manipulation",
-// 												'name' => "Manipulation",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										),
-// 										'2' => array(
-// 												'id' => "apperance",
-// 												'name' => "Apperance",
-// 												'type' => "field",
-// 												'value' => "4"
-// 										)
-// 								),
-// 								'2' => array(
-// 										'id' => "mental",
-// 										'name' => "Mental",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "perception",
-// 												'name' => "Perception",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										),
-// 										'1' => array(
-// 												'id' => "inteligence",
-// 												'name' => "Inteligence",
-// 												'type' => "field",
-// 												'value' => "3"
-// 										),
-// 										'2' => array(
-// 												'id' => "wits",
-// 												'name' => "Wits",
-// 												'type' => "field",
-// 												'value' => "3"
-// 										)
-// 								)
-// 						),
-// 						'2' => array(
-// 								'id' => "abilities",
-// 								'name' => "Abilities",
-// 								'type' => "group",
-// 								'0' => array(
-// 										'id' => "talents",
-// 										'name' => "Talents",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "acting",
-// 												'name' => "Acting",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										),
-// 										'1' => array(
-// 												'id' => "alertness",
-// 												'name' => "Alertness",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										),
-// 										'2' => array(
-// 												'id' => "athletics",
-// 												'name' => "Athletics",
-// 												'type' => "field",
-// 												'value' => "3"
-// 										)
-// 								),
-// 								'1' => array(
-// 										'id' => "skills",
-// 										'name' => "Skills",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "animal_ken",
-// 												'name' => "Animal Ken",
-// 												'type' => "field",
-// 												'value' => "0"
-// 										),
-// 										'1' => array(
-// 												'id' => "drive",
-// 												'name' => "Drive",
-// 												'type' => "field",
-// 												'value' => "0"
-// 										),
-// 										'2' => array(
-// 												'id' => "etiquette",
-// 												'name' => "Etiquette",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										)
-// 								),
-// 								'2' => array(
-// 										'id' => "knowledge",
-// 										'name' => "Knowledge",
-// 										'type' => "group",
-// 										'0' => array(
-// 												'id' => "bureaucracy",
-// 												'name' => "Bureaucracy",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										),
-// 										'1' => array(
-// 												'id' => "computer",
-// 												'name' => "Computer",
-// 												'type' => "field",
-// 												'value' => "5"
-// 										),
-// 										'2' => array(
-// 												'id' => "finance",
-// 												'name' => "Finance",
-// 												'type' => "field",
-// 												'value' => "1"
-// 										)
-// 								)
-// 						)
-// 				)
-// 		);
-// 	}
 // 	IMPORT CHARACTER SHEET
 
 // 	FUNCTIONALITY CHARACTER SHEET
@@ -1325,7 +884,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	{
 	    $character_sheet_functionality = array();
 	    $character_sheet_functionality['character_sheet_owner_functionality'] = self::getPathfinderOwnerFunctionality();
-	    $character_sheet_functionality['character_sheet_gamemaster_functionality'] = array();
+	    $character_sheet_functionality['character_sheet_gamemaster_functionality'] = self::getPathfinderGamemasterFunctionality();
 	    
 	    return $character_sheet_functionality;
 	}
@@ -1334,43 +893,96 @@ class GameSessionTopic extends Controller implements TopicInterface
 	{
 	    $pathfinder_owner_functionality = array();
 	    
-	    $pathfinder_owner_functionality_strength_actual_modifier = array();
-	    $pathfinder_owner_functionality_strength_actual_modifier['functionality_type'] = 'individual';
-	    $pathfinder_owner_functionality_strength_actual_modifier['identifier'] = 'strength_actual_modifier';
-	    $pathfinder_owner_functionality_strength_actual_modifier['multiple_selection_list'] = null;
+	    $pathfinder_owner_functionality_strength_temporary_modifier = array();
+	    $pathfinder_owner_functionality_strength_temporary_modifier['functionality_type'] = 'individual';
+	    $pathfinder_owner_functionality_strength_temporary_modifier['identifier'] = 'strength_temporary_modifier';
+	    $pathfinder_owner_functionality_strength_temporary_modifier['multiple_selection_list'] = null;
 	    
 	    $list_of_modifiers = array();
 	    $list_of_modifiers['type'] = 'sum';
 	    $list_of_modifiers['value'] = array();
 	    $list_of_modifiers['value'][] = array('type' => 'dice', 'name' => null, 'value' => 20);
-	    $list_of_modifiers['value'][] = array('type' => 'derived', 'name' => 'strength_actual_modifier', 'value' => null);
-	    $pathfinder_owner_functionality_strength_actual_modifier['list_of_modifiers'] = $list_of_modifiers;
+	    $list_of_modifiers['value'][] = array('type' => 'derived', 'name' => 'strength_temporary_modifier', 'value' => null);
+	    $pathfinder_owner_functionality_strength_temporary_modifier['list_of_modifiers'] = $list_of_modifiers;
 	    
-	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_strength_actual_modifier;
+	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_strength_temporary_modifier;
+	    
+	    
+	    $pathfinder_owner_functionality_constitution_temporary_modifier = array();
+	    $pathfinder_owner_functionality_constitution_temporary_modifier['functionality_type'] = 'individual';
+	    $pathfinder_owner_functionality_constitution_temporary_modifier['identifier'] = 'constitution_temporary_modifier';
+	    $pathfinder_owner_functionality_constitution_temporary_modifier['multiple_selection_list'] = null;
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'dice', 'name' => null, 'value' => 20);
+	    $list_of_modifiers['value'][] = array('type' => 'derived', 'name' => 'constitution_temporary_modifier', 'value' => null);
+	    $pathfinder_owner_functionality_constitution_temporary_modifier['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_constitution_temporary_modifier;
 	    
 	    return $pathfinder_owner_functionality;
 	}
 	
+	private function getPathfinderGamemasterFunctionality()
+	{
+	    $pathfinder_gamemaster_functionality = array();
+	    
+	    $pathfinder_gamemaster_functionality_damage_hit_points = array();
+	    $pathfinder_gamemaster_functionality_damage_hit_points['functionality_type'] = 'collective';
+	    $pathfinder_gamemaster_functionality_damage_hit_points['identifier'] = 'damage_hit_points';
+	    $pathfinder_gamemaster_functionality_damage_hit_points['name'] = 'Damage hit points';
+	    $pathfinder_gamemaster_functionality_damage_hit_points['access_list'] = array('Gamemaster', 'HIT', 'damage');
+	    
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'subtraction';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'hit_points_current', 'value' => null);
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => null, 'value' => 1);
+	    $pathfinder_gamemaster_functionality_damage_hit_points['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $pathfinder_gamemaster_functionality[] = $pathfinder_gamemaster_functionality_damage_hit_points;
+	    
+	    
+	    $pathfinder_gamemaster_functionality_heal_hit_points = array();
+	    $pathfinder_gamemaster_functionality_heal_hit_points['functionality_type'] = 'collective';
+	    $pathfinder_gamemaster_functionality_heal_hit_points['identifier'] = 'heal_hit_points';
+	    $pathfinder_gamemaster_functionality_heal_hit_points['name'] = 'Heal hit points';
+	    $pathfinder_gamemaster_functionality_heal_hit_points['access_list'] = array('Gamemaster', 'HIT', 'heal');
+	    
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'hit_points_current', 'value' => null);
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => null, 'value' => 1);
+	    $pathfinder_gamemaster_functionality_damage_hit_points['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $pathfinder_gamemaster_functionality[] = $pathfinder_gamemaster_functionality_heal_hit_points;
+	    
+	    
+	    return $pathfinder_gamemaster_functionality;
+	}
+	
 	private function onPublishFunctionality (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
 		switch ($event['option']) {
-			case "individual":
-				$throwing = json_decode($event['throwing']);
-// 				$result = getIndividualResult($throwing);
+		    case 'execute_functionality':
+		        $character_sheet_functionality_executed = json_decode($event['character_sheet_functionality_executed_json']);
 
-                $random = rand(0, 10);
-				$result = "The result is ".$random." hits";
-				
-				$date = new \DateTime();
-				$date = $date->format('H:i:s');
-				
-				$topic->broadcast([
-						'section' => "chat",
-				        'option' => 'add_text',
-						'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
-						'text' => $result,
-						'date' => $date,
-				]);
-				break;
+		        $random = rand(0, 10);
+		        $result = "The result is ".$random." hits";
+		        
+		        $date = new \DateTime();
+		        $date = $date->format('H:i:s');
+		        
+		        $topic->broadcast([
+		            'section' => "chat",
+		            'option' => 'add_text',
+		            'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+		            'text' => $result,
+		            'date' => $date,
+		        ]);
+		        break;
 		}
 	}
 // 	FUNCTIONALITY CHARACTER SHEET

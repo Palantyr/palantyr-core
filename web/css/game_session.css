@@ -222,6 +222,33 @@ body .main-container {
 	display: none;
 }
 
+.character-sheet-access-list {
+	flex-grow: 1;
+/* 	display: none; */
+}
+
+.character-sheet-access-list .functional-element {
+	border-style: solid;
+	border-color: red;
+/* 	display: none; */
+}
+
+.character-sheet-access-list .nonfunctional-element {
+	border-style: solid;
+	border-color: green;
+/* 	display: none; */
+}
+
+
+
+
+
+
+/* .character-sheet-individual-panel { */
+/* 	flex-grow: 1; */
+/* 	display: none; */
+/* } */
+
 .character-sheet-functional-panel {
 	border-style: solid;
 }
