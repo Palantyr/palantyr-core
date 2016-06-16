@@ -140,7 +140,7 @@
 						<button id="character_sheet_extend_button" title='+character_sheet_extend_button_trans+' class="btn-sm glyphicon glyphicon-user"></button> \
 				</div> \
 		    	<div id="character_sheet_extended" class="character-sheet-extended"></div> \
-		    	<div id="character_sheet_access_list" class="character-sheet-access-list"></div> \
+		    	 \
 			</div> \
 		');
 
@@ -148,9 +148,9 @@
 		case 'owner', 'gamemaster':
 			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheets.delete_button'|trans }}';
 			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(' \
-				<div class="private-options"> \
- 					<button  id="character_sheet_delete_button" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button> \
- 					<button  id="character_sheet_actions" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-menu-right" value="'+character_sheet_id+'"></button> \
+				<div id="private_options" class="private-options"> \
+					<div id="character_sheet_access_list" class="character-sheet-access-list"></div> \
+ 					<button id="character_sheet_delete_button" title='+character_sheet_delete_button_trans+' class="btn-sm glyphicon glyphicon-trash" value="'+character_sheet_id+'"></button> \
 				</div>');
 
 // 			if ()
@@ -297,38 +297,63 @@
 		}
  	}
 
- 	function addCollectivePanelToCharacterSheet(character_sheet_id) { //prepare
+ 	function addCollectivePanelToCharacterSheet(character_sheet_id) {
  		var character_sheet_collective_functionality_access_list = character_sheets_collective_functionality_access_list[character_sheet_id];
+ 	 	
+		$( "#"+character_sheet_id+" #character_sheet_access_list" ).append(' \
+				<nav id="main-nav" role="navigation"> \
+				<ul id="character-sheet-access-list" class="sm sm-vertical sm-clean"> \
+					<li id="actions"> \
+    					<a href="#">  \
+    						Actions \
+    					</a> \
+						<ul></ul> \
+					</li> \
+				</ul> \
+			</nav> \
+		');
 
- 		$( "#"+character_sheet_id ).on('click', "#character_sheet_actions", function() {
- 			addCollectivePanelToCharacterSheetAux(character_sheet_id, character_sheet_collective_functionality_access_list);
- 	 	});
-		
- 		alert(JSON.stringify(character_sheet_collective_functionality_access_list));
+		addCollectivePanelToCharacterSheetAux(character_sheet_id, character_sheet_collective_functionality_access_list, '#main-nav #actions > ul');
+		$(function() {
+			$( "#character-sheet-access-list" ).smartmenus({
+				mainMenuSubOffsetX: 6,
+				mainMenuSubOffsetY: -6,
+				subMenusSubOffsetX: 6,
+				subMenusSubOffsetY: -6
+			});
+		});
+//  		alert(JSON.stringify(character_sheet_collective_functionality_access_list));
  	}
 
- 	function addCollectivePanelToCharacterSheetAux(character_sheet_id, elements_of_access_list) {
-//  		$.each( elements_of_access_list, function( key, value ) {
-//  			if (typeof value == 'string') { //is functional
-//  	 			$( "#"+character_sheet_id+" > #character_sheet_access_list" ).append(
-//  	 	 				"<div id="+value+" class='functional-element '>"+key+"</div>");
+ 	function addCollectivePanelToCharacterSheetAux(character_sheet_id, elements_of_access_list, father_div_identification) {
+ 		$.each( elements_of_access_list, function( key, value ) {
+ 			if (typeof value == 'string') { //is functional
+ 				$( "#"+character_sheet_id+" #character_sheet_access_list "+father_div_identification ).append(' \
+ 	 				<li id='+value+'> \
+						<a href="#">  \
+							'+key+' \
+						</a> \
+ 	 				</li> \
+ 				');
 
-//  				//if click id....
-//  	 		}
-//  			else { //is not functional
-//  	 			$( "#"+character_sheet_id+" > #character_sheet_access_list" ).append(
-//  	 	 				"<div id="+key+" class='nonfunctional-element'>"+key+"</div>");
- 					
-//  	 	 		$( "#"+character_sheet_id ).on('click', "#"+key, function() {
-//  	 	 			addCollectivePanelToCharacterSheetAux(character_sheet_id, value);
+ 				//if click id....
+//  	 	 		$( "#"+character_sheet_id ).on('click', "#"+value, function() {
+//  	 	 			execute
 //  	 	 	 	});
-//  	 		}
-//  		});
-
-		$( "#"+character_sheet_id+" > #character_sheet_access_list" ).append();
+ 	 		}
+ 			else { //is not functional
+ 	 			$( "#"+character_sheet_id+" #character_sheet_access_list "+father_div_identification ).append(' \
+ 					<li id='+key+'> \
+ 						<a href="#">  \
+ 							'+key+' \
+ 						</a> \
+						<ul></ul> \
+ 					</li> \
+ 				');
+ 	 			addCollectivePanelToCharacterSheetAux(character_sheet_id, value, '#'+key+' > ul');
+ 	 		}
+ 		});
  	}
-
-
 
  	function listOfModifiers(list_of_modifiers, character_sheet_id)
  	{
