@@ -160,7 +160,7 @@
 			});
 		});
 
-		$( '#myModal' ).on('click', '#import_character_sheet_button', function() {
+		$( '#myModal' ).on('click', '#character_sheet_import_button', function() {
 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
 			closePopup();
 			session.publish(route_game_session, {

@@ -939,7 +939,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['type'] = 'subtraction';
 	    $list_of_modifiers['value'] = array();
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'hit_points_current', 'value' => null);
-	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => null, 'value' => 1);
+	    $list_of_modifiers['value'][] = array('type' => 'new_field', 'name' => null, 'value' => 1);
 	    $pathfinder_gamemaster_functionality_damage_hit_points['list_of_modifiers'] = $list_of_modifiers;
 	    
 	    $pathfinder_gamemaster_functionality[] = $pathfinder_gamemaster_functionality_damage_hit_points;
@@ -955,8 +955,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['type'] = 'sum';
 	    $list_of_modifiers['value'] = array();
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'hit_points_current', 'value' => null);
-	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => null, 'value' => 1);
-	    $pathfinder_gamemaster_functionality_damage_hit_points['list_of_modifiers'] = $list_of_modifiers;
+	    $list_of_modifiers['value'][] = array('type' => 'new_field', 'name' => null, 'value' => 1);
+	    $pathfinder_gamemaster_functionality_heal_hit_points['list_of_modifiers'] = $list_of_modifiers;
 	     
 	    $pathfinder_gamemaster_functionality[] = $pathfinder_gamemaster_functionality_heal_hit_points;
 	    
