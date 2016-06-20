@@ -922,6 +922,23 @@ class GameSessionTopic extends Controller implements TopicInterface
 	     
 	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_constitution_temporary_modifier;
 	    
+	    
+	    $pathfinder_owner_functionality_mele_attack = array();
+	    $pathfinder_owner_functionality_mele_attack['functionality_type'] = 'collective';
+	    $pathfinder_owner_functionality_mele_attack['identifier'] = 'attack_mele_punch';
+	    $pathfinder_owner_functionality_mele_attack['name'] = 'Punch';
+	    $pathfinder_owner_functionality_mele_attack['access_list'] = array('Attack', 'Mele');
+	    
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'strength_temporary_modifier', 'value' => null);
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'dexterity_temporary_modifier', 'value' => null);
+	    $pathfinder_owner_functionality_mele_attack['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_mele_attack;
+	    
+	    
 	    return $pathfinder_owner_functionality;
 	}
 	
@@ -933,7 +950,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $pathfinder_gamemaster_functionality_damage_hit_points['functionality_type'] = 'collective';
 	    $pathfinder_gamemaster_functionality_damage_hit_points['identifier'] = 'damage_hit_points';
 	    $pathfinder_gamemaster_functionality_damage_hit_points['name'] = 'Damage hit points';
-	    $pathfinder_gamemaster_functionality_damage_hit_points['access_list'] = array('Gamemaster', 'HIT', 'damage');
+	    $pathfinder_gamemaster_functionality_damage_hit_points['access_list'] = array('Gamemaster');
 	    
 	    $list_of_modifiers = array();
 	    $list_of_modifiers['type'] = 'subtraction';
@@ -949,7 +966,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $pathfinder_gamemaster_functionality_heal_hit_points['functionality_type'] = 'collective';
 	    $pathfinder_gamemaster_functionality_heal_hit_points['identifier'] = 'heal_hit_points';
 	    $pathfinder_gamemaster_functionality_heal_hit_points['name'] = 'Heal hit points';
-	    $pathfinder_gamemaster_functionality_heal_hit_points['access_list'] = array('Gamemaster', 'HIT', 'heal');
+	    $pathfinder_gamemaster_functionality_heal_hit_points['access_list'] = array('Gamemaster');
 	    
 	    $list_of_modifiers = array();
 	    $list_of_modifiers['type'] = 'sum';

@@ -96,11 +96,13 @@ class CharacterSheetController extends Controller
             $em->persist($character_sheet);
             $em->flush();
             
-            return $this->redirect($this->generateUrl(
-                'edit_character_sheet',
-                array(
-                    'character_sheet_id' => $character_sheet->getId())
-            ));
+            return $this->redirect($this->generateUrl('character_sheets_list'));
+            
+//             return $this->redirect($this->generateUrl(
+//                 'edit_character_sheet',
+//                 array(
+//                     'character_sheet_id' => $character_sheet->getId())
+//             ));
         }
 
         return $this->render('GameSessionBundle:CharacterSheet:add_character_sheet.html.twig', array(
@@ -118,6 +120,12 @@ class CharacterSheetController extends Controller
         }
         elseif ($id_modified == 'strength_temporary_score') {
             $fields_modificated['strength_temporary_modifier'] = rand(1, 10);
+        }
+        if ($id_modified == 'dexterity_actual_score') {
+            $fields_modificated['dexterity_actual_modifier'] = rand(1, 10);
+        }
+        elseif ($id_modified == 'dexterity_temporary_score') {
+            $fields_modificated['dexterity_temporary_modifier'] = rand(1, 10);
         }
         elseif ($id_modified == 'constitution_actual_score') {
             $fields_modificated['constitution_actual_modifier'] = rand(1, 10);
@@ -285,6 +293,8 @@ class CharacterSheetController extends Controller
         
         $requestDerivationFields[] = 'strength_actual_score';
         $requestDerivationFields[] = 'strength_temporary_score';
+        $requestDerivationFields[] = 'dexterity_actual_score';
+        $requestDerivationFields[] = 'dexterity_temporary_score';
         $requestDerivationFields[] = 'constitution_actual_score';
         $requestDerivationFields[] = 'constitution_temporary_score';
         
@@ -391,25 +401,66 @@ class CharacterSheetController extends Controller
         $strength_actual_modifier->setCharacterSheetDataGroup($strengrh_actual);
         $strengrh_actual->addCharacterSheetDatum($strength_actual_modifier);
         
-        $strengrh_temporary = new CharacterSheetData();
-        $strengrh_temporary->setName('strength_temporary');
-        $strengrh_temporary->setDatatype('group');
-        $strengrh_temporary->setCharacterSheetDataGroup($attributes);
-        $attributes->addCharacterSheetDatum($strengrh_temporary);
+        $strength_temporary = new CharacterSheetData();
+        $strength_temporary->setName('strength_temporary');
+        $strength_temporary->setDatatype('group');
+        $strength_temporary->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($strength_temporary);
         
         $strength_temporary_score = new CharacterSheetData();
         $strength_temporary_score->setName('strength_temporary_score');
         $strength_temporary_score->setDatatype('field');
         $strength_temporary_score->setDisplayName('Strength temporary score');
-        $strength_temporary_score->setCharacterSheetDataGroup($strengrh_temporary);
-        $strengrh_temporary->addCharacterSheetDatum($strength_temporary_score);
+        $strength_temporary_score->setCharacterSheetDataGroup($strength_temporary);
+        $strength_temporary->addCharacterSheetDatum($strength_temporary_score);
         
         $strength_temporary_modifier = new CharacterSheetData();
         $strength_temporary_modifier->setName('strength_temporary_modifier');
         $strength_temporary_modifier->setDatatype('derived');
         $strength_temporary_modifier->setDisplayName('Strength temporary modifier');
-        $strength_temporary_modifier->setCharacterSheetDataGroup($strengrh_temporary);
-        $strengrh_temporary->addCharacterSheetDatum($strength_temporary_modifier);
+        $strength_temporary_modifier->setCharacterSheetDataGroup($strength_temporary);
+        $strength_temporary->addCharacterSheetDatum($strength_temporary_modifier);
+
+        
+        $dexterity_actual = new CharacterSheetData();
+        $dexterity_actual->setName('dexterity_actual');
+        $dexterity_actual->setDatatype('group');
+        $dexterity_actual->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($dexterity_actual);
+        
+        $dexterity_actual_score = new CharacterSheetData();
+        $dexterity_actual_score->setName('dexterity_actual_score');
+        $dexterity_actual_score->setDatatype('field');
+        $dexterity_actual_score->setDisplayName('Dexterity actual score');
+        $dexterity_actual_score->setCharacterSheetDataGroup($dexterity_actual);
+        $dexterity_actual->addCharacterSheetDatum($dexterity_actual_score);
+        
+        $dexterity_actual_modifier = new CharacterSheetData();
+        $dexterity_actual_modifier->setName('dexterity_actual_modifier');
+        $dexterity_actual_modifier->setDatatype('derived');
+        $dexterity_actual_modifier->setDisplayName('Dexterity actual modifier');
+        $dexterity_actual_modifier->setCharacterSheetDataGroup($dexterity_actual);
+        $dexterity_actual->addCharacterSheetDatum($dexterity_actual_modifier);
+        
+        $dexterity_temporary = new CharacterSheetData();
+        $dexterity_temporary->setName('dexterity_temporary');
+        $dexterity_temporary->setDatatype('group');
+        $dexterity_temporary->setCharacterSheetDataGroup($attributes);
+        $attributes->addCharacterSheetDatum($dexterity_temporary);
+        
+        $dexterity_temporary_score = new CharacterSheetData();
+        $dexterity_temporary_score->setName('dexterity_temporary_score');
+        $dexterity_temporary_score->setDatatype('field');
+        $dexterity_temporary_score->setDisplayName('Dexterity temporary score');
+        $dexterity_temporary_score->setCharacterSheetDataGroup($dexterity_temporary);
+        $dexterity_temporary->addCharacterSheetDatum($dexterity_temporary_score);
+        
+        $dexterity_temporary_modifier = new CharacterSheetData();
+        $dexterity_temporary_modifier->setName('dexterity_temporary_modifier');
+        $dexterity_temporary_modifier->setDatatype('derived');
+        $dexterity_temporary_modifier->setDisplayName('Dexterity temporary modifier');
+        $dexterity_temporary_modifier->setCharacterSheetDataGroup($dexterity_temporary);
+        $dexterity_temporary->addCharacterSheetDatum($dexterity_temporary_modifier);
         
         
         $constitution_actual = new CharacterSheetData();
