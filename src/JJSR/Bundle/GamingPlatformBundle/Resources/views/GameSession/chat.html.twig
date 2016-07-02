@@ -1,4 +1,21 @@
+<div class="chat-box">
+	<div class="chat-box-body">
+		<ul id="chat" class="chat"></ul>
+	</div>
+	<div class="chat-box-footer">
+		<input id="chat_new_text" class="chat-box-footer input" type="text" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
+		<button id="chat_send_button" class="chat-box-footer button">{% trans %}chat.send_button{% endtrans %}</button>
+	</div>
+</div>
+
 <script type="text/javascript">
+
+    $( ".chat-box" ).draggable({
+      	scroll: false,
+      	containment: 'parent'
+    });
+    $( ".chat-box" ).resizable();
+    $( ".chat-box" ).css('position', 'absolute');
 
  	function subscribeChat(payload) {
  		if (payload.text != null) {
@@ -128,11 +145,13 @@
        			</div> \
         	</li>');
 
-		$ ( '#chat' ).append(new_text);
+		$ ( "#chat" ).append(new_text);
+	    $( ".chat-box-body" ).animate({
+	        scrollTop: $( ".chat-box-body" )[0].scrollHeight}, 500);
 	}
 
-	$(' #chat ').on('click', '.chat-head-whisper', function() {
-		$('#chat_new_text').val('/w '+$(this).text()+' ');
+	$( "#chat" ).on("click", ".chat-head-whisper", function() {
+		$( "#chat_new_text" ).val('/w '+$(this).text()+' ');
 		$( "#chat_new_text" ).focus();
 	});
 </script>

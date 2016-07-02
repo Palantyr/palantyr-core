@@ -128,7 +128,7 @@
 		var character_name = getCharacterSheetName(character_sheet); //Actually is character sheet name (no character name)
 
 		var character_sheet_show_complete_button_trans = '{{ 'game_session.character_sheets.show_complete_button'|trans }}';
-		$( "#main-container" ).append(' \
+		$( "#game_container" ).append(' \
 			<div id='+character_sheet_id+' class="character-sheet '+character_sheet_class+'"> \
 				<div id="character_sheet_reduced" class="character-sheet-reduced"> \
 					<div class="user-username"> \
@@ -168,7 +168,7 @@
 		  	scroll: false,
 		  	containment: 'parent',
 	  		drag: function( event, ui ) {
-				$( "#main-container .character-sheet" ).css("z-index", '');
+				$( "#game_container .character-sheet" ).css("z-index", '');
 				$(this).css("z-index", 1);
 		  	}
 		});
@@ -265,7 +265,7 @@
  		addNewElementToAccessList(character_sheet_id, new_element_access_list, new_element_name, new_element_identifier);
 
  		$( '#'+character_sheet_id ).on('click', '#'+functionality['identifier'], function() {
- 			if(!$( "body .checkmark" ).length && !$( "#main-container #character_sheet_target" ).length) {
+ 			if(!$( "body .checkmark" ).length && !$( "#game_container #character_sheet_target" ).length) {
      			if (checkAndPrepareFunctionalityPanel(character_sheet_id, new_element_identifier) == true) {
      				character_sheets_current_functionality[character_sheet_id][functionality['identifier']] = character_sheets_functionality[character_sheet_id][functionality['identifier']];
      	 			var list_of_modifiers = functionality['list_of_modifiers'];
@@ -574,14 +574,14 @@
  		character_sheets_current_functionality[character_sheet_id] = {};
  	}
 
- 	$( "#main-container" ).on("click", "#functional_panel_cancel_button", function() {
+ 	$( "#game_container" ).on("click", "#functional_panel_cancel_button", function() {
 		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
 		if (character_sheet_id) {
 			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
 		}
  	});
 
-	$( "#main-container" ).on("click", "#character_sheet_show_complete_button", function() {
+	$( "#game_container" ).on("click", "#character_sheet_show_complete_button", function() {
 		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
 
 		if ($( "#"+character_sheet_id+" .character-sheet-complete" ).css('display') == 'none') {

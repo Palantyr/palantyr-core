@@ -27,6 +27,20 @@ body .main-container {
  	position: relative;
 }
 
+body .main-container .game-container {        
+  	height: 100%;
+	width: 100%;
+ 	position: inherit;
+}
+
+body .main-container .map-container {        
+  	height: 100%;
+	width: 100%;
+ 	position: inherit;
+ 	display: none;
+}
+
+/* Chat */
 .chat-box {
 	height: 200px;
 	min-height: 150px;
@@ -43,7 +57,6 @@ body .main-container {
     padding: 5px;
 }
 
-/* Chat */
 .chat-box-footer {
    	height: 35px;
   	max-height: 35px;
@@ -151,6 +164,7 @@ body .main-container {
 
 /* Character sheet */
 .character-sheet {
+	position: absolute;
 	min-height: 50px;
 	max-height: 300px;
 	width: 150px;
@@ -246,29 +260,30 @@ body .main-container {
 	pointer-events:none;
 }
 
-/* .character-sheet-access-list .functional-element { */
-/* 	border-style: solid; */
-/* 	border-color: red; */
-/* 	display: none; */
-/* } */
-
-/* .character-sheet-access-list .nonfunctional-element { */
-/* 	border-style: solid; */
-/* 	border-color: green; */
-/* 	display: none; */
-/* } */
-
-/* .character-sheet-individual-panel { */
-/* 	flex-grow: 1; */
-/* 	display: none; */
-/* } */
-
-.character-sheet-functional-panel {
+.character-sheet-functional-panel { /* Work?¿ */
 	border-style: solid;
 }
 /* Character Sheet */
 
+/* MAP */
+.map-panel {
+	position: absolute;
+	background-color: #e7e7e7;
+	text-align: center;
+	max-width: 400px;
+}
 
+.map-token {
+	position: absolute;
+	background-color: red;
+	border: 2px solid #000000;
+	height: 40px;
+	width: 40px;
+	border-radius: 20px;
+}
+/* MAP */
+
+/* Utilities */
 .standard-size {
   	height: 100%;
 	width: 100%;
@@ -279,3 +294,4 @@ body .main-container {
 .select-dice {
     display: inline-flex;
 }
+/* Utilities */

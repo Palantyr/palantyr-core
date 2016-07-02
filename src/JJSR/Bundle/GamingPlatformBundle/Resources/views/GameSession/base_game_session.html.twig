@@ -55,14 +55,12 @@
 			{% endjavascripts %}
         {% endblock %}
         
-        <div id="main-container" class="main-container">
+        <div id="main_container" class="main-container">
 			{% block body %}{% endblock %}
     	</div>
         
         {% block bootstrap_javascripts %}
         	<script src="{{ asset('js/bootstrap.js') }}"></script>
         {% endblock %}
-
-        {% block javascripts %}{% endblock %}
     </body>
 </html>

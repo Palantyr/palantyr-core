@@ -1,0 +1,111 @@
+<div id="game_container" class="game-container">
+
+{# CONNECTION #}
+	{{ include('GamingPlatformBundle:GameSession:connection.html.twig') }}
+{# CONNECTION #}
+ 
+ 
+{# SETTINGS #}
+	{{ include('GamingPlatformBundle:GameSession:settings.html.twig') }}
+{# SETTINGS #}
+
+
+{# IMPORT CHARACTER SHEET #}
+	{{ include('GamingPlatformBundle:GameSession:import_character_sheet.html.twig') }}
+{# IMPORT CHARACTER SHEET #}
+
+
+{# FUNCTIONALITY CHARACTER SHEET #}
+	{{ include('GamingPlatformBundle:GameSession:functionality_character_sheet.html.twig') }}
+{# FUNCTIONALITY CHARACTER SHEET #}
+	
+
+{# CHAT #}
+	{{ include('GamingPlatformBundle:GameSession:chat.html.twig') }}
+{# CHAT #}
+
+
+{# Utilities #}
+	{{ include('GamingPlatformBundle:GameSession:utilities.html.twig') }}
+{# Utilities #}
+
+<script type="text/javascript">
+// OTHER
+ 	function getCharacterSheetIdFromElement(element) {
+ 		var is_only_number = /^\d+$/;
+		
+ 		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
+ 				element.parent().attr('id') == 'other_users_connected' ||
+ 				element.parent().attr('id') == 'myModal') { 
+ 			return false;
+ 		}
+ 		else if (is_only_number.test(element.parent().attr("id"))) {
+ 			return element.parent().attr("id");
+ 		}
+ 		else {
+ 			return getCharacterSheetIdFromElement(element.parent());
+ 		}
+ 	}
+
+	function usePopup (title, body, footer) {
+
+		if ($('#myModal').is(':visible')) {
+			var executed = false;
+			$('#myModal').on('hidden.bs.modal', function (oneTime) {
+				if (executed == false) {
+					$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
+					$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
+					$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
+					$('#myModal').modal('show');
+				}
+				executed = true;
+			})
+		}
+		else {
+			$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
+			$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
+			$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
+	        $('#myModal').modal('show');
+		}
+	}
+
+	function closePopup () {
+		$('#myModal').modal('hide');
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').empty();
+	}
+
+	function getModalTitle() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html();
+	}
+
+	function setModalTitle(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(text);
+	}
+
+	function getModalBody() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-body').html();
+	}
+
+	function setModalBody(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').html(text);
+	}
+	
+	function getModalFooter() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-footer').html();
+	}
+
+	function setModalFooter(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(text);
+	}
+
+// 	var last_id_from_input;
+// 	$(function() {
+// 	    $("input").on("click", function() {
+// 	    	last_id_from_input = $(this).attr("id");
+// 	    });
+// 	});
+
+</script>
+</div>

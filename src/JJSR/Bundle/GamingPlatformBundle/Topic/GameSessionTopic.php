@@ -25,6 +25,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 
 	public $character_sheets_in_game = array();
 	public $users_language = array(); //better $users_locale
+	public $map_tokens = array();
 	
 	/**
 	 * @param ClientManipulatorInterface $clientManipulator
@@ -56,6 +57,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 			self::onSuscribeConnection($connection, $topic, $request);
 			self::onSuscribeChat($connection, $topic, $request);
 			self::onSuscribeImportCharacterSheet($connection, $topic, $request);
+			self::onSuscribeMap($connection, $topic, $request);
 		}
 	}
 	
@@ -99,6 +101,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 		 	case 'chat':
 		 		self::onPublishChat($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
+		 	case 'map':
+		 	    self::onPublishMap($connection, $topic, $request, $event, $exclude, $eligible);
+		 	    break;
 		 	case 'utilities':
 		 		self::onPublishUtilities($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
@@ -579,6 +584,100 @@ class GameSessionTopic extends Controller implements TopicInterface
 	}
 // 	CHAT
 
+// 	MAP
+	private function onSuscribeMap(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+	{
+	    $room = $request->getAttributes()->get('room');
+	    
+	    if (self::isFirstToConnectToTheRoom($topic)) {
+	        $this->map_tokens[$room] = array();
+	    }
+	    else {
+	        $connection->event($topic->getId(), [
+	            'section' => 'map',
+	            'option' => 'add_all_tokens',
+	            'map_tokens' => $this->map_tokens[$room]
+	        ]);
+	    }
+	}
+	
+	private function onPublishMap(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+	{   
+	    $room = $request->getAttributes()->get('room');
+	    
+	    switch ($event['option']) {
+	        case 'add_token':
+	            self::addAndUpdateMapToken($room, $event['data_json']);
+	            
+	            $topic->broadcast([
+	                'section' => 'map',
+	                'option' => 'add_token',
+	                'data_json' => $event['data_json']]
+                );
+	            break;
+	            
+            case 'move_token':
+                self::addAndUpdateMapToken($room, $event['data_json']);
+                
+                $topic->broadcast([
+                    'section' => 'map',
+                    'option' => 'move_token',
+                    'data_json' => $event['data_json']],
+                    array($connection->WAMP->sessionId)
+                );
+                break;
+                
+            case 'delete_token':
+                self::deleteMapToken($room, $event['token_id']);
+                $topic->broadcast([
+                    'section' => 'map',
+                    'option' => 'delete_token',
+                    'token_id' => $event['token_id']]
+                );
+                break;
+                
+            case 'delete_all_tokens':
+                self::deleteAllMapTokens($room);
+                $topic->broadcast([
+                    'section' => 'map',
+                    'option' => 'delete_all_tokens']
+                );
+                break;
+	    }
+	}
+	
+	private function addAndUpdateMapToken($room, $data_json)
+	{
+	    if (array_key_exists($data_json['token_id'], $this->map_tokens[$room])) {
+	        $current_map_token = $this->map_tokens[$room][$data_json['token_id']];
+	        $current_map_token['token_top'] = $data_json['token_top'];
+	        $current_map_token['token_left'] = $data_json['token_left'];
+	        $this->map_tokens[$room][$data_json['token_id']] = $current_map_token;
+	    }
+	    else {
+	        $current_map_token = array();
+	        $current_map_token['token_name'] = $data_json['token_name'];
+	        $current_map_token['token_css_color'] = $data_json['token_css_color'];
+	        $current_map_token['token_top'] = 0;
+	        $current_map_token['token_left'] = 0;
+	        $this->map_tokens[$room][$data_json['token_id']] = $current_map_token;
+	    }
+	}
+	
+	private function deleteMapToken($room, $token_id)
+	{
+	    if (array_key_exists($token_id, $this->map_tokens[$room])) {
+	        unset($this->map_tokens[$room][$token_id]);
+	    }
+	}
+	
+	private function deleteAllMapTokens($room)
+	{
+	    unset($this->map_tokens[$room]);
+	    $this->map_tokens[$room] = array();
+	}
+// 	MAP
+	
 // 	UTILITIES
 	private function onPublishUtilities(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
@@ -993,7 +1092,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        $date = $date->format('H:i:s');
 		        
 		        $topic->broadcast([
-		            'section' => "chat",
+		            'section' => 'chat',
 		            'option' => 'add_text',
 		            'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 		            'text' => $result,
@@ -1022,7 +1121,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 		return false;
 	}
 	
-	private function getGameSessionOwner (WampRequest $request) {
+	private function getGameSessionOwner(WampRequest $request) 
+	{
 		$game_session_id = $request->getAttributes()->get('room');
 		
 		$game_session = $this->em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
@@ -1033,7 +1133,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    return ($this->clientManipulator->getClient($connection)->getId() == self::getGameSessionOwner($request)->getId());
 	}
 	
-	private function getUsersUsernameToTheRoom (Topic $topic)
+	private function getUsersUsernameToTheRoom(Topic $topic)
 	{
 		$users_username = array();
 		foreach ($topic as $client) {

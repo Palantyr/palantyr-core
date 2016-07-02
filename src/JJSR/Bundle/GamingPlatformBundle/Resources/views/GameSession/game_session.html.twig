@@ -1,34 +1,11 @@
 {% extends 'GamingPlatformBundle:GameSession:base_game_session.html.twig' %}
 
 {% block body %}
-	{{ include('GamingPlatformBundle:GameSession:base_popup.html.twig') }}
 	{{ ws_client() }}
-	
-	<div class="chat-box">
-		<div class="chat-box-body">
-			<ul id="chat" class="chat"></ul>
-		</div>
-		<div class="chat-box-footer">
-			<input id="chat_new_text" class="chat-box-footer input" type="text" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
-			<button id="chat_send_button" class="chat-box-footer button">{% trans %}chat.send_button{% endtrans %}</button>
-{# 			<div class="chat-box-footer resizable">#}
-{# 			</div>#}
-		</div>
-	</div>
-    
-	<script type="text/javascript">
-		$( '.chat-box' ).draggable({
-		  	scroll: false,
-		  	containment: 'parent'
-		});
-		$( '.chat-box' ).resizable();
-		$( '.chat-box' ).css('position', 'absolute');
-	</script>
-{% endblock %}
 
-{% block javascripts %}
-<script>
+<script type="text/javascript">
 // 	GLOBAL VARIABLES FROM TWIG 
+	var room = "{{ game_session.getId() }}";
 	var rol_game_name = "{{ game_session.getRolGame.getName() }}";
 	var user_username = "{{ app.user.username }}";
 	var game_session_owner_username = "{{ game_session.getOwner().getUsername() }}";
@@ -36,7 +13,12 @@
 	var websocket = WS.connect(_WS_URI);
 // 	GLOBAL VARIABLES FROM TWIG 
 
-	var room = "{{ game_session.getId() }}";
+    function isGamemaster()
+    {
+    	return user_username == game_session_owner_username;
+    }
+
+	
 // ||||||||||||||||||||||||||||||||||||| WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
 	websocket.on("socket/connect", function(session){
 
@@ -54,6 +36,9 @@
 			    break;
 		    case 'chat':
 		    	subscribeChat(payload);
+			    break;
+		    case 'map':
+			    subscribeMap(payload);
 			    break;
 		    case 'utilities':
 // 			    suscribeUtilities(payload);
@@ -184,7 +169,7 @@
 
 
 // FUNCTIONALITY CHARACTER SHEET
-     	$( "#main-container" ).on("click", "#functional_panel_throw_button", function() {
+     	$( ".main-container" ).on("click", "#functional_panel_throw_button", function() {
     		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
     		if (character_sheet_id) {
 //     			alert(JSON.stringify(character_sheets_current_functionality[character_sheet_id]));
@@ -246,6 +231,54 @@
  		});
 // FUNCTIONALITY CHARACTER SHEET
 
+// MAP
+        $( "#map_container" ).on( "myAddTokenMapEvent", function( event, data_json ) {
+ 			session.publish(route_game_session, {
+ 				section: 'map',
+ 				option: 'add_token', 
+ 				data_json: data_json
+ 			});
+        });
+
+        $( "#map_container" ).on( "myDraggTokenMapEvent", ".map-token", function( event, data_json ) {
+ 			session.publish(route_game_session, {
+ 				section: 'map',
+ 				option: 'move_token', 
+ 				data_json: data_json
+ 			});
+        });
+
+    	$( "#map_container" ).on("click", "#map_panel_delete_token_button", function() {
+    		if (last_map_token_selected_id) {
+    			if (confirm("Are you sure?")) {
+    	 			session.publish(route_game_session, {
+    	 				section: 'map',
+    	 				option: 'delete_token', 
+    	 				token_id: last_map_token_selected_id
+    	 			});
+    				last_map_token_selected_id = null;
+    			}
+    		}
+    		else {
+    			alert('There is no token selected');
+    		}
+    	});
+
+    	$( "#map_container" ).on("click", "#map_panel_delete_all_tokens_button", function() {
+    		if (tokens_count) {
+    			if (confirm("Are you sure?")) {
+    	 			session.publish(route_game_session, {
+    	 				section: 'map',
+    	 				option: 'delete_all_tokens'
+    	 			});
+    	 			last_map_token_selected_id = null;
+    			}
+    		}
+    		else {
+    			alert('There are no tokens');
+    		}
+    	});
+// MAP
 
 // UTILITIES
 		$( '#myModal' ).on('click', '#throw_dice', function() {
@@ -276,114 +309,7 @@
  // ||||||||||||||||||||||||||||||||||||| END WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
 </script>
 
-
-{# CONNECTION #}
-	{{ include('GamingPlatformBundle:GameSession:connection.html.twig') }}
-{# CONNECTION #}
- 
- 
-{# SETTINGS #}
-	{{ include('GamingPlatformBundle:GameSession:settings.html.twig') }}
-{# SETTINGS #}
-
-
-{# IMPORT CHARACTER SHEET #}
-	{{ include('GamingPlatformBundle:GameSession:import_character_sheet.html.twig') }}
-{# IMPORT CHARACTER SHEET #}
-
-
-{# FUNCTIONALITY CHARACTER SHEET #}
-	{{ include('GamingPlatformBundle:GameSession:functionality_character_sheet.html.twig') }}
-{# FUNCTIONALITY CHARACTER SHEET #}
-	
-
-{# CHAT #}
-	{{ include('GamingPlatformBundle:GameSession:chat.html.twig') }}
-{# CHAT #}
-
-
-{# Utilities #}
-	{{ include('GamingPlatformBundle:GameSession:utilities.html.twig') }}
-{# Utilities #}
-
-<script>
-// OTHER
- 	function getCharacterSheetIdFromElement(element) {
- 		var is_only_number = /^\d+$/;
-		
- 		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
- 				element.parent().attr('id') == 'other_users_connected' ||
- 				element.parent().attr('id') == 'myModal') { 
- 			return false;
- 		}
- 		else if (is_only_number.test(element.parent().attr("id"))) {
- 			return element.parent().attr("id");
- 		}
- 		else {
- 			return getCharacterSheetIdFromElement(element.parent());
- 		}
- 	}
-
-	function usePopup (title, body, footer) {
-
-		if ($('#myModal').is(':visible')) {
-			var executed = false;
-			$('#myModal').on('hidden.bs.modal', function (oneTime) {
-				if (executed == false) {
-					$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
-					$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
-					$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
-					$('#myModal').modal('show');
-				}
-				executed = true;
-			})
-		}
-		else {
-			$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
-			$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
-			$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
-	        $('#myModal').modal('show');
-		}
-	}
-
-	function closePopup () {
-		$('#myModal').modal('hide');
-		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').empty();
-		$('#myModal > .modal-dialog > .modal-content > .modal-body').empty();
-		$('#myModal > .modal-dialog > .modal-content > .modal-footer').empty();
-	}
-
-	function getModalTitle() {
-		return $('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html();
-	}
-
-	function setModalTitle(text) {
-		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(text);
-	}
-
-	function getModalBody() {
-		return $('#myModal > .modal-dialog > .modal-content > .modal-body').html();
-	}
-
-	function setModalBody(text) {
-		$('#myModal > .modal-dialog > .modal-content > .modal-body').html(text);
-	}
-	
-	function getModalFooter() {
-		return $('#myModal > .modal-dialog > .modal-content > .modal-footer').html();
-	}
-
-	function setModalFooter(text) {
-		$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(text);
-	}
-
-// 	var last_id_from_input;
-// 	$(function() {
-// 	    $("input").on("click", function() {
-// 	    	last_id_from_input = $(this).attr("id");
-// 	    });
-// 	});
-// OTHER
- </script>
-
+	{{ include('GamingPlatformBundle:GameSession:base_popup.html.twig') }}
+    {{ include('GamingPlatformBundle:GameSession:game_session_map_container.html.twig') }}
+    {{ include('GamingPlatformBundle:GameSession:game_session_game_container.html.twig') }}
 {% endblock %}
