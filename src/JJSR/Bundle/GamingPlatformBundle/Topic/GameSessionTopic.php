@@ -208,7 +208,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	// CONNECTION SECURITY
 	
 // CONNECTION
-	private function onSuscribeConnection (ConnectionInterface $connection, Topic $topic, WampRequest $request)
+	private function onSuscribeConnection(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
 		$room = $request->getAttributes()->get('room');
 		
@@ -236,7 +236,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		    );
 	}
 	
-	private function onUnSubscribeConnection (ConnectionInterface $connection, Topic $topic, WampRequest $request)
+	private function onUnSubscribeConnection(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
 		$room = $request->getAttributes()->get('room');
 
@@ -255,7 +255,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		$connection->close();
 	}
 	
-	private function setUserLanguage (ConnectionInterface $connection, $room, $user_id)
+	private function setUserLanguage(ConnectionInterface $connection, $room, $user_id)
 	{
 	    $user_game_session_connection = $this->em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
 	    ->findOneBy(array('user' => $this->clientManipulator->getClient($connection)->getId(), 'game_session' => $room));
@@ -264,14 +264,14 @@ class GameSessionTopic extends Controller implements TopicInterface
 		$this->users_language[$room][$user_id] = $language;
 	}
 	
-	private function getUserLanguage ($room, $user_id)
+	private function getUserLanguage($room, $user_id)
 	{
 		return $this->users_language[$room][$user_id];
 	}
 // CONNECTION
 	
 // SETTINGS
-	private function onPublishSettings (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+	private function onPublishSettings(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
 		$room = $request->getAttributes()->get('room');
 		
@@ -285,7 +285,6 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$array_game_session['comments'] = $game_session->getComments();
 				$array_game_session_json = json_encode($array_game_session);
 				
-				var_dump($array_game_session);
 				$connection->event($topic->getId(), [
 				    'section' => "settings",
 				    'option' => "game_session_request_edit",
@@ -424,15 +423,17 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function onSuscribeChat(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
 		$user_username_sender = $this->clientManipulator->getClient($connection)->getUsername();
+		$message_options = array('%user_username%' => $user_username_sender);
 		$yml_message = 'chat.user_is_online %user_username%';
-		self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $user_username_sender);
+		self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $message_options);
 	}
 	
 	private function onUnSubscribeChat(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
 		$user_username_sender = $this->clientManipulator->getClient($connection)->getUsername();
+		$message_options = array('%user_username%' => $user_username_sender);
 		$yml_message = 'chat.user_is_offline %user_username%';
-		self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $user_username_sender);
+		self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $message_options);
 	}
 	
 	private function whisperAnotherUser(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event)
@@ -547,7 +548,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		return $date->format('H:i:s');
 	}
 	
-	private function sendMessageAdaptToLanguage(ConnectionInterface $connection, Topic $topic, WampRequest $request, $yml_message, $user_username_sender)
+	private function sendMessageAdaptToLanguage(ConnectionInterface $connection, Topic $topic, WampRequest $request, $yml_message, $message_options)
 	{
 	    $room = $request->getAttributes()->get('room');
 	    
@@ -555,10 +556,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 	        $user_id = $this->clientManipulator->getClient($client)->getId();
 	        $user_language = self::getUserLanguage($room, $user_id);
 	        
-	        if(isset($user_username_sender)) {
+	        if(isset($message_options)) {
 	            $message_translated = $this->translator->trans(
 	                $yml_message,
-	                array('%user_username%' => $user_username_sender),
+	                $message_options,
 	                'messages',
 	                $user_language
 	                );
@@ -793,13 +794,17 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$this->character_sheets_in_game[$room][] = $formatted_character_sheet;
 				
 				$user_username_sender = $this->clientManipulator->getClient($connection)->getUsername();
-				$yml_message = 'character_sheet.import %user_username%';
-				self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $user_username_sender);				
+				$character_sheet_name = $character_sheet->getName();
+				$message_options = array('%user_username%' => $user_username_sender, '%character_sheet_name%' => $character_sheet_name);
+				$yml_message = 'chat.character_sheet.import %user_username% %character_sheet_name%';
+				self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $message_options);				
 				break;
 				
 			case 'delete':
 				$character_sheet_id = $event['character_sheet_id'];
 				if (self::isCharacterSheetInGame($room, $character_sheet_id)) {
+				    $character_sheet = self::getCharacterSheet($event['character_sheet_id']);
+				    $character_sheet_name = $character_sheet->getName();
 
 					self::deleteCharacterSheetInGame($room, $character_sheet_id);
 					
@@ -810,8 +815,9 @@ class GameSessionTopic extends Controller implements TopicInterface
 					]);
 					
 					$user_username_sender = $this->clientManipulator->getClient($connection)->getUsername();
-					$yml_message = 'character_sheet.delete %user_username%';
-					self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $user_username_sender);
+					$message_options = array('%user_username%' => $user_username_sender, '%character_sheet_name%' => $character_sheet_name);
+					$yml_message = 'chat.character_sheet.delete %user_username% %character_sheet_name%';
+					self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $message_options);
 				}
 				else {
 					var_dump("ERROR !characterSheetExistInGame to delete");

@@ -69,25 +69,5 @@ character_sheet:
             title: Error adding character sheet
 character_sheet.add.error.message %rol_game_name% %character_sheet_template_name%: Sorry, but the sheet "character_sheet_template_name" from rol game "rol_game_name" can't be created. Contact administrator.
 
-secondary_menu:
-    settings:
-        title: Settings
-        manage_users:
-            title: Manage users
-            no_other_users_connected: There are no other users connected
-            remove_button: Kick out
-        exit:
-            title: Exit
-
-navigation_sidebar:
-    request_character_sheets: Request character sheets 
-    dice: Dados
-
-chat:
-    send_button: Send
-    placeholder: Type your message here...
-chat.user_is_online %user_username%: %user_username% is online
-chat.user_is_offline %user_username%: %user_username% is offline
-
 spanish: español
 english: english

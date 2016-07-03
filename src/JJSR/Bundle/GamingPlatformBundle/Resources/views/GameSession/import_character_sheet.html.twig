@@ -127,7 +127,7 @@
  		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
 		var character_name = getCharacterSheetName(character_sheet); //Actually is character sheet name (no character name)
 
-		var character_sheet_show_complete_button_trans = '{{ 'game_session.character_sheets.show_complete_button'|trans }}';
+		var character_sheet_show_complete_button_trans = '{{ 'game_session.character_sheet.show_complete_button'|trans }}';
 		$( "#game_container" ).append(' \
 			<div id='+character_sheet_id+' class="character-sheet '+character_sheet_class+'"> \
 				<div id="character_sheet_reduced" class="character-sheet-reduced"> \
@@ -147,7 +147,7 @@
 
 		switch(character_sheet_permission) {
 		case 'gamemaster':
-			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheets.delete_button'|trans }}';
+			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheet.delete_button'|trans }}';
 			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(' \
 				<div id="private_options" class="private-options"> \
 					<div id="character_sheet_access_list" class="character-sheet-access-list"></div> \
@@ -155,7 +155,7 @@
 				</div>');
 			break;
 		case 'owner':
-			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheets.delete_button'|trans }}';
+			var character_sheet_delete_button_trans = '{{ 'game_session.character_sheet.delete_button'|trans }}';
 			$( "#"+character_sheet_id+" > .character-sheet-reduced" ).append(' \
 				<div id="private_options" class="private-options"> \
 					<div id="character_sheet_access_list" class="character-sheet-access-list"></div> \
@@ -338,13 +338,14 @@
  	function addCollectivePanelToCharacterSheet(character_sheet_id) 
  	{
  		var character_sheet_collective_functionality_access_list = character_sheets_collective_functionality_access_list[character_sheet_id];
-
+		var actions_trans = '{% trans %}game_session.character_sheet.actions.title{% endtrans %}';
+ 		
 		$( "#"+character_sheet_id+" #character_sheet_access_list" ).append(' \
 				<nav id="main-nav" role="navigation"> \
 				<ul id="character-sheet-access-list" class="sm sm-vertical sm-clean"> \
 					<li id="actions"> \
     					<a href="#">  \
-    						Actions \
+    						'+actions_trans+' \
     					</a> \
 						<ul></ul> \
 					</li> \

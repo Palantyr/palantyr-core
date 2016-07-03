@@ -69,26 +69,6 @@ character_sheet:
             title: Error añadiendo ficha de personaje
 character_sheet.add.error.message %rol_game_name% %character_sheet_template_name%: Lo sentimos, pero la ficha "character_sheet_template_name" del juego de rol "rol_game_name" no puede ser creada. Contacte con el administrador.
 
-secondary_menu:
-    settings:
-        title: Ajustes
-        manage_users:
-            title: Gestión de usuarios
-            no_other_users_connected: No hay otros usuarios conectados
-            remove_button: Expulsar
-        exit:
-            title: Salir
-
-navigation_sidebar:
-    request_character_sheets: Pedir fichas de personaje
-    dice: Dados
-
-chat:
-    send_button: Enviar
-    placeholder: Escribe aquí tu mensaje...
-chat.user_is_online %user_username%: %user_username% está en línea
-chat.user_is_offline %user_username%: %user_username% se ha desconectado
-
 spanish: español
 english: english
 

@@ -120,13 +120,19 @@
 
 
     if (isGamemaster()) {
+    	var map_name_trans = '{% trans %}map.name{% endtrans %}';
+    	var map_css_color_trans = '{% trans %}map.css_color{% endtrans %}';
+    	var map_add_token_trans = '{% trans %}map.add_token_button{% endtrans %}';
+    	var map_delete_token_trans = '{% trans %}map.delete_token_button{% endtrans %}';
+    	var map_delete_all_tokens_trans = '{% trans %}map.delete_all_tokens_button{% endtrans %}';
+    	
     	$( "#map_container" ).append(' \
     		<div id="map_panel" class="map-panel"> \
-    		    <input id="map_panel_text" type="text" placeholder="Name" /> \
-    		    <input id="map_panel_color" type="text" placeholder="CSS color" /> \
-    		    <button id="map_panel_add_token_button">Add token</button> \
-    		    <button id="map_panel_delete_token_button">Delete token</button> \
-    		    <button id="map_panel_delete_all_tokens_button">Delete all tokens</button> \
+    		    <input id="map_panel_text" type="text" placeholder="'+map_name_trans+'" /> \
+    		    <input id="map_panel_color" type="text" placeholder="'+map_css_color_trans+'" /> \
+    		    <button id="map_panel_add_token_button">'+map_add_token_trans+'</button> \
+    		    <button id="map_panel_delete_token_button">'+map_delete_token_trans+'</button> \
+    		    <button id="map_panel_delete_all_tokens_button">'+map_delete_all_tokens_trans+'</button> \
     		</div> \
     	');
 
@@ -138,7 +144,7 @@
     	var tokens_count = 0;
     	function updateTokensCount()
     	{
-        	$('.map-token').each(function() {
+        	$('#map_container .map-token').each(function() {
       		  var token_id = $( this ).attr('id');
       		  if(token_id > tokens_count) 
       			  tokens_count = token_id;

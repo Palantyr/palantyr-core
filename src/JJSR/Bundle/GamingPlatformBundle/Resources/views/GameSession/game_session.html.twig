@@ -155,7 +155,8 @@
  		});
 
  		$( '.main-container' ).on('click', '#character_sheet_delete_button', function() {
- 		    if (confirm("Are you sure?")) { //need trans
+ 	 		var are_you_sure_trans = '{% trans %}are_you_sure{% endtrans %}';
+ 		    if (confirm(are_you_sure_trans)) {
  	 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
  	 			
  	 			session.publish(route_game_session, {
@@ -250,7 +251,8 @@
 
     	$( "#map_container" ).on("click", "#map_panel_delete_token_button", function() {
     		if (last_map_token_selected_id) {
-    			if (confirm("Are you sure?")) {
+    			var are_you_sure_trans = '{% trans %}are_you_sure{% endtrans %}';
+    			if (confirm(are_you_sure_trans)) {
     	 			session.publish(route_game_session, {
     	 				section: 'map',
     	 				option: 'delete_token', 
@@ -260,13 +262,19 @@
     			}
     		}
     		else {
-    			alert('There is no token selected');
+    			var no_token_select_trans = '{% trans %}map.no_token_select{% endtrans %}';
+    			alert(no_token_select_trans);
     		}
     	});
 
     	$( "#map_container" ).on("click", "#map_panel_delete_all_tokens_button", function() {
-    		if (tokens_count) {
-    			if (confirm("Are you sure?")) {
+        	var tokens_in_game_count = 0;
+        	$('#map_container .map-token').each(function() {
+        		tokens_in_game_count++;
+      		});
+    		if (tokens_in_game_count != 0) {
+    			var are_you_sure_trans = '{% trans %}are_you_sure{% endtrans %}';
+    			if (confirm(are_you_sure_trans)) {
     	 			session.publish(route_game_session, {
     	 				section: 'map',
     	 				option: 'delete_all_tokens'
@@ -275,7 +283,8 @@
     			}
     		}
     		else {
-    			alert('There are no tokens');
+    			var no_tokens_in_game_trans = '{% trans %}map.no_tokens_in_game{% endtrans %}';
+    			alert(no_tokens_in_game_trans);
     		}
     	});
 // MAP
