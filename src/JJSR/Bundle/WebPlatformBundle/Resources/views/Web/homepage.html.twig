@@ -3,9 +3,39 @@
 {% block title %}Palantir{% endblock %}
 
 {% block body %}
-    <h1>Welcome to Palantir project,
-    {% if app.user == true %}
-    	{{ app.user.username }}
-	{% endif %}
-    </h1>
+{% if app.user == true %}
+<div class="page-header">
+	<h1>{% trans %}homepage.welcome{% endtrans %}
+    	<small>    
+        	{{ app.user.username }}
+    	</small>
+	</h1>
+</div>
+{% endif %}
+
+<h1>{% trans %}homepage.our_games{% endtrans %} <span class="label label-success">{% trans %}homepage.new_games_coming{% endtrans %}</span></h1>
+
+<span class="label label-success">{% trans %}homepage.label.new{% endtrans %}</span>
+<div class="jumbotron">
+    <h1>Pathfinder</h1>
+    <p>{% trans %}homepage.pathfinder.description{% endtrans %}</p>
+    <p><a class="btn btn-primary btn-lg" href="{{ path('create_game_session') }}" role="button">{% trans %}main_menu.game_session.create{% endtrans %}</a></p>
+    <p><a class="btn btn-primary btn-lg" href="{{ path('add_character_sheet_menu') }}" role="button">{% trans %}main_menu.add_character_sheet.title{% endtrans %}</a></p>
+</div>
+
+<span class="label label-info">{% trans %}homepage.label.updated_with_new_abilities{% endtrans %}</span>
+<div class="jumbotron">
+    <h1>{% trans %}Vampire The Masquerade{% endtrans %}</h1>
+    <p>{% trans %}homepage.vampire_the_masquerade.description{% endtrans %}</p>
+    <p><a class="btn btn-primary btn-lg" href="{{ path('create_game_session') }}" role="button">{% trans %}main_menu.game_session.create{% endtrans %}</a></p>
+    <p><a class="btn btn-primary btn-lg" href="{{ path('add_character_sheet_menu') }}" role="button">{% trans %}main_menu.add_character_sheet.title{% endtrans %}</a></p>
+</div>
+
+<span class="label label-warning">{% trans %}homepage.label.maintenance{% endtrans %}</span>
+<div class="jumbotron">
+    <h1>{% trans %}Legend of Five Rings{% endtrans %}</h1>
+    <p>{% trans %}homepage.legend_of_five_rings.description{% endtrans %}</p>
+    <p><a class="btn btn-primary btn-lg" href="{{ path('create_game_session') }}" role="button">{% trans %}main_menu.game_session.create{% endtrans %}</a></p>
+    <p><a class="btn btn-primary btn-lg" href="{{ path('add_character_sheet_menu') }}" role="button">{% trans %}main_menu.add_character_sheet.title{% endtrans %}</a></p>
+</div>
 {% endblock %}
