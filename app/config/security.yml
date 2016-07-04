@@ -64,7 +64,7 @@ security:
         - { path: ^/[^/]+/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/[^/]+/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/[^/]+/administration, role: ROLE_SUPER_ADMIN }
-        - { path: ^/[^/]+/admin/, role: ROLE_ADMIN }
+#        - { path: ^/[^/]+/administration, role: ROLE_ADMIN }
         - { path: ^/[^/]+/game, roles: ROLE_USER }
         
             # activate different ways to authenticate
