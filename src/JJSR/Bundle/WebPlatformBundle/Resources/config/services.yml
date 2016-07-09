@@ -1,6 +1,6 @@
 services:
-#    web.menu.voter.request:
-#        class: WebPlatformBundle\Menu\RequestVoter
+#    web.menu.menu_builder:
+#        class: WebPlatformBundle\Menu\MenuBuilder
 #        tags:
 #            - { name: knp_menu.voter }
 #        arguments: [ @request_stack ]

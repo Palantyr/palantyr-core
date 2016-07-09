@@ -2,10 +2,13 @@
 namespace JJSR\Bundle\WebPlatformBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class MenuBuilder extends ContainerAware
+class MenuBuilder implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+    
     public function mainMenu(FactoryInterface $factory, array $options)
     {
     	$translator = $this->container->get('translator');
@@ -135,4 +138,13 @@ class MenuBuilder extends ContainerAware
     				->setAttribute('icon', 'fa fa-edit');
     	}
     }
+    
+     /**
+      * {@inheritDoc}
+      * @see \Symfony\Component\DependencyInjection\ContainerAwareInterface::setContainer()
+      */
+     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
+     }
+
 }
