@@ -29,7 +29,8 @@
 		"twbs/bootstrap" : "^3.3",
 		"knplabs/knp-menu-bundle" : "^2.1",
 		"components/jqueryui": "^1.11",
-		"drmonty/smartmenus": "^1.0"
+		"drmonty/smartmenus": "^1.0",
+		"phpunit/phpunit": "^5.4"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "~2.3"
