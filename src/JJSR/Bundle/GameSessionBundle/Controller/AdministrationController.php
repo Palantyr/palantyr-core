@@ -73,7 +73,7 @@ class AdministrationController extends Controller
     
     public function addAllDefaultDataAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
         $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
         $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
@@ -90,7 +90,7 @@ class AdministrationController extends Controller
     
     public function deleteAllDefaultDataAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $languages = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')->findAll();
         if (!$languages) {
             self::deleteGameSessions();
@@ -107,7 +107,7 @@ class AdministrationController extends Controller
     
     public function addLanguages()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $language_names = array("es", "en");
         $language_display_names = array("spanish", "english");
         
@@ -125,7 +125,7 @@ class AdministrationController extends Controller
     
     public function addRolGames()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $rol_game_names = array("Pathfinder", "Vampire The Masquerade", "Werewolf", "Star Wars");
         $rol_game_actives = array(1, 1, 0, 0);
 
@@ -140,7 +140,7 @@ class AdministrationController extends Controller
     
     public function addCharacterSheetTemplates()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         $character_sheet_template = new CharacterSheetTemplate();
         $character_sheet_template->setName('Vampire character');
@@ -161,7 +161,7 @@ class AdministrationController extends Controller
     
     public function deleteLanguages()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
         
         foreach ($languages as $language) {
@@ -172,7 +172,7 @@ class AdministrationController extends Controller
     
     public function deleteRolGames()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
 
         foreach ($rol_games as $rol_game) {
@@ -183,7 +183,7 @@ class AdministrationController extends Controller
     
     public function deleteCharacterSheets()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $character_sheets = $em->getRepository('GameSessionBundle:CharacterSheet')->findAll();
         
         foreach ($character_sheets as $character_sheet) {
@@ -194,7 +194,7 @@ class AdministrationController extends Controller
     
     public function deleteCharacterSheetTemplates()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
     
         foreach ($character_sheet_templates as $character_sheet_template) {
@@ -205,7 +205,7 @@ class AdministrationController extends Controller
     
     public function deleteGameSessions()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $game_sessions = $em->getRepository('GameSessionBundle:GameSession')->findAll();
     
         foreach ($game_sessions as $game_session) {
@@ -230,7 +230,8 @@ class AdministrationController extends Controller
     
         $character_sheet_template = new CharacterSheetTemplate();
     
-        $form = $this->createFormBuilder($character_sheet_template)
+        $form = $this->createFormBuilder($character_sheet_template, 
+            array('validation_groups' => array('Create')))
         ->add('name', 'text')
         ->add('version', 'text')
         ->add('rol_game', 'entity', array(
@@ -267,7 +268,7 @@ class AdministrationController extends Controller
     public function removeCharacterSheetTemplateAction(Request $request)
     {
         $character_sheet_template_id = $request->get('character_sheet_template_id');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $character_sheet_template = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
         
         if (isset($character_sheet_template)) {
@@ -283,10 +284,11 @@ class AdministrationController extends Controller
         $translator = $this->get('translator');
     
         $character_sheet_template_id = $request->get('character_sheet_template_id');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $character_sheet_template = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
     
-        $form = $this->createFormBuilder($character_sheet_template)
+        $form = $this->createFormBuilder($character_sheet_template,
+            array('validation_groups' => array('Update')))
         ->add('name', 'text')
         ->add('version', 'text')
         ->add('rol_game', 'entity', array(

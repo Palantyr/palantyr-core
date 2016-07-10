@@ -4,7 +4,7 @@ name:
     maximum_characters: Name cannot be longer than {{ limit }} characters
     
 password:
-    not_blank: Password Should not be blank
+    not_blank: Password should not be blank
     minimum_characters: Password must be at least {{ limit }} characters long
     maximum_characters: Password cannot be longer than {{ limit }} characters
     
@@ -16,3 +16,7 @@ rol_game:
     
 language:
     not_blank: You must select a language
+    
+version:
+    not_blank: Version should not be blank
+    must_be_integer: Version must be integer value

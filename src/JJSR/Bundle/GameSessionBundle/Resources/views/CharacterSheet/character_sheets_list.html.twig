@@ -3,7 +3,6 @@
 {% block title %}{% trans %}character_sheet.list.title{% endtrans %}{% endblock %}
 
 {% block body %}
-    
 	<h1>{% trans %}character_sheet.list.title{% endtrans %}</h1>
 	</br>
 	
@@ -28,7 +27,7 @@
 							</form>	
 						</td>
 						<td>
-							<form action="{{ path('delete_character_sheet', {'character_sheet_id': character_sheet.getId()}) }}">
+							<form action="{{ path('delete_character_sheet', {'character_sheet_id': character_sheet.getId()}) }}" onsubmit="return confirm('{% trans %}are_you_sure{% endtrans %}');">
 					    		<input class="btn btn-danger" type="submit" value={% trans %}character_sheet.remove.submit{% endtrans %}>
 							</form>	
 						</td>

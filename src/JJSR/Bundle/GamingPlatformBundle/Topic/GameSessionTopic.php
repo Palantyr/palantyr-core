@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JJSR\Bundle\GameSessionBundle\Entity\GameSession;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class GameSessionTopic extends Controller implements TopicInterface
 {
@@ -780,7 +781,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 			    $character_sheet = self::getCharacterSheet($event['character_sheet_id']);			    
 			    $formatted_character_sheet = self::getFormattedCharacterSheet($character_sheet, $connection);
 			    
-			    $character_sheet_functionality = self::getFunctionalityFromCharacterSheet($character_sheet->getId());
+			    $character_sheet_functionality = self::getFunctionalityFromCharacterSheet($character_sheet->getCharacterSheetTemplate());
 			    $formatted_character_sheet['character_sheet_functionality'] = $character_sheet_functionality;
 			    
 				$character_sheet_json = json_encode($formatted_character_sheet);
@@ -904,7 +905,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $character_sheet_settings['character_sheet_template_version'] = $character_sheet->getCharacterSheetTemplate()->getVersion();
 	    $character_sheet_settings['character_sheet_name'] = $character_sheet->getName();
 	    $character_sheet_settings['user_username'] = $this->clientManipulator->getClient($connection)->getUsername();
-// 	    $character_sheet_settings['rol_game'];
+	    $character_sheet_settings['rol_game'] = $character_sheet->getCharacterSheetTemplate()->getRolGame()->getName();
 	    $formatted_character_sheet['character_sheet_settings'] = $character_sheet_settings;
 	    
 	    $character_sheet_data = $character_sheet->getCharacterSheetData();
@@ -985,12 +986,19 @@ class GameSessionTopic extends Controller implements TopicInterface
 
 // 	}
 
-	private function getFunctionalityFromCharacterSheet($character_sheet_id)
+	private function getFunctionalityFromCharacterSheet($character_sheet_template)
 	{
 	    $character_sheet_functionality = array();
-	    $character_sheet_functionality['character_sheet_owner_functionality'] = self::getPathfinderOwnerFunctionality();
-	    $character_sheet_functionality['character_sheet_gamemaster_functionality'] = self::getPathfinderGamemasterFunctionality();
-	    
+	    switch ($character_sheet_template->getRolGame()->getName()) {
+	        case 'Pathfinder':
+	            $character_sheet_functionality['character_sheet_owner_functionality'] = self::getPathfinderOwnerFunctionality();
+	            $character_sheet_functionality['character_sheet_gamemaster_functionality'] = self::getPathfinderGamemasterFunctionality();
+	            break;
+            case 'Vampire The Masquerade':
+                $character_sheet_functionality['character_sheet_owner_functionality'] = self::getVampireOwnerFunctionality();
+                $character_sheet_functionality['character_sheet_gamemaster_functionality'] = self::getVampireGamemasterFunctionality();
+                break;
+	    }	    
 	    return $character_sheet_functionality;
 	}
 	
@@ -1084,6 +1092,123 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    
 	    
 	    return $pathfinder_gamemaster_functionality;
+	}
+	
+	private function getVampireOwnerFunctionality()
+	{
+	    $vampire_owner_functionality = array();
+	
+	    $vampire_owner_functionality_strength = array();
+	    $vampire_owner_functionality_strength['functionality_type'] = 'individual';
+	    $vampire_owner_functionality_strength['identifier'] = 'strength';
+	    $vampire_owner_functionality_strength['multiple_selection_list'] = array('alert', 'athletics');
+	    
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'strength', 'value' => null);
+	    $vampire_owner_functionality_strength['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $vampire_owner_functionality[] = $vampire_owner_functionality_strength;
+	    
+	    
+	    $vampire_owner_functionality_dexterity = array();
+	    $vampire_owner_functionality_dexterity['functionality_type'] = 'individual';
+	    $vampire_owner_functionality_dexterity['identifier'] = 'dexterity';
+	    $vampire_owner_functionality_dexterity['multiple_selection_list'] = array('alert', 'athletics');
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'dexterity', 'value' => null);
+	    $vampire_owner_functionality_dexterity['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $vampire_owner_functionality[] = $vampire_owner_functionality_dexterity;
+	    
+	    
+	    $vampire_owner_functionality_alert = array();
+	    $vampire_owner_functionality_alert['functionality_type'] = 'individual';
+	    $vampire_owner_functionality_alert['identifier'] = 'alert';
+	    $vampire_owner_functionality_alert['multiple_selection_list'] = array('strength', 'dexterity');
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'alert', 'value' => null);
+	    $vampire_owner_functionality_alert['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $vampire_owner_functionality[] = $vampire_owner_functionality_alert;
+	    
+	    
+	    $vampire_owner_functionality_athletics = array();
+	    $vampire_owner_functionality_athletics['functionality_type'] = 'individual';
+	    $vampire_owner_functionality_athletics['identifier'] = 'athletics';
+	    $vampire_owner_functionality_athletics['multiple_selection_list'] = array('strength', 'dexterity');
+	    
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'athletics', 'value' => null);
+	    $vampire_owner_functionality_athletics['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $vampire_owner_functionality[] = $vampire_owner_functionality_athletics;
+	    
+	    
+	    $vampire_owner_functionality_mele_attack = array();
+	    $vampire_owner_functionality_mele_attack['functionality_type'] = 'collective';
+	    $vampire_owner_functionality_mele_attack['identifier'] = 'attack_mele_punch';
+	    $vampire_owner_functionality_mele_attack['name'] = 'Punch';
+	    $vampire_owner_functionality_mele_attack['access_list'] = array('Attack', 'Mele');
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'strength', 'value' => null);
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'dexterity', 'value' => null);
+	    $vampire_owner_functionality_mele_attack['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $vampire_owner_functionality[] = $vampire_owner_functionality_mele_attack;
+	     
+	    return $vampire_owner_functionality;
+	}
+	
+	private function getVampireGamemasterFunctionality()
+	{
+	    $vampire_gamemaster_functionality = array();
+	     
+	    $vampire_gamemaster_functionality_damage_hit_points = array();
+	    $vampire_gamemaster_functionality_damage_hit_points['functionality_type'] = 'collective';
+	    $vampire_gamemaster_functionality_damage_hit_points['identifier'] = 'damage_hit_points';
+	    $vampire_gamemaster_functionality_damage_hit_points['name'] = 'Damage hit points';
+	    $vampire_gamemaster_functionality_damage_hit_points['access_list'] = array('Gamemaster');
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'subtraction';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'hit_points_current', 'value' => null);
+	    $list_of_modifiers['value'][] = array('type' => 'new_field', 'name' => null, 'value' => 1);
+	    $vampire_gamemaster_functionality_damage_hit_points['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $vampire_gamemaster_functionality[] = $vampire_gamemaster_functionality_damage_hit_points;
+	     
+	     
+	    $vampire_gamemaster_functionality_heal_hit_points = array();
+	    $vampire_gamemaster_functionality_heal_hit_points['functionality_type'] = 'collective';
+	    $vampire_gamemaster_functionality_heal_hit_points['identifier'] = 'heal_hit_points';
+	    $vampire_gamemaster_functionality_heal_hit_points['name'] = 'Heal hit points';
+	    $vampire_gamemaster_functionality_heal_hit_points['access_list'] = array('Gamemaster');
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'hit_points_current', 'value' => null);
+	    $list_of_modifiers['value'][] = array('type' => 'new_field', 'name' => null, 'value' => 1);
+	    $vampire_gamemaster_functionality_heal_hit_points['list_of_modifiers'] = $list_of_modifiers;
+	
+	    $vampire_gamemaster_functionality[] = $vampire_gamemaster_functionality_heal_hit_points;
+	     
+	     
+	    return $vampire_gamemaster_functionality;
 	}
 	
 	private function onPublishFunctionality (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {

@@ -42,3 +42,48 @@ JJSR\Bundle\GameSessionBundle\Entity\GameSession:
                 max: 200
                 maxMessage: comments.maximum_characters
                 groups: [Create]
+
+JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetTemplate:
+    properties:
+        id:
+            - IsNull:
+                groups: [Create]
+        name:
+            - NotBlank:
+                message: name.not_blank
+                groups: [Create, Update]
+            - Length:
+                min: 1
+                max: 255
+                minMessage: name.minimum_characters
+                maxMessage: name.maximum_characters
+                groups: [Create, Update]
+        rol_game:
+            - NotBlank:
+                message: rol_game.not_blank
+                groups: [Create, Update]
+        version:
+            - NotBlank:
+                message: version.not_blank
+                groups: [Create, Update]
+            - Regex:
+                pattern: '/\d/'
+                match:   true
+                message: version.must_be_integer
+                groups: [Create, Update]
+
+#JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet:
+#    properties:
+#        id:
+#            - IsNull:
+#                groups: [Create]
+#        name:
+#            - NotBlank:
+#                message: name.not_blank
+#                groups: [Create, Update]
+#            - Length:
+#                min: 1
+#                max: 50
+#                minMessage: name.minimum_characters
+#                maxMessage: name.maximum_characters
+#                groups: [Create, Update]

@@ -10,6 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+
 
 class CharacterSheetDataEditableType extends AbstractType
 {
@@ -63,6 +66,11 @@ class CharacterSheetDataEditableType extends AbstractType
                     break;
                 case 'field':
                     $form->add('value', TextType::class, array(
+                        'cascade_validation' => true,
+                        'constraints' => array(
+                            new NotBlank(),
+                            new Length(array('min' => 1, 'max' => 50)),
+                        ),
                         'attr' => array('id-form' => $character_sheet_data->getName(), 'label_col' => 2, 'widget_col' => 3),
 //                         'label_attr' => array('id' => $character_sheet_data->getName())
                     ));

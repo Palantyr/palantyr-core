@@ -16,3 +16,7 @@ rol_game:
     
 language:
     not_blank: Debes seleccionar un idioma
+
+version:
+    not_blank: Version no debe estar en blanco
+    must_be_integer: Version debe tener un valor numérico entero

@@ -15,9 +15,9 @@ class CharacterSheetController extends Controller
     public function addCharacterSheetMenuAction(Request $request)
     {
         $add_character_sheet_service = $this->get('add_character_sheet_menu_type.service');
-        $form = $this->createForm($add_character_sheet_service);         
+        $form = $this->createForm($add_character_sheet_service);        
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $rol_game_url = str_replace(" ", "-", $form->getData()['rol_game']->getName());
             $character_sheet_template_url = str_replace(" ", "-", $form->getData()['character_sheet_template']->getName());
@@ -37,7 +37,7 @@ class CharacterSheetController extends Controller
     
     public function addCharacterSheetAction(Request $request)
     {
-        if ($this->getRequest()->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
             return self::handleAjax($request);
         }
 
@@ -70,7 +70,7 @@ class CharacterSheetController extends Controller
             case 'Vampire The Masquerade':
                 self::vampireCharacterSheet($character_sheet);
                 break;
-                
+
             case 'Pathfinder':
                 self::pathfinderCharacterSheet($character_sheet);
                 break;
@@ -243,7 +243,7 @@ class CharacterSheetController extends Controller
     
     public function editCharacterSheetAction(Request $request)
     {
-        if ($this->getRequest()->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
             return self::handleAjax($request);
         }
         
@@ -309,16 +309,14 @@ class CharacterSheetController extends Controller
         $main_data->setDatatype('group');
         $character_sheet->addCharacterSheetDatum($main_data);
         
-        $character_name = new CharacterSheetData();
-//         $character_name->setCharacterSheet($character_sheet);
-        $character_name->setName('character_name');
-        $character_name->setDatatype('field');
-        $character_name->setDisplayName('Character name');
-        $character_name->setCharacterSheetDataGroup($main_data);
-        $main_data->addCharacterSheetDatum($character_name);
+        $generation = new CharacterSheetData();
+        $generation->setName('generation');
+        $generation->setDatatype('field');
+        $generation->setDisplayName('Generation');
+        $generation->setCharacterSheetDataGroup($main_data);
+        $main_data->addCharacterSheetDatum($generation);
         
         $player_name = new CharacterSheetData();
-//         $player_name->setCharacterSheet($character_sheet);
         $player_name->setName('player_name');
         $player_name->setDatatype('field');
         $player_name->setDisplayName('Player name');
@@ -333,7 +331,6 @@ class CharacterSheetController extends Controller
         $character_sheet->addCharacterSheetDatum($attributes);
         
         $physical = new CharacterSheetData();
-//         $physical->setCharacterSheet($character_sheet);
         $physical->setName('physical');
         $physical->setDatatype('group');
         $physical->setDisplayName('Physical');
@@ -341,7 +338,6 @@ class CharacterSheetController extends Controller
         $attributes->addCharacterSheetDatum($physical);
         
         $strength = new CharacterSheetData();
-//         $strength->setCharacterSheet($character_sheet);
         $strength->setName('strength');
         $strength->setDatatype('field');
         $strength->setDisplayName('Strength');
@@ -349,12 +345,60 @@ class CharacterSheetController extends Controller
         $physical->addCharacterSheetDatum($strength);
         
         $dexterity = new CharacterSheetData();
-//         $dexterity->setCharacterSheet($character_sheet);
         $dexterity->setName('dexterity');
         $dexterity->setDatatype('field');
         $dexterity->setDisplayName('Dexterity');
         $dexterity->setCharacterSheetDataGroup($physical);
         $physical->addCharacterSheetDatum($dexterity);
+        
+        $abilities = new CharacterSheetData();
+        $abilities->setCharacterSheet($character_sheet);
+        $abilities->setName('abilities');
+        $abilities->setDatatype('group');
+        $abilities->setDisplayName('Abilities');
+        $character_sheet->addCharacterSheetDatum($abilities);
+        
+        $talents = new CharacterSheetData();
+        $talents->setName('talents');
+        $talents->setDatatype('group');
+        $talents->setDisplayName('Talents');
+        $talents->setCharacterSheetDataGroup($abilities);
+        $abilities->addCharacterSheetDatum($talents);
+        
+        $alert = new CharacterSheetData();
+        $alert->setName('alert');
+        $alert->setDatatype('field');
+        $alert->setDisplayName('Alert');
+        $alert->setCharacterSheetDataGroup($talents);
+        $talents->addCharacterSheetDatum($alert);
+        
+        $athletics = new CharacterSheetData();
+        $athletics->setName('athletics');
+        $athletics->setDatatype('field');
+        $athletics->setDisplayName('Athletics');
+        $athletics->setCharacterSheetDataGroup($talents);
+        $talents->addCharacterSheetDatum($athletics);
+        
+        
+        $hit_points = new CharacterSheetData();
+        $hit_points->setCharacterSheet($character_sheet);
+        $hit_points->setName('hit_points');
+        $hit_points->setDatatype('group');
+        $character_sheet->addCharacterSheetDatum($hit_points);
+        
+        $hit_points_total = new CharacterSheetData();
+        $hit_points_total->setName('hit_points_total');
+        $hit_points_total->setDatatype('field');
+        $hit_points_total->setDisplayName('Hit points total');
+        $hit_points_total->setCharacterSheetDataGroup($hit_points);
+        $hit_points->addCharacterSheetDatum($hit_points_total);
+        
+        $hit_points_current = new CharacterSheetData();
+        $hit_points_current->setName('hit_points_current');
+        $hit_points_current->setDatatype('field');
+        $hit_points_current->setDisplayName('Hit points current');
+        $hit_points_current->setCharacterSheetDataGroup($hit_points);
+        $hit_points->addCharacterSheetDatum($hit_points_current);
     }
     
     private function pathfinderCharacterSheet(CharacterSheet $character_sheet)
@@ -366,12 +410,12 @@ class CharacterSheetController extends Controller
         $main_data->setDisplayName('Main Data');
         $character_sheet->addCharacterSheetDatum($main_data);
         
-        $character_name = new CharacterSheetData();
-        $character_name->setName('character_name');
-        $character_name->setDatatype('field');
-        $character_name->setDisplayName('Character name');
-        $character_name->setCharacterSheetDataGroup($main_data);
-        $main_data->addCharacterSheetDatum($character_name);
+        $alignment = new CharacterSheetData();
+        $alignment->setName('alignment');
+        $alignment->setDatatype('field');
+        $alignment->setDisplayName('Alignment');
+        $alignment->setCharacterSheetDataGroup($main_data);
+        $main_data->addCharacterSheetDatum($alignment);
         
         $attributes = new CharacterSheetData();
         $attributes->setCharacterSheet($character_sheet);
