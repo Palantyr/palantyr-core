@@ -1018,6 +1018,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'][] = array('type' => 'derived', 'name' => 'strength_temporary_modifier', 'value' => null);
 	    $pathfinder_owner_functionality_strength_temporary_modifier['list_of_modifiers'] = $list_of_modifiers;
 	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd20';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 20);
+	    $pathfinder_owner_functionality_strength_temporary_modifier['launch_system'] = $launch_system;
+	    
 	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_strength_temporary_modifier;
 	    
 	    
@@ -1032,6 +1038,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'][] = array('type' => 'dice', 'name' => null, 'value' => 20);
 	    $list_of_modifiers['value'][] = array('type' => 'derived', 'name' => 'constitution_temporary_modifier', 'value' => null);
 	    $pathfinder_owner_functionality_constitution_temporary_modifier['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd20';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 20);
+	    $pathfinder_owner_functionality_constitution_temporary_modifier['launch_system'] = $launch_system;
 	     
 	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_constitution_temporary_modifier;
 	    
@@ -1048,6 +1060,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'strength_temporary_modifier', 'value' => null);
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'dexterity_temporary_modifier', 'value' => null);
 	    $pathfinder_owner_functionality_mele_attack['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd20';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 20);
+	    $pathfinder_owner_functionality_mele_attack['launch_system'] = $launch_system;
 	     
 	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_mele_attack;
 	    
@@ -1108,6 +1126,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'] = array();
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'strength', 'value' => null);
 	    $vampire_owner_functionality_strength['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd10';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 6);
+	    $vampire_owner_functionality_strength['launch_system'] = $launch_system;
 	     
 	    $vampire_owner_functionality[] = $vampire_owner_functionality_strength;
 	    
@@ -1123,6 +1147,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'dexterity', 'value' => null);
 	    $vampire_owner_functionality_dexterity['list_of_modifiers'] = $list_of_modifiers;
 	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd10';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 6);
+	    $vampire_owner_functionality_dexterity['launch_system'] = $launch_system;
+	    
 	    $vampire_owner_functionality[] = $vampire_owner_functionality_dexterity;
 	    
 	    
@@ -1137,6 +1167,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'alert', 'value' => null);
 	    $vampire_owner_functionality_alert['list_of_modifiers'] = $list_of_modifiers;
 	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd10';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 6);
+	    $vampire_owner_functionality_alert['launch_system'] = $launch_system;
+	    
 	    $vampire_owner_functionality[] = $vampire_owner_functionality_alert;
 	    
 	    
@@ -1150,6 +1186,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'] = array();
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'athletics', 'value' => null);
 	    $vampire_owner_functionality_athletics['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd10';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 6);
+	    $vampire_owner_functionality_athletics['launch_system'] = $launch_system;
 	     
 	    $vampire_owner_functionality[] = $vampire_owner_functionality_athletics;
 	    
@@ -1166,6 +1208,12 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'strength', 'value' => null);
 	    $list_of_modifiers['value'][] = array('type' => 'field', 'name' => 'dexterity', 'value' => null);
 	    $vampire_owner_functionality_mele_attack['list_of_modifiers'] = $list_of_modifiers;
+	    
+	    $launch_system = array();
+	    $launch_system['type'] = 'd10';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 6);
+	    $vampire_owner_functionality_mele_attack['launch_system'] = $launch_system;
 	    
 	    $vampire_owner_functionality[] = $vampire_owner_functionality_mele_attack;
 	     
@@ -1197,7 +1245,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $vampire_gamemaster_functionality_heal_hit_points['identifier'] = 'heal_hit_points';
 	    $vampire_gamemaster_functionality_heal_hit_points['name'] = 'Heal hit points';
 	    $vampire_gamemaster_functionality_heal_hit_points['access_list'] = array('Gamemaster');
-	     
+
 	    $list_of_modifiers = array();
 	    $list_of_modifiers['type'] = 'sum';
 	    $list_of_modifiers['value'] = array();

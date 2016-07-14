@@ -209,8 +209,9 @@
      		for (var functionality_permission in functionality) {
      	 		switch (functionality_permission) {
      	 			case 'character_sheet_owner_functionality':
-//          	 			if user is owner or gamemaster
-     	 				addFunctionalityAuxToCharacterSheet(functionality[functionality_permission], character_sheet_id);
+						if (isGamemaster() || isOwnerOfCharacterSheetId(character_sheet_id)) {
+							addFunctionalityAuxToCharacterSheet(functionality[functionality_permission], character_sheet_id);
+						}
      	 				break;
      	 			case 'character_sheet_gamemaster_functionality':
      	 				if (user_username == game_session_owner_username) {
@@ -242,9 +243,11 @@
 		$( "#"+character_sheet_id ).on("click", "#"+functionality['identifier'], function() {	
 			if (checkAndPrepareFunctionalityPanel(character_sheet_id, functionality['identifier']) == true) {
 				character_sheets_current_functionality[character_sheet_id][functionality['identifier']] = character_sheets_functionality[character_sheet_id][functionality['identifier']];
-				//launch_system
 				if (functionality['list_of_modifiers']) {
 					listOfModifiers(functionality['list_of_modifiers'], character_sheet_id);
+				}
+				if (functionality['launch_system'] && !$( '#'+character_sheet_id+' #functional_panel #launch_system').length) {
+					launchSystem(functionality['launch_system'], character_sheet_id);
 				}
 				if (!$( '#'+character_sheet_id+' #functional_panel #functional_panel_throw_button').length) {
 					$( '#'+character_sheet_id+' #functional_panel').append('<button id="functional_panel_throw_button" title="Throw" class="btn-sm glyphicon glyphicon-th-large"></button>');
@@ -272,10 +275,15 @@
  			if(!$( "body .checkmark" ).length && !$( "#game_container #character_sheet_target" ).length) {
      			if (checkAndPrepareFunctionalityPanel(character_sheet_id, new_element_identifier) == true) {
      				character_sheets_current_functionality[character_sheet_id][functionality['identifier']] = character_sheets_functionality[character_sheet_id][functionality['identifier']];
+
      	 			var list_of_modifiers = functionality['list_of_modifiers'];
-    //  	 			alert(JSON.stringify(list_of_modifiers));
      	 			listOfModifiers(list_of_modifiers, character_sheet_id);
-    
+
+    				if (functionality['launch_system'] && !$( '#'+character_sheet_id+' #functional_panel #launch_system').length) {
+         	 			var launch_system = functionality['launch_system'];
+         	 			launchSystem(launch_system, character_sheet_id);
+    				}
+     	 			
      	 		 	$( "body" ).append( '<div class="checkmark"></div>' ); 	
      	 			$( "body" ).mousemove(function(event) {
      	 				var offset = $(this).offset(),
@@ -295,8 +303,8 @@
         					$( "body .checkmark" ).remove();
         					$( "#"+character_sheet_id+" > #character_sheet_extended > #functional_panel").append('<button id="functional_panel_throw_button" title="Throw" class="btn-sm glyphicon glyphicon-th-large"></button>');
         
-        					var character_sheet_target_name = getCharacterSheetIdFromJQuery(this);
-        					$( "#"+character_sheet_id+" #functional_panel_data" ).append('<div id="character_sheet_target">Character sheet target: '+character_sheet_target_name+'</div>');
+        					var character_sheet_target_name = getCharacterSheetNameFromJQuery(this);
+        					$( "#"+character_sheet_id+" #functional_panel_data" ).append('<div id="character_sheet_target">Target: '+character_sheet_target_name+'</div>');
         				}
     					$( this ).off( event );
     				});
@@ -396,31 +404,32 @@
 
  	function listOfModifiers(list_of_modifiers, character_sheet_id) //to improve types of modifiers
  	{
-		switch(list_of_modifiers['type']) { 
+		switch(list_of_modifiers['type']) {
 		case 'field':
 			var value = $( '#'+character_sheet_id+' #'+list_of_modifiers['name']+' > #value' ).text();
-			if (user_username == game_session_owner_username) {
-				$( '#'+character_sheet_id+' #functional_panel_data').append('<input type="number" name='+list_of_modifiers['name']+' value='+value+'>');
-			}
-			else {
-				$( '#'+character_sheet_id+' #functional_panel_data').append('<input readonly type="number" name='+list_of_modifiers['name']+' value='+value+'>');
-			}
+// 			if (isGamemaster()) {
+// 				$( '#'+character_sheet_id+' #functional_panel_data').append('<input class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>');
+// 			}
+// 			else {
+// 				$( '#'+character_sheet_id+' #functional_panel_data').append('<input class="col-xs-4" readonly name='+list_of_modifiers['name']+' value='+value+'>');
+// 			}
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
 			break;
 
 		case 'new_field':
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<input type="number" name='+list_of_modifiers['value']+' value='+list_of_modifiers['value']+'>');
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<input class="col-xs-4" name='+list_of_modifiers['value']+' value='+list_of_modifiers['value']+'>');
 			break;
 
 		case 'derived':
 			var value = $( '#'+character_sheet_id+' #'+list_of_modifiers['name']+' > #value' ).text();
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<span name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
 			break;
 
 		case 'sum':
 			for(var value_count = 0 ; value_count < list_of_modifiers['value'].length ; value_count++) {
 				listOfModifiers(list_of_modifiers['value'][value_count], character_sheet_id);
 				if (value_count + 1  < list_of_modifiers['value'].length) {
-					$( '#'+character_sheet_id+' #functional_panel_data').append('<span name="sum"> + </span>');
+					$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name="sum"> + </span>');
 				}
 			}
 			break;
@@ -428,14 +437,40 @@
 			for(var value_count = 0 ; value_count < list_of_modifiers['value'].length ; value_count++) {
 				listOfModifiers(list_of_modifiers['value'][value_count], character_sheet_id);
 				if (value_count + 1  < list_of_modifiers['value'].length) {
-					$( '#'+character_sheet_id+' #functional_panel_data').append('<span name="sum"> - </span>');
+					$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name="subtraction"> - </span>');
 				}
 			}
 			break;
 
 		case 'dice':
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<span name="dice" value='+list_of_modifiers['value']+'>d'+list_of_modifiers['value']+'</span>');
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name="dice" value='+list_of_modifiers['value']+'>d'+list_of_modifiers['value']+'</span>');
 			break;
+		}
+ 	}
+
+ 	function launchSystem(launch_system, character_sheet_id)
+ 	{
+		switch(launch_system['type']) {
+		case 'd20':
+			for(value in launch_system['value']) {
+				launchSystemAux(launch_system['value'][value], character_sheet_id)
+			}
+			break;
+		case 'd10':
+			for(value in launch_system['value']) {
+				launchSystemAux(launch_system['value'][value], character_sheet_id)
+			}
+			break;
+		}
+ 	}
+
+ 	function launchSystemAux(value, character_sheet_id)
+ 	{
+		if (isGamemaster()) {
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<div id="launch_system"><span class="col-xs-4">'+value['display_name']+'</span><input class="col-xs-4" name='+value['type']+' value='+value['value']+'></div>');
+		}
+		else {
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<div id="launch_system"><span class="col-xs-4">'+value['display_name']+'</span><input class="col-xs-4" readonly name='+value['type']+' value='+value['value']+'></div>');
 		}
  	}
 
@@ -555,6 +590,16 @@
 		return character_sheet['character_sheet_settings']['character_sheet_name'];
  	}
 
+
+ 	function isOwnerOfCharacterSheetId(character_sheet_id)
+ 	{
+		if ($( ".main-container #"+character_sheet_id )) {
+			var character_sheet_user_username = $( ".main-container #"+character_sheet_id ).children('#character_sheet_settings').children('#user_username').text();
+			return (character_sheet_user_username == user_username);
+		}
+		return false;
+ 	}
+
  	function getCharacterSheetIdFromJQuery(element)
  	{
  	 	if ($( element ).attr('id') == 'main-container') {
@@ -565,6 +610,19 @@
 		}
 		else {
 			return getCharacterSheetIdFromJQuery($( element ).parent());
+		}
+ 	}
+
+ 	function getCharacterSheetNameFromJQuery(element)
+ 	{
+ 	 	if ($( element ).attr('id') == 'main-container') {
+			return null;
+ 	 	}
+ 	 	else if ($( element ).hasClass('character-sheet')) {
+ 	 		return $( element ).children('#character_sheet_settings').children('#character_sheet_name').text();
+		}
+		else {
+			return getCharacterSheetNameFromJQuery($( element ).parent());
 		}
  	}
  	

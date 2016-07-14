@@ -173,8 +173,9 @@
      	$( ".main-container" ).on("click", "#functional_panel_throw_button", function() {
     		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
     		if (character_sheet_id) {
+        		//get modified funcionality
     			character_sheet_functionality_executed_json = JSON.stringify(character_sheets_current_functionality[character_sheet_id]);
-//     			alert(character_sheet_functionality_executed_json);
+    			alert(character_sheet_functionality_executed_json);
     			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
  	 			session.publish(route_game_session, {
  	 				section:'functionality_character_sheet',

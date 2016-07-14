@@ -224,14 +224,18 @@ body .main-container .map-container {
 	margin-bottom: 5px;
 }
 
-.character-sheet-extended {
+.character-sheet .character-sheet-extended {
 	display: table;
-	flex-grow: 1;
+/* 	flex-grow: 1; */
+/* 	max-width: 300px; */
+	position: absolute;
 }
 
 .character-sheet-extended .character-sheet-complete {
-	flex-grow: 1;
+/* 	flex-grow: 1; */
 	display: none;
+/* 	max-width: 300px; */
+	width: 220px;
 }
 
 @media (min-width: 768px) {
