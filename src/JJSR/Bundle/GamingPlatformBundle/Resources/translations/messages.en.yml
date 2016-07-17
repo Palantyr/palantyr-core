@@ -40,3 +40,13 @@ game_session:
     not_exist:
         title: Game session not exist
         message: The game session not exist
+    request_character_sheets:
+        title: Request character sheets
+        not_to_import: You haven\'t any character sheet to import
+        import_button: Import character
+        delete_button: Delete character
+    throw_dice:
+        title: Throw dice
+        throw_button: Throw
+        
+game_session.throw_dice.partial_message %die_type% %number_of_dice%: 'The %number_of_dice%d%die_type% result is: '

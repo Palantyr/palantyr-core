@@ -40,3 +40,13 @@ game_session:
     not_exist:
         title: La sesión de juego no existe
         message: La sesión de juego no existe
+    request_character_sheets:
+        title: Pedir fichas de personaje
+        not_to_import: No tienes ninguna ficha de personaje para importar
+        import_button: Importar personaje
+        delete_button: Eliminar personaje
+    throw_dice:
+        title: Lanzar dados
+        throw_button: Lanzar
+
+game_session.throw_dice.partial_message %die_type% %number_of_dice%: 'El resultado de %number_of_dice%d%die_type% es: '

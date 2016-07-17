@@ -727,9 +727,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 		$dice_result_message = '';
 		$dice_partial_message = '';
 		foreach ($dice_result as $die_type => $die_values) {
+    		$number_of_dice = count($die_values);
 			$dice_partial_message = $this->translator->trans(
-					'game_session.throw_dice.partial_message %die_type%',
-					array('%die_type%' => $die_type),
+					'game_session.throw_dice.partial_message %die_type% %number_of_dice%',
+					array('%die_type%' => $die_type, '%number_of_dice%' => $number_of_dice),
 					'messages',
 					$user_language
 					);
