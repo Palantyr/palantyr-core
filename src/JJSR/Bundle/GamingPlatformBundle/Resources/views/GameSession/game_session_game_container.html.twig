@@ -30,23 +30,7 @@
 {# Utilities #}
 
 <script type="text/javascript">
-// OTHER
- 	function getCharacterSheetIdFromElement(element) {
- 		var is_only_number = /^\d+$/;
-		
- 		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
- 				element.parent().attr('id') == 'other_users_connected' ||
- 				element.parent().attr('id') == 'myModal') { 
- 			return false;
- 		}
- 		else if (is_only_number.test(element.parent().attr("id"))) {
- 			return element.parent().attr("id");
- 		}
- 		else {
- 			return getCharacterSheetIdFromElement(element.parent());
- 		}
- 	}
-
+// Popup
 	function usePopup (title, body, footer) {
 
 		if ($('#myModal').is(':visible')) {
@@ -99,13 +83,6 @@
 	function setModalFooter(text) {
 		$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(text);
 	}
-
-// 	var last_id_from_input;
-// 	$(function() {
-// 	    $("input").on("click", function() {
-// 	    	last_id_from_input = $(this).attr("id");
-// 	    });
-// 	});
-
+// Popup
 </script>
 </div>

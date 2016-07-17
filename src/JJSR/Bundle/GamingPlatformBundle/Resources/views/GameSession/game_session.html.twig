@@ -3,6 +3,10 @@
 {% block body %}
 	{{ ws_client() }}
 
+{# General functionality #}
+	{{ include('GamingPlatformBundle:GameSession:general_functionality.html.twig') }}
+{# General functionality #}
+
 <script type="text/javascript">
 // 	GLOBAL VARIABLES FROM TWIG 
 	var room = "{{ game_session.getId() }}";
@@ -13,12 +17,6 @@
 	var websocket = WS.connect(_WS_URI);
 // 	GLOBAL VARIABLES FROM TWIG 
 
-    function isGamemaster()
-    {
-    	return user_username == game_session_owner_username;
-    }
-
-	
 // ||||||||||||||||||||||||||||||||||||| WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
 	websocket.on("socket/connect", function(session){
 
@@ -145,8 +143,8 @@
 			});
 		});
 
-		$( '#myModal' ).on('click', '#character_sheet_import_button', function() {
-			var character_sheet_id = getCharacterSheetIdFromElement($(this));
+		$( "#myModal" ).on("click", "#character_sheet_import_button", function() {
+			var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
 			closePopup();
 			session.publish(route_game_session, {
 				section:'import_character_sheet',
@@ -157,7 +155,7 @@
  		$( '.main-container' ).on('click', '#character_sheet_delete_button', function() {
  	 		var are_you_sure_trans = '{% trans %}are_you_sure{% endtrans %}';
  		    if (confirm(are_you_sure_trans)) {
- 	 			var character_sheet_id = getCharacterSheetIdFromElement($(this));
+ 	 			var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
  	 			
  	 			session.publish(route_game_session, {
  	 				section:'import_character_sheet',
@@ -171,7 +169,7 @@
 
 // FUNCTIONALITY CHARACTER SHEET
      	$( ".main-container" ).on("click", "#functional_panel_throw_button", function() {
-    		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
+    		var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
     		if (character_sheet_id) {
 
     			var character_sheet_functionality_executed = character_sheets_current_functionality[character_sheet_id];
@@ -185,7 +183,7 @@
 				}
 
 				character_sheet_functionality_executed_json = JSON.stringify(character_sheets_current_functionality[character_sheet_id]);
-				alert(character_sheet_functionality_executed_json);
+// 				alert(character_sheet_functionality_executed_json);
     			
     			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
  	 			session.publish(route_game_session, {

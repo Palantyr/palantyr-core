@@ -47,9 +47,9 @@
 
  	function printRequestCharacterSheet(character_sheet)
  	{
- 		var character_sheet_id = getCharacterSheetId(character_sheet);
+ 		var character_sheet_id = getCharacterSheetProperty(character_sheet, 'character_sheet_id');
  		var character_sheet_class = 'character-sheet-provisional'; //currently unused
- 		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
+ 		var character_sheet_user_username = getCharacterSheetProperty(character_sheet, 'user_username');
  		var sheet_destination = '.modal-body #import_character_sheet';
 
  		$( sheet_destination ).append( 
@@ -94,10 +94,10 @@
 
 	function getClassToCharacterSheet(character_sheet)
 	{
-		if (user_username == getUserUsernameFromCharacterSheet(character_sheet)) {
+		if (user_username == getCharacterSheetProperty(character_sheet, 'user_username')) {
 			return 'character-sheet-owner';
  		}
-		else if (game_session_owner_username == getUserUsernameFromCharacterSheet(character_sheet)) {
+		else if (game_session_owner_username == getCharacterSheetProperty(character_sheet, 'user_username')) {
 			return 'character-sheet-gamemaster';
  		}
 		else {
@@ -110,7 +110,7 @@
 		if (user_username == game_session_owner_username) {
 			return 'gamemaster';
  		}
-		else if (user_username == getUserUsernameFromCharacterSheet(character_sheet)) {
+		else if (user_username == getCharacterSheetProperty(character_sheet, 'user_username')) {
 			return 'owner';
  		}
 		else {
@@ -123,9 +123,9 @@
 		var character_sheet_class = getClassToCharacterSheet(character_sheet);
 		var character_sheet_permission = getPermissionToCharacterSheet(character_sheet);
  	 	
- 		var character_sheet_id = getCharacterSheetId(character_sheet);
- 		var character_sheet_user_username = getUserUsernameFromCharacterSheet(character_sheet);
-		var character_name = getCharacterSheetName(character_sheet);
+ 		var character_sheet_id = getCharacterSheetProperty(character_sheet, 'character_sheet_id');
+ 		var character_sheet_user_username = getCharacterSheetProperty(character_sheet, 'user_username');
+		var character_name = getCharacterSheetProperty(character_sheet, 'character_sheet_name');
 
 		var character_sheet_show_complete_button_trans = '{{ 'game_session.character_sheet.show_complete_button'|trans }}';
 		$( "#game_container" ).append(' \
@@ -303,7 +303,7 @@
         					$( "body .checkmark" ).remove();
         					$( "#"+character_sheet_id+" > #character_sheet_extended > #functional_panel").append('<button id="functional_panel_throw_button" title="Throw" class="btn-sm glyphicon glyphicon-th-large"></button>');
         
-        					var character_sheet_target_name = getCharacterSheetNameFromJQuery(this);
+        					var character_sheet_target_name = getCharacterSheetProperty(this, 'character_sheet_name');
         					$( "#"+character_sheet_id+" #functional_panel_data" ).append('<div id="character_sheet_target">Target: '+character_sheet_target_name+'</div>');
         				}
     					$( this ).off( event );
@@ -575,57 +575,6 @@
 			</div>' );
  	}
 
- 	function getCharacterSheetId(character_sheet) 
- 	{
- 		return character_sheet['character_sheet_settings']['character_sheet_id'];
- 	}
-
- 	function getUserUsernameFromCharacterSheet(character_sheet) 
- 	{
- 		return character_sheet['character_sheet_settings']['user_username'];
- 	}
-
- 	function getCharacterSheetName(character_sheet)
- 	{
-		return character_sheet['character_sheet_settings']['character_sheet_name'];
- 	}
-
-
- 	function isOwnerOfCharacterSheetId(character_sheet_id)
- 	{
-		if ($( ".main-container #"+character_sheet_id )) {
-			var character_sheet_user_username = $( ".main-container #"+character_sheet_id ).children('#character_sheet_settings').children('#user_username').text();
-			return (character_sheet_user_username == user_username);
-		}
-		return false;
- 	}
-
- 	function getCharacterSheetIdFromJQuery(element)
- 	{
- 	 	if ($( element ).attr('id') == 'main-container') {
-			return null;
- 	 	}
- 	 	else if ($( element ).hasClass('character-sheet')) {
-			return $( element ).attr('id');
-		}
-		else {
-			return getCharacterSheetIdFromJQuery($( element ).parent());
-		}
- 	}
-
- 	function getCharacterSheetNameFromJQuery(element)
- 	{
- 	 	if ($( element ).attr('id') == 'main-container') {
-			return null;
- 	 	}
- 	 	else if ($( element ).hasClass('character-sheet')) {
- 	 		return $( element ).children('#character_sheet_settings').children('#character_sheet_name').text();
-		}
-		else {
-			return getCharacterSheetNameFromJQuery($( element ).parent());
-		}
- 	}
- 	
  	function deleteCharacterSheet(character_sheet_id)
  	{
  	 	$( ".main-container #"+character_sheet_id ).remove();
@@ -638,14 +587,14 @@
  	}
 
  	$( "#game_container" ).on("click", "#functional_panel_cancel_button", function() {
-		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
+		var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
 		if (character_sheet_id) {
 			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
 		}
  	});
 
 	$( "#game_container" ).on("click", "#character_sheet_show_complete_button", function() {
-		var character_sheet_id = getCharacterSheetIdFromJQuery(this);
+		var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
 
 		if ($( "#"+character_sheet_id+" .character-sheet-complete" ).css('display') == 'none') {
 			$( "#"+character_sheet_id+" .character-sheet-complete" ).css('display', 'table');
