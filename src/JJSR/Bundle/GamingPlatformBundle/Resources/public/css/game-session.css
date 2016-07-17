@@ -1,3 +1,5 @@
+@CHARSET "UTF-8";
+
 html, body {
   	height: 100%;
 	width: 100%;
@@ -38,6 +40,7 @@ body .main-container .map-container {
 	width: 100%;
  	position: inherit;
  	display: none;
+ 	background: url('../images/map-background.png');
 }
 
 /* Chat */

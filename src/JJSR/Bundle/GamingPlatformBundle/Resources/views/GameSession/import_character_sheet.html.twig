@@ -413,23 +413,23 @@
 // 			else {
 // 				$( '#'+character_sheet_id+' #functional_panel_data').append('<input class="col-xs-4" readonly name='+list_of_modifiers['name']+' value='+value+'>');
 // 			}
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
+			$( '#'+character_sheet_id+' #functional_panel_data' ).append('<span class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
 			break;
 
 		case 'new_field':
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<input class="col-xs-4" name='+list_of_modifiers['value']+' value='+list_of_modifiers['value']+'>');
+			$( '#'+character_sheet_id+' #functional_panel_data' ).append('<input class="col-xs-4" name='+list_of_modifiers['value']+' value='+list_of_modifiers['value']+'>');
 			break;
 
 		case 'derived':
 			var value = $( '#'+character_sheet_id+' #'+list_of_modifiers['name']+' > #value' ).text();
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
+			$( '#'+character_sheet_id+' #functional_panel_data' ).append('<span class="col-xs-4" name='+list_of_modifiers['name']+' value='+value+'>'+value+'</span>');
 			break;
 
 		case 'sum':
 			for(var value_count = 0 ; value_count < list_of_modifiers['value'].length ; value_count++) {
 				listOfModifiers(list_of_modifiers['value'][value_count], character_sheet_id);
 				if (value_count + 1  < list_of_modifiers['value'].length) {
-					$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name="sum"> + </span>');
+					$( '#'+character_sheet_id+' #functional_panel_data' ).append('<span class="col-xs-4" name="sum"> + </span>');
 				}
 			}
 			break;
@@ -437,13 +437,13 @@
 			for(var value_count = 0 ; value_count < list_of_modifiers['value'].length ; value_count++) {
 				listOfModifiers(list_of_modifiers['value'][value_count], character_sheet_id);
 				if (value_count + 1  < list_of_modifiers['value'].length) {
-					$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name="subtraction"> - </span>');
+					$( '#'+character_sheet_id+' #functional_panel_data' ).append('<span class="col-xs-4" name="subtraction"> - </span>');
 				}
 			}
 			break;
 
 		case 'dice':
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<span class="col-xs-4" name="dice" value='+list_of_modifiers['value']+'>d'+list_of_modifiers['value']+'</span>');
+			$( '#'+character_sheet_id+' #functional_panel_data' ).append('<span class="col-xs-4" name="dice" value='+list_of_modifiers['value']+'>d'+list_of_modifiers['value']+'</span>');
 			break;
 		}
  	}
@@ -467,10 +467,10 @@
  	function launchSystemAux(value, character_sheet_id)
  	{
 		if (isGamemaster()) {
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<div id="launch_system"><span class="col-xs-4">'+value['display_name']+'</span><input class="col-xs-4" name='+value['type']+' value='+value['value']+'></div>');
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<div id="launch_system"><span class="col-xs-4">'+value['display_name']+'</span><input class="col-xs-4" id='+value['type']+' value='+value['value']+'></div>');
 		}
 		else {
-			$( '#'+character_sheet_id+' #functional_panel_data').append('<div id="launch_system"><span class="col-xs-4">'+value['display_name']+'</span><input class="col-xs-4" readonly name='+value['type']+' value='+value['value']+'></div>');
+			$( '#'+character_sheet_id+' #functional_panel_data').append('<div id="launch_system"><span class="col-xs-4">'+value['display_name']+'</span><input class="col-xs-4" readonly id='+value['type']+' value='+value['value']+'></div>');
 		}
  	}
 
