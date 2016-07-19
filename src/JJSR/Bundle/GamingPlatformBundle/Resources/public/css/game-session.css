@@ -288,6 +288,11 @@ body .main-container .map-container {
 	width: 40px;
 	border-radius: 20px;
 }
+
+.map-token-name {
+	font-weight: bold;
+	color: #e7e7e7;
+}
 /* MAP */
 
 /* Utilities */

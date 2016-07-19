@@ -5,19 +5,33 @@
     	return user_username == game_session_owner_username;
     }
 
+	function isOwnerOfCharacterSheet(element)
+ 	{
+		var is_only_number = /^\d+$/;
+		
+		if (is_only_number.test(element)) {
+			var character_sheet_user_username = getCharacterSheetProperty($( ".main-container #"+element ), 'user_username'); //Must be character_sheet_user_username
+			return character_sheet_user_username == user_username;
+		}
+		else {
+			var character_sheet_user_username = getCharacterSheetProperty(element, 'user_username'); //Must be character_sheet_user_username
+			return character_sheet_user_username == user_username;
+		}
+ 	}
+
 	function getCharacterSheetProperty(element, property) 
-	{ 
-		var value;
+	{
+		var result;
 
 		if (element['character_sheet_settings']) {
-			value = element['character_sheet_settings'][property];
+			result = element['character_sheet_settings'][property];
 		}
 
-		if (!value) {
-			value = getCharacterSheetFromJQuery(element, property);
+		if (!result) {
+			result = getCharacterSheetFromJQuery(element, property);
 		}
 
-		return value;
+		return result;
 	}
 
 	function getCharacterSheetFromJQuery(element, property)
@@ -32,30 +46,20 @@
 			return getCharacterSheetFromJQuery($( element ).parent(), property);
 		}
  	}
-
-	function isOwnerOfCharacterSheetId(character_sheet_id)
- 	{
-		if ($( ".main-container #"+character_sheet_id )) {
-			var character_sheet_user_username = $( ".main-container #"+character_sheet_id ).children('#character_sheet_settings').children('#user_username').text();
-			return (character_sheet_user_username == user_username);
-		}
-		return false;
- 	}
-
- 	function getCharacterSheetIdFromElement(element) {
- 		var is_only_number = /^\d+$/;
+//  	function getCharacterSheetIdFromElement(element) {
+//  		var is_only_number = /^\d+$/;
 		
- 		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
- 				element.parent().attr('id') == 'other_users_connected' ||
- 				element.parent().attr('id') == 'myModal') { 
- 			return false;
- 		}
- 		else if (is_only_number.test(element.parent().attr("id"))) {
- 			return element.parent().attr("id");
- 		}
- 		else {
- 			return getCharacterSheetIdFromElement(element.parent());
- 		}
- 	}
+//  		if (element.parent().attr('id') == user_username || // || element.parent().attr("id") == "game_master"
+//  				element.parent().attr('id') == 'other_users_connected' ||
+//  				element.parent().attr('id') == 'myModal') { 
+//  			return false;
+//  		}
+//  		else if (is_only_number.test(element.parent().attr("id"))) {
+//  			return element.parent().attr("id");
+//  		}
+//  		else {
+//  			return getCharacterSheetIdFromElement(element.parent());
+//  		}
+//  	}
  	
 </script>

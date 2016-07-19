@@ -209,7 +209,7 @@
      		for (var functionality_permission in functionality) {
      	 		switch (functionality_permission) {
      	 			case 'character_sheet_owner_functionality':
-						if (isGamemaster() || isOwnerOfCharacterSheetId(character_sheet_id)) {
+						if (isGamemaster() || isOwnerOfCharacterSheet(character_sheet_id)) {
 							addFunctionalityAuxToCharacterSheet(functionality[functionality_permission], character_sheet_id);
 						}
      	 				break;

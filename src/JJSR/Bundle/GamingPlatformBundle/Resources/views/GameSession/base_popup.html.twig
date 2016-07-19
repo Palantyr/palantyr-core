@@ -16,3 +16,58 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+	function usePopup (title, body, footer) {
+
+		if ($('#myModal').is(':visible')) {
+			var executed = false;
+			$('#myModal').on('hidden.bs.modal', function (oneTime) {
+				if (executed == false) {
+					$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
+					$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
+					$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
+					$('#myModal').modal('show');
+				}
+				executed = true;
+			})
+		}
+		else {
+			$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(title);
+			$('#myModal > .modal-dialog > .modal-content > .modal-body').html(body);
+			$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(footer);
+	        $('#myModal').modal('show');
+		}
+	}
+
+	function closePopup () {
+		$('#myModal').modal('hide');
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').empty();
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').empty();
+	}
+
+	function getModalTitle() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html();
+	}
+
+	function setModalTitle(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-header > .modal-title').html(text);
+	}
+
+	function getModalBody() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-body').html();
+	}
+
+	function setModalBody(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-body').html(text);
+	}
+	
+	function getModalFooter() {
+		return $('#myModal > .modal-dialog > .modal-content > .modal-footer').html();
+	}
+
+	function setModalFooter(text) {
+		$('#myModal > .modal-dialog > .modal-content > .modal-footer').html(text);
+	}
+</script>

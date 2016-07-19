@@ -64,7 +64,7 @@
 	{		
 		$( "#map_container" ).append(' \
 				<div id="'+data_json.token_id+'" class="map-token"> \
-					<span id="map_token_name">'+data_json.token_name+'</span> \
+					<span id="map_token_name" class="map-token-name">'+data_json.token_name+'</span> \
 				</div> \
 			');
 		$( "#map_container #"+data_json.token_id ).css("background-color", data_json.token_css_color);
