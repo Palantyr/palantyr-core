@@ -1263,13 +1263,36 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function onPublishFunctionality (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
 		switch ($event['option']) {
 		    case 'execute_functionality':
-		        $character_sheet_functionality_executed = json_decode($event['character_sheet_functionality_executed_json']);
-
-		        $random = rand(0, 10);
-		        $result = "The result is ".$random." hits";
-		        
 		        $date = new \DateTime();
 		        $date = $date->format('H:i:s');
+		        
+		        $character_sheet_functionality_executed = json_decode($event['character_sheet_functionality_executed_json']);
+                dump($character_sheet_functionality_executed);
+                
+                //update character sheet test. The other complement is needed
+                foreach ($character_sheet_functionality_executed as $index => $value) {
+                    if ($index == 'damage_hit_points') {
+                        $character_sheet_functionality_updates = array(array('id' => 'hit_points_current', 'value' => rand(5, 15)));
+                        $topic->broadcast([
+                            'section' => 'functionality_character_sheet',
+                            'option' => 'update_character_sheet',
+                            'character_sheet_id' => $event['character_sheet_id'],
+                            'character_sheet_functionality_updates' => $character_sheet_functionality_updates,
+                        ]);
+                    }
+                    elseif ($index == 'heal_hit_points') {
+                        $character_sheet_functionality_updates = array(array('id' => 'hit_points_current', 'value' => rand(16, 26)));
+                        $topic->broadcast([
+                            'section' => 'functionality_character_sheet',
+                            'option' => 'update_character_sheet',
+                            'character_sheet_id' => $event['character_sheet_id'],
+                            'character_sheet_functionality_updates' => $character_sheet_functionality_updates,
+                        ]);
+                    }
+                }
+		        
+		        $random = rand(0, 10);
+		        $result = "The result is ".$random." hits";
 		        
 		        $topic->broadcast([
 		            'section' => 'chat',

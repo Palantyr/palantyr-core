@@ -1,5 +1,11 @@
 <script type="text/javascript">
 
+// Global variables
+ 	var character_sheets_functionality = {};
+ 	var character_sheets_current_functionality = {};
+ 	var character_sheets_collective_functionality_access_list = {};
+// Global variables
+
 	function subscribeImportCharacterSheet(payload) 
 	{
  		switch(payload.option) {		
@@ -196,9 +202,6 @@
  		}
  	}
 
- 	var character_sheets_functionality = {};
- 	var character_sheets_current_functionality = {};
- 	var character_sheets_collective_functionality_access_list = {};
  	function addFunctionalityToCharacterSheet(functionality, character_sheet_id)
  	{
  	 	if (functionality != null) {
@@ -283,24 +286,14 @@
          	 			var launch_system = functionality['launch_system'];
          	 			launchSystem(launch_system, character_sheet_id);
     				}
-     	 			
-     	 		 	$( "body" ).append( '<div class="checkmark"></div>' ); 	
-     	 			$( "body" ).mousemove(function(event) {
-     	 				var offset = $(this).offset(),
-     	 					initial_position = {x:offset.left, y:offset.top},
-     	 					mouse_position = {x:event.pageX, y:event.pageY},
-     	 					x = mouse_position.x - initial_position.x - 10,
-     	 					y = mouse_position.y - initial_position.y - 10;
-     	 				
-     	 				$('.checkmark', this).css({left:x, top:y, backgroundPosition: -x+'px '+-y+'px'});
-     	 				$('.checkmark').css("z-index", 2);
-     	 			});
+
+    				addCheckMark();
      	 			
     				$( '#'+character_sheet_id+' > #character_sheet_extended > #functional_panel').append('<button id="functional_panel_cancel_button" title="Cancel" class="btn-sm glyphicon glyphicon-remove-sign"></button>');
     
-    				$( ".main-container .character-sheet" ).on("click", function(event){
-        				if ($( "body .checkmark" ).length) {
-        					$( "body .checkmark" ).remove();
+    				$( "#game_container #"+character_sheet_id ).on("click", function(event) {
+        				if (existCheckMark()) {
+        					deleteCheckMark();
         					$( "#"+character_sheet_id+" > #character_sheet_extended > #functional_panel").append('<button id="functional_panel_throw_button" title="Throw" class="btn-sm glyphicon glyphicon-th-large"></button>');
         
         					var character_sheet_target_name = getCharacterSheetProperty(this, 'character_sheet_name');
@@ -417,7 +410,7 @@
 			break;
 
 		case 'new_field':
-			$( '#'+character_sheet_id+' #functional_panel_data' ).append('<input class="col-xs-4" name='+list_of_modifiers['value']+' value='+list_of_modifiers['value']+'>');
+			$( '#'+character_sheet_id+' #functional_panel_data' ).append('<input id="new_field" class="col-xs-4" name='+list_of_modifiers['value']+' value='+list_of_modifiers['value']+'>');
 			break;
 
 		case 'derived':
@@ -586,14 +579,43 @@
  		character_sheets_current_functionality[character_sheet_id] = {};
  	}
 
- 	$( "#game_container" ).on("click", "#functional_panel_cancel_button", function() {
+ 	function addCheckMark()
+ 	{
+ 	 	if (!existCheckMark()) {
+ 		 	$( "body" ).append( '<div class="checkmark"></div>' ); 	
+ 			$( "body" ).mousemove(function(event) {
+ 				var offset = $(this).offset(),
+ 					initial_position = {x:offset.left, y:offset.top},
+ 					mouse_position = {x:event.pageX, y:event.pageY},
+ 					x = mouse_position.x - initial_position.x - 10,
+ 					y = mouse_position.y - initial_position.y - 10;
+ 				
+ 				$('.checkmark', this).css({left:x, top:y, backgroundPosition: -x+'px '+-y+'px'});
+ 				$('.checkmark').css("z-index", 2);
+ 			});
+ 	 	}
+ 	}
+
+ 	function deleteCheckMark()
+ 	{
+ 		$( "body .checkmark" ).remove();
+ 	}
+
+ 	function existCheckMark()
+ 	{
+		return $( "body .checkmark" ).length;
+ 	}
+
+ 	$( "#game_container" ).on("click", "#functional_panel_cancel_button", function() 
+ 	{
 		var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
 		if (character_sheet_id) {
 			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
 		}
  	});
 
-	$( "#game_container" ).on("click", "#character_sheet_show_complete_button", function() {
+	$( "#game_container" ).on("click", "#character_sheet_show_complete_button", function() 
+	{
 		var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
 
 		if ($( "#"+character_sheet_id+" .character-sheet-complete" ).css('display') == 'none') {

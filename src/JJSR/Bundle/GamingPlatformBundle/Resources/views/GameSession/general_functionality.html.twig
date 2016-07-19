@@ -46,6 +46,13 @@
 			return getCharacterSheetFromJQuery($( element ).parent(), property);
 		}
  	}
+
+ 	function getElementFromCharacterSheet(character_sheet_id, objetive_element_id)
+ 	{
+ 			return $( '#game_container #'+character_sheet_id+' #character_sheet_complete' ).find('#'+objetive_element_id);
+ 	}
+
+ 	
 //  	function getCharacterSheetIdFromElement(element) {
 //  		var is_only_number = /^\d+$/;
 		
