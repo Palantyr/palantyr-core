@@ -1332,7 +1332,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		return $game_session->getOwner();
 	}
 	
-	private function isOwner (ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
+	private function isOwner(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible) {
 	    return ($this->clientManipulator->getClient($connection)->getId() == self::getGameSessionOwner($request)->getId());
 	}
 	

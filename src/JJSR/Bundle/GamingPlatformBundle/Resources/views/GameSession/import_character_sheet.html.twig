@@ -290,8 +290,8 @@
     				addCheckMark();
      	 			
     				$( '#'+character_sheet_id+' > #character_sheet_extended > #functional_panel').append('<button id="functional_panel_cancel_button" title="Cancel" class="btn-sm glyphicon glyphicon-remove-sign"></button>');
-    
-    				$( "#game_container #"+character_sheet_id ).on("click", function(event) {
+
+    				$( "#game_container .character-sheet" ).bind('click.selectCharacterSheetOfFunctionalPanel', function(event) {
         				if (existCheckMark()) {
         					deleteCheckMark();
         					$( "#"+character_sheet_id+" > #character_sheet_extended > #functional_panel").append('<button id="functional_panel_throw_button" title="Throw" class="btn-sm glyphicon glyphicon-th-large"></button>');
@@ -299,7 +299,7 @@
         					var character_sheet_target_name = getCharacterSheetProperty(this, 'character_sheet_name');
         					$( "#"+character_sheet_id+" #functional_panel_data" ).append('<div id="character_sheet_target">Target: '+character_sheet_target_name+'</div>');
         				}
-    					$( this ).off( event );
+    				    $("#game_container .character-sheet").unbind('click.selectCharacterSheetOfFunctionalPanel');
     				});
      			}
  			}

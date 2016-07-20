@@ -9,12 +9,12 @@
 		case "change_game_session_name":
 			changeGameSessionName(payload.game_session_name);
 			break;
-		case "game_session_invalid_edit":
+		case 'game_session_invalid_edit':
 			var game_session = JSON.parse(payload.game_session_json);
 			var error_messages = JSON.parse(payload.error_messages_json);
 			popupEditGameSession(game_session, error_messages);
 			break;
-		case "manage_users_request":
+		case 'manage_users_request':
 			if (payload.other_users_connected_json) {
 				var other_users_connected = JSON.parse(payload.other_users_connected_json);
 				popupManageUsers(other_users_connected);
@@ -22,6 +22,9 @@
 			else {
 				popupManageNoUsers();
 			}
+			break;
+		case 'show_users_request':
+// 			To develop
 			break;
 		}
 	}
@@ -51,6 +54,26 @@
 		        <div id="remove_user" class="form-group"> \
 		        	<button type="submit" id="'+other_users_connected[other_user_connected]+'" class="btn btn-danger">'+"{% trans %}secondary_menu.settings.manage_users.remove_button{% endtrans %}"+'</button> \
 		        </div> \
+	        </div></br>';
+		}
+		
+		var footer = "";
+					
+		usePopup(title, body, footer);
+	}
+
+	function popupShowUsers (users_connected) {
+		var title = "{% trans %}secondary_menu.settings.show_users.title{% endtrans %}";
+
+		var body = '';
+
+		for (var user_connected in users_connected) {
+			body = body + ' \
+			<div id="form" class="form-inline"> \
+				<div class="form-group"> \
+					<label class="control-label">'+users_connected[user_connected]+'</label> \
+				</div> \
+		        &nbsp; \
 	        </div></br>';
 		}
 		
