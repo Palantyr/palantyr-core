@@ -40,6 +40,15 @@ game_session:
     not_exist:
         title: La sesión de juego no existe
         message: La sesión de juego no existe
+    already_connected:
+        title: Ya estás conectado a la sesión de juego
+        message: Ya estás conectado a la session de juego
+    already_users_connected:
+        title: Hay usuarios conectados
+        message: Hay usuarios conectados
+    without_permission:
+        title: Sin permiso
+        message: No tienes suficientes permisos
     request_character_sheets:
         title: Pedir fichas de personaje
         not_to_import: No tienes ninguna ficha de personaje para importar

@@ -62,7 +62,7 @@
 
 	$( '#myModal' ).on('click', '#die_to_throw_add_button', function() {
 		var number_of_dice = $( this ).siblings('#die_to_throw_count').val();
-		if (number_of_dice < 25) {
+		if (number_of_dice < maximum_number_of_dice) {
 			$( this ).siblings('#die_to_throw_count').val(++number_of_dice);
 		}
 	});

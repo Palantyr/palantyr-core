@@ -21,6 +21,10 @@ class ConnectionController extends Controller
     
     public function loginGameSessionAction(Request $request)
     {
+        header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        header("Pragma: no-cache"); // HTTP 1.0.
+        header("Expires: 0"); // Proxies.
+        
         $game_session_id = $request->get('game_session_id');
         
         if (!self::gameSessionExist($game_session_id)) {
@@ -189,14 +193,60 @@ class ConnectionController extends Controller
         }
     }
     
+
+    public function deleteGameSessionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+    
+        $game_session_id = $request->get('game_session_id');
+        $game_session = $em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+    
+        if(isset($game_session)) {
+            if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') ||
+                $this->getUser() == $game_session->getOwner()) {
+    
+                    $users_game_session_connection = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')->findBy(array('game_session' => $game_session));
+    
+                    $is_allowed_to_delete = true;
+                    foreach ($users_game_session_connection as $user_game_session_connection) {
+                        if ($user_game_session_connection->getConnectionOption() == 'connected') {
+                            $is_allowed_to_delete = false;
+                        }
+                    }
+    
+                    if ($is_allowed_to_delete == true) {
+                        foreach ($users_game_session_connection as $user_game_session_connection) {
+                            $em->remove($user_game_session_connection);
+                        }
+                        $em->remove($game_session);
+                        $em->flush();
+                        return $this->redirectToRoute('game_sessions');
+                    }
+                    else {
+                        return $this->redirectToRoute('game_session_already_users_connected', array('game_session_id' => $request->get('game_session_id')));
+                    }
+                }
+            return $this->redirectToRoute('game_session_without_permission', array('game_session_id' => $request->get('game_session_id')));
+        }
+        return $this->redirectToRoute('game_session_not_exist', array('game_session_id' => $request->get('game_session_id')));
+    }
+    
     public function gameSessionNotExistAction(Request $request)
     {
         return $this->render('GamingPlatformBundle:Security:game_session_not_exist.html.twig');
     }
     
-    private function gameSessionNotExistRender()
-    {
-        return $this->render('GamingPlatformBundle:Security:game_session_not_exist.html.twig');
+//     private function gameSessionNotExistRender()
+//     {
+//         return $this->render('GamingPlatformBundle:Security:game_session_not_exist.html.twig');
+//     }
+
+    public function withoutPermissionAction(Request $request) {
+        return $this->render('GamingPlatformBundle:Security:without_permission_to_game_session.html.twig');
+    }
+    
+    public function alreadyUsersConnectedAction(Request $request) {
+        return $this->render('GamingPlatformBundle:Security:already_users_connected_to_game_session.html.twig');
     }
     
     private function gameSessionExist($game_session_id)
