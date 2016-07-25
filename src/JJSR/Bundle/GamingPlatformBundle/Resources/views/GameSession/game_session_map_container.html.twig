@@ -125,11 +125,21 @@
     	var map_add_token_trans = '{% trans %}map.add_token_button{% endtrans %}';
     	var map_delete_token_trans = '{% trans %}map.delete_token_button{% endtrans %}';
     	var map_delete_all_tokens_trans = '{% trans %}map.delete_all_tokens_button{% endtrans %}';
-    	
+
+// 	    <input id="map_panel_color" type="text" placeholder="'+map_css_color_trans+'" /> \
+
+
     	$( "#map_container" ).append(' \
     		<div id="map_panel" class="map-panel"> \
     		    <input id="map_panel_text" type="text" placeholder="'+map_name_trans+'" /> \
-    		    <input id="map_panel_color" type="text" placeholder="'+map_css_color_trans+'" /> \
+    		    	'+map_css_color_trans+' <select id="map_panel_color" class="map-panel-select-option" style="background-color: red;" required> \
+                    <option value="red" selected="selected" class="map-panel-select-option" style="background-color: red;">Red</option> \
+                    <option value="blue" class="map-panel-select-option" style="background-color: blue;">Blue</option> \
+                    <option value="green" class="map-panel-select-option" style="background-color: green;">Green</option> \
+                    <option value="brown" class="map-panel-select-option" style="background-color: brown;">Brown</option> \
+                    <option value="orange" class="map-panel-select-option" style="background-color: orange;">Orange</option> \
+                    <option value="violet" class="map-panel-select-option" style="background-color: violet;">Violet</option> \
+    	    	</select> \
     		    <button id="map_panel_add_token_button">'+map_add_token_trans+'</button> \
     		    <button id="map_panel_delete_token_button">'+map_delete_token_trans+'</button> \
     		    <button id="map_panel_delete_all_tokens_button">'+map_delete_all_tokens_trans+'</button> \
@@ -140,6 +150,22 @@
           	scroll: false,
           	containment: 'parent'
         });
+
+        $( "#map_panel #map_panel_color" ).on('change', function() {
+			$( this ).css('background-color', this.value);
+        });
+
+       
+        function mapPanelChangeBackgrondColor() {
+//         	var myselect = document.getElementById("select1"),
+//         	colour = myselect.options[myselect.selectedIndex].className;
+//         	myselect.className = colour;
+//         	myselect.blur(); //This just unselects the select list without having to click
+
+//         	$( this ).css('background-color');
+
+			
+        }
 
     	var tokens_count = 0;
     	function updateTokensCount()
@@ -163,15 +189,22 @@
     	});
 
     	var last_map_token_selected_id;
+    	var last_map_token_selected_background_color;
     	$( "#map_container" ).on("click", ".map-token", function() {
     		var actual_map_token_selected_id = $( this ).attr('id');
-    		
-    		$( this ).css("border-color", 'blue');
+
     		if (last_map_token_selected_id != actual_map_token_selected_id) {
-    			$( "#map_container #"+last_map_token_selected_id ).css("border-color", 'black');
+    			$( "#map_container #"+last_map_token_selected_id ).css("background", '');
+    			$( "#map_container #"+last_map_token_selected_id ).css("background-color", last_map_token_selected_background_color);
+        		
+    			var actual_map_token_selected_background_color = $( this ).css('background-color');
+    			$( this ).css({
+    			    'background':'radial-gradient(circle, '+actual_map_token_selected_background_color+', black, '+actual_map_token_selected_background_color+')'      
+    			});
+
+    			last_map_token_selected_background_color = actual_map_token_selected_background_color;
+    			last_map_token_selected_id = actual_map_token_selected_id;
     		}
-    		
-    		last_map_token_selected_id = actual_map_token_selected_id;
     	});
     }
 </script>

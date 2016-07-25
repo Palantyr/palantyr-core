@@ -24,7 +24,8 @@
 			}
 			break;
 		case 'show_users_request':
-// 			To develop
+			var users_connected = JSON.parse(payload.users_connected_json);
+			popupShowUsers(users_connected);
 			break;
 		}
 	}

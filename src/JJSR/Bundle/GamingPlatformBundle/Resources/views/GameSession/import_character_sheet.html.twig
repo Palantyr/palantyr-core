@@ -173,6 +173,7 @@
 		$( "#"+character_sheet_id ).draggable({
 		  	scroll: false,
 		  	containment: 'parent',
+		  	distance: 10,
 	  		drag: function( event, ui ) {
 				$( "#game_container .character-sheet" ).css("z-index", '');
 				$(this).css("z-index", 1);

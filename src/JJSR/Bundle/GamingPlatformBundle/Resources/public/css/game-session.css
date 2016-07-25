@@ -280,9 +280,15 @@ body .main-container .map-container {
 	max-width: 400px;
 }
 
+.map-panel-select-option {
+	color: #e7e7e7; 
+	font-weight: bold;
+}
+
 .map-token {
 	position: absolute;
 	background-color: red;
+/* 	background: radial-gradient(circle, red, yellow, green); */
 	border: 2px solid #000000;
 	height: 40px;
 	width: 40px;

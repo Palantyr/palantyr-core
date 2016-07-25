@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 class MenuBuilder extends ContainerAware
 {
+//     need revision
 	public function mainMenu (FactoryInterface $factory, array $options) {
 		
 		$menu = $factory->createItem('root');
@@ -41,6 +42,11 @@ class MenuBuilder extends ContainerAware
 			$menu['settings']->addChild($translator->trans('secondary_menu.settings.manage_users.title'),
 					array('uri' => 'javascript:void(0)'))
 				->setAttribute('id', 'manage_users_button');
+		}
+		else {
+		    $menu['settings']->addChild($translator->trans('secondary_menu.settings.show_users.title'),
+		        array('uri' => 'javascript:void(0)'))
+		        ->setAttribute('id', 'show_users_button');		    
 		}
 		
 		$menu['settings']->addChild($translator->trans('secondary_menu.settings.exit.title'),
