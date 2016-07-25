@@ -737,7 +737,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 			foreach ($die_values as $die_value) {
 				$dice_partial_message .= $die_value.' ';
 			}
-			$dice_result_message .= $dice_partial_message.' ';
+			$dice_result_message .= $dice_partial_message.'<br>';
 			$dice_partial_message = '';
 		}
 		return $dice_result_message;

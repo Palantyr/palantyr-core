@@ -126,9 +126,6 @@
     	var map_delete_token_trans = '{% trans %}map.delete_token_button{% endtrans %}';
     	var map_delete_all_tokens_trans = '{% trans %}map.delete_all_tokens_button{% endtrans %}';
 
-// 	    <input id="map_panel_color" type="text" placeholder="'+map_css_color_trans+'" /> \
-
-
     	$( "#map_container" ).append(' \
     		<div id="map_panel" class="map-panel"> \
     		    <input id="map_panel_text" type="text" placeholder="'+map_name_trans+'" /> \
@@ -154,18 +151,6 @@
         $( "#map_panel #map_panel_color" ).on('change', function() {
 			$( this ).css('background-color', this.value);
         });
-
-       
-        function mapPanelChangeBackgrondColor() {
-//         	var myselect = document.getElementById("select1"),
-//         	colour = myselect.options[myselect.selectedIndex].className;
-//         	myselect.className = colour;
-//         	myselect.blur(); //This just unselects the select list without having to click
-
-//         	$( this ).css('background-color');
-
-			
-        }
 
     	var tokens_count = 0;
     	function updateTokensCount()

@@ -1,5 +1,9 @@
 <script type="text/javascript">
 
+//Global variables
+	var maximum_number_of_dice = 25;
+//Global variables
+
 	function subscribeUtilities(payload) {
 		switch(payload.option) {		
 		case 'throw_dice':
@@ -37,9 +41,9 @@
 	}
 
 	$( '#myModal' ).on('click', '.pre-select-dice', function() {
-
 		var new_dice_value = $(this).attr('value');
 		var allow_new_dice = true;
+		
 		$( '.select-dice' ).each(function() {
 			if ($( this ).attr('value') == new_dice_value) {
 				allow_new_dice = false;
@@ -50,31 +54,52 @@
 			var footer = getModalFooter();
 			if (footer == '') {
 				var throw_button = '<button id="throw_dice" type="button" class="btn btn-success">{% trans %}game_session.throw_dice.throw_button{% endtrans %}</button>';
-				footer = footer.concat(throw_button);		
+				addModalFooter(throw_button);
 			}
-			footer = footer.concat(generateDiceThrowDiv($(this).attr('value')));
-			setModalFooter(footer);
+			addModalFooter(generateDiceThrowDiv($(this).attr('value')));
 		}
 	});
 
-	$( '#myModal' ).on('click', '.delete-select-dice', function() {
+	$( '#myModal' ).on('click', '#die_to_throw_add_button', function() {
+		var number_of_dice = $( this ).siblings('#die_to_throw_count').val();
+		if (number_of_dice < 25) {
+			$( this ).siblings('#die_to_throw_count').val(++number_of_dice);
+		}
+	});
 
-		var number_of_dice = $(this).parent().parent().children().length - 1;
-
-		if (number_of_dice == 1) {
-			$(this).parent().parent().empty();
+	$( '#myModal' ).on('click', '#die_to_throw_add_five_button', function() {
+		var number_of_dice = $( this ).siblings('#die_to_throw_count').val();
+		if (number_of_dice >= maximum_number_of_dice - 5) {
+			$( this ).siblings('#die_to_throw_count').val(maximum_number_of_dice);
 		}
 		else {
+			number_of_dice =  parseInt(number_of_dice) + 5;
+			$( this ).siblings('#die_to_throw_count').val(number_of_dice);
+		}
+	});
+
+	$( '#myModal' ).on('click', '#die_to_throw_subtract_button', function() {
+		var number_of_dice = $( this ).siblings('#die_to_throw_count').val();
+		if (number_of_dice == 1) {
 			$(this).parent().remove();
 		}
+		else {
+			$( this ).siblings('#die_to_throw_count').val(--number_of_dice);
+		}
+	});
+
+	$( '#myModal' ).on('click', '#die_to_throw_name_button', function() {
+		$(this).parent().remove();
 	});
 
 	function generateDiceThrowDiv(dice_type) {
 		return ' \
-			<div value="'+dice_type+'" class="select-dice btn-group"> \
-				<button type="button" class="btn btn-danger delete-select-dice">-</button> \
-				<span class="btn btn-primary">d'+dice_type+'</span> \
-				<input type="number" class="col-xs-6 value-select-dice" min="1" max="25" value="1"> \
+			<div id="die_to_throw" value="'+dice_type+'" class="select-dice btn-group"> \
+				<span id="die_to_throw_name_button" class="btn btn-danger">d'+dice_type+'</span> \
+				<input id="die_to_throw_count" class="col-xs-3 value-select-dice" min="1" max="25" value="1" readonly> \
+				<button id="die_to_throw_add_button" type="button" class="btn btn-success">+</button> \
+				<button id="die_to_throw_add_five_button" type="button" class="btn btn-success">+5</button> \
+				<button id="die_to_throw_subtract_button" type="button" class="btn btn-danger">-</button> \
 			<div>'
 	}
 </script>
