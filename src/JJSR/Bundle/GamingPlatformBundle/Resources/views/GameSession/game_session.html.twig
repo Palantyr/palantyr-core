@@ -3,9 +3,9 @@
 {% block body %}
 	{{ ws_client() }}
 
-{# General functionality #}
+{# GENERAL FUNCTIONALITY #}
 	{{ include('GamingPlatformBundle:GameSession:general_functionality.html.twig') }}
-{# General functionality #}
+{# GENERAL FUNCTIONALITY #}
 
 <script type="text/javascript">
 // 	GLOBAL VARIABLES FROM TWIG 
@@ -29,8 +29,13 @@
 		    case 'connection':
 			    subscribeConnection(payload);
 			    break;
-		    case 'settings':
-			    subscribeSettings(payload);
+		    case 'gamemaster_settings':
+			    if (isGamemaster) {
+			    	subscribeGamemasterSettings(payload);
+				}
+			    break;
+		    case 'user_settings':
+		    	subscribeUserSettings(payload);
 			    break;
 		    case 'chat':
 		    	subscribeChat(payload);
@@ -50,10 +55,10 @@
 		    }
 		});
 		
-// SETTINGS
+// GAMEMASTER SETTINGS
 		$( "#game_session_edit_button" ).on('click', function() {
 			session.publish(route_game_session, {
-				section: "settings",
+				section: "gamemaster_settings",
 				option: "game_session_request_edit"
 			});
 		});
@@ -61,7 +66,7 @@
 		$( '#myModal' ).on('click', '.modal-dialog > .modal-content > .modal-footer > #game_session_edit_submit_button', function() {
 	 		var game_session_edited = JSON.stringify($(this).parent().siblings('.modal-body').children('#form_edit_game_session').serializeArray());
 			session.publish(route_game_session, {
-				section: "settings",
+				section: "gamemaster_settings",
 				option: "game_session_edit",
 				game_session_edited: game_session_edited
 			});
@@ -69,33 +74,42 @@
 
 		$( '#myModal' ).on('click', '.modal-dialog > .modal-content > .modal-footer > #game_session_remove_submit_button', function() {
 			session.publish(route_game_session, {
-				section: "settings",
+				section: "gamemaster_settings",
 				option: "remove_game_session"
 			});
 		});
 
 		$( "#manage_users_button" ).on('click', function() {
 			session.publish(route_game_session, {
-				section: "settings",
+				section: "gamemaster_settings",
 				option: "manage_users_request"
 			});
 		});
 
 		$( '#myModal' ).on('click', '.modal-dialog > .modal-content > .modal-body > #form > #remove_user > button', function() {
 			session.publish(route_game_session, {
-				section: "settings",
+				section: "gamemaster_settings",
 				option: "remove_user",
 				user_username_to_remove: $(this).attr('id')
 			});
 			closePopup();
 			setTimeout(function () {
 				session.publish(route_game_session, {
-					section: "settings",
+					section: "gamemaster_settings",
 					option: "manage_users_request"
 				});
 			}, 1000);
 		});
-// SETTINGS
+// GAMEMASTER SETTINGS
+
+// USER SETTINGS
+	$( "#show_users_button" ).on('click', function() {
+		session.publish(route_game_session, {
+			section: "user_settings",
+			option: "show_users_request"
+		});
+	});
+// USER SETTINGS
 
 
 // CHAT

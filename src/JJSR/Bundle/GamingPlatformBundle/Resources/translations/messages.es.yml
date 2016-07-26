@@ -7,6 +7,8 @@ secondary_menu:
             remove_button: Expulsar
         exit:
             title: Salir
+        show_users:
+            title: Ver usuarios
 
 navigation_sidebar:
     request_character_sheets: Pedir fichas de personaje
@@ -32,6 +34,16 @@ map:
     no_tokens_in_game: No hay fichas en el juego
     
 game_session:
+    join:
+        submit: Unirse
+        title: Unirse a sesión de juego
+    login:
+        submit: Acceder
+        title: Acceder a sesión de juego
+        incorrect_password: Contraseña incorrecta
+    re_login:
+        title: Volver a acceder
+        message: Lo siento, necesita volver a acceder
     character_sheet:
         show_complete_button: Ver/Esconder
         delete_button: Eliminar

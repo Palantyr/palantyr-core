@@ -32,7 +32,7 @@
 							</form>
                             {% if game_session.getOwner().getId() == app.user.id %}
     							<form action="{{ path('delete_game_session', {'game_session_id': game_session.getId()}) }}">
-    					    		<input class="btn btn-danger" type="submit" value={% trans %}game_session.join.submit{% endtrans %}>
+    					    		<input class="btn btn-danger" type="submit" value={% trans %}game_session.remove.submit{% endtrans %}>
     							</form>
                             {% endif %}
 						</td>

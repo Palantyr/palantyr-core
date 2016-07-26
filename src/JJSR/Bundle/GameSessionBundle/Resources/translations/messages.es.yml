@@ -11,16 +11,6 @@ game_session:
         title: Crear sessión de juego
         choose_rol_game: Elegir juego de rol
         choose_language: Elegir idioma
-    join:
-        submit: Unirse
-        title: Unirse a sesión de juego
-    login:
-        submit: Acceder
-        title: Acceder a sesión de juego
-        incorrect_password: Contraseña incorrecta
-    re_login:
-        title: Volver a acceder
-        message: Lo siento, necesita volver a acceder
     edit:
         title: Editar sesión de juego
         submit: Editar

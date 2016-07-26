@@ -26,6 +26,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 
 	public $character_sheets_in_game = array();
 	public $users_language = array(); //better $users_locale
+	public $chat_history = array();
 	public $map_tokens = array();
 	
 	/**
@@ -91,26 +92,35 @@ class GameSessionTopic extends Controller implements TopicInterface
 	public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
 		 switch ($event['section']) {
-		 	case 'settings':
+		 	case 'gamemaster_settings':
 		 		if (self::isOwner($connection, $topic, $request, $event, $exclude, $eligible) == true) {
-		 			self::onPublishSettings($connection, $topic, $request, $event, $exclude, $eligible);		 			
+		 			self::onPublishGamemasterSettings($connection, $topic, $request, $event, $exclude, $eligible);		 			
 		 		}
 		 		else {
-		 			//hacking
+// 		 			hacking
 		 		}
 		 		break;
+		 		
+		 	case 'user_settings':
+		 	    self::onPublishUserSettings($connection, $topic, $request, $event, $exclude, $eligible);
+		 	    break;
+		 	    
 		 	case 'chat':
 		 		self::onPublishChat($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
+		 		
 		 	case 'map':
 		 	    self::onPublishMap($connection, $topic, $request, $event, $exclude, $eligible);
 		 	    break;
+		 	    
 		 	case 'utilities':
 		 		self::onPublishUtilities($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
+		 		
 		 	case 'import_character_sheet':
 		 		self::onPublishImportCharacterSheet($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
+		 		
 		 	case 'functionality_character_sheet':
 		 		self::onPublishFunctionality($connection, $topic, $request, $event, $exclude, $eligible);
 		 		break;
@@ -271,8 +281,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 	}
 // CONNECTION
 	
-// SETTINGS
-	private function onPublishSettings(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+// GAMEMASTER SETTINGS
+	private function onPublishGamemasterSettings(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
 	{
 		$room = $request->getAttributes()->get('room');
 		
@@ -287,7 +297,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$array_game_session_json = json_encode($array_game_session);
 				
 				$connection->event($topic->getId(), [
-				    'section' => "settings",
+				    'section' => "gamemaster_settings",
 				    'option' => "game_session_request_edit",
 				    'game_session_json' => $array_game_session_json
 				]);
@@ -336,7 +346,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 					$array_game_session_json = json_encode($array_game_session);
 					
 					$connection->event($topic->getId(), [
-					    'section' => "settings",
+					    'section' => "gamemaster_settings",
 					    'option' => "game_session_invalid_edit",
 					    'game_session_json' => $array_game_session_json,
 					    'error_messages_json' => json_encode($error_messages)
@@ -348,12 +358,13 @@ class GameSessionTopic extends Controller implements TopicInterface
 					$game_session->setComments($game_session_aux->getComments());
 					
 					$topic->broadcast([
-						'section' => "settings",
+						'section' => "gamemaster_settings",
 						'option' => "change_game_session_name",
 						'game_session_name' => $game_session->getName()
 					]);
 				}
 				break;
+				
 			case 'remove_game_session':
 				$other_users_username_connected = array_diff(self::getUsersUsernameToTheRoom($topic), array($this->clientManipulator->getClient($connection)->getUsername()));
 
@@ -389,40 +400,82 @@ class GameSessionTopic extends Controller implements TopicInterface
 				$this->em->remove($game_session);
 				
 				$this->em->flush();
+				break;
 				
-				break;
-			case "manage_users_request":
-				$other_users_connected = array_diff(self::getUsersUsernameToTheRoom($topic), array($this->clientManipulator->getClient($connection)->getUsername()));
-
-				if ($other_users_connected) {
-					$other_users_connected = json_encode($other_users_connected);
-				}
-				else {
-					$other_users_connected = null;
-				}
-
-				$connection->event($topic->getId(), [
-				    'section' => "settings",
-				    'option' => "manage_users_request",
-				    'other_users_connected_json' => $other_users_connected
-				]);
-				break;
 			case "remove_user":
 				$user_username_to_remove = $event['user_username_to_remove'];
 
 				$client_to_remove = $this->clientManipulator->findByUsername($topic, $user_username_to_remove);
 
 				if ($client_to_remove !== false) {
-// 				    removedUserBecauseGameSessionRemoved
 					self::removedUserBecauseGameSessionRemoved($client_to_remove['connection'], $topic, $request);
 				}
+				break;
+				
+			case "manage_users_request":
+			    $other_users_connected = array_diff(self::getUsersUsernameToTheRoom($topic), array($this->clientManipulator->getClient($connection)->getUsername()));
+			
+			    if ($other_users_connected) {
+			        $other_users_connected = json_encode($other_users_connected);
+			    }
+			    else {
+			        $other_users_connected = null;
+			    }
+
+			    $connection->event($topic->getId(), [
+			        'section' => "gamemaster_settings",
+			        'option' => "manage_users_request",
+			        'other_users_connected_json' => $other_users_connected
+			    ]);
+			    break;
 		}
 	}
-// SETTINGS
+// GAMEMASTER SETTINGS
+
+	
+// USER SETTINGS
+	private function onPublishUserSettings(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
+	{
+// 	    $room = $request->getAttributes()->get('room');
+	
+	    switch ($event['option']) {
+	        case "show_users_request":            
+	            $users_connected = self::getUsersUsernameToTheRoom($topic);
+	            
+	            if ($users_connected) {
+	                $users_connected = json_encode($users_connected);
+	            }
+	            else {
+	                $users_connected = null;
+	            }
+
+	            $connection->event($topic->getId(), [
+	                'section' => "user_settings",
+	                'option' => "show_users_request",
+	                'users_connected_json' => $users_connected
+	            ]);
+	            break;
+	    }
+	}
+// USER SETTINGS
 	
 // CHAT
 	private function onSuscribeChat(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
+	    $room = $request->getAttributes()->get('room');
+	     
+	    if (self::isFirstToConnectToTheRoom($topic) && empty($this->map_tokens[$room])) {
+	        $this->chat_history[$room] = array();
+	    }
+	    else {
+	        dump($this->chat_history[$room]);
+	        $connection->event($topic->getId(), [
+	            'section' => 'chat',
+	            'option' => 'add_chat_history',
+	            'text' => $this->chat_history[$room]
+	        ]);
+	    }
+	    
 		$user_username_sender = $this->clientManipulator->getClient($connection)->getUsername();
 		$message_options = array('%user_username%' => $user_username_sender);
 		$yml_message = 'chat.user_is_online %user_username%';
@@ -532,6 +585,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        self::chatCommands($connection, $topic, $request, $event);
 		    }
     		else {
+    		    $room = $request->getAttributes()->get('room');
+    		    $this->chat_history[$room][] = $event["msg"];
     		    $topic->broadcast([
     		        'section' => 'chat',
     		        'option' => 'add_text',
@@ -552,6 +607,28 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function sendMessageAdaptToLanguage(ConnectionInterface $connection, Topic $topic, WampRequest $request, $yml_message, $message_options)
 	{
 	    $room = $request->getAttributes()->get('room');
+	    
+	    $game_session = $this->em->getRepository('GameSessionBundle:GameSession')->find($room);
+	    $game_session_language = $game_session->getLanguage()->getId();
+	    
+	    if(isset($message_options)) {
+	        $message_translated = $this->translator->trans(
+	            $yml_message,
+	            $message_options,
+	            'messages',
+	            $game_session_language
+	            );
+	    }
+	    else {
+	        $message_translated = $this->translator->trans(
+	            $yml_message,
+	            array(),
+	            'messages',
+	            $game_session_language
+	            );
+	    }
+	    
+	    $this->chat_history[$room][] = $message_translated;
 	    
 	    foreach ($topic as $client) {
 	        $user_id = $this->clientManipulator->getClient($client)->getId();
@@ -591,7 +668,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	{
 	    $room = $request->getAttributes()->get('room');
 	    
-	    if (self::isFirstToConnectToTheRoom($topic)) {
+	    if (self::isFirstToConnectToTheRoom($topic) && empty($this->map_tokens[$room])) {
 	        $this->map_tokens[$room] = array();
 	    }
 	    else {
@@ -749,11 +826,10 @@ class GameSessionTopic extends Controller implements TopicInterface
 	{
 		$room = $request->getAttributes()->get('room');
 		
-		if (self::isFirstToConnectToTheRoom($topic)) {
+		if (self::isFirstToConnectToTheRoom($topic) && empty($this->character_sheets_in_game[$room])) {
 			$this->character_sheets_in_game[$room] = array();
 		}
-
-		if (!self::isFirstToConnectToTheRoom($topic)) {
+		else {
 			$character_sheets_in_game_json = json_encode($this->character_sheets_in_game[$room]);
 			$connection->event($topic->getId(), [
 			    'section' => 'import_character_sheet',
@@ -854,26 +930,6 @@ class GameSessionTopic extends Controller implements TopicInterface
 		}
 		return false;
 	}
-	
-// 	private function onUnSubscribeImportCharacterSheet(ConnectionInterface $connection, Topic $topic, WampRequest $request)
-// 	{
-// 		$room = $request->getAttributes()->get('room');
-		
-// 		if(self::isLastToDisconnectToTheRoom($topic)) {
-// 			unset($this->character_sheets_in_game[$room]);
-// 		}
-// 		else {
-// 			if (!empty($this->character_sheets_in_game[$room])) {
-// 				$user_username = $this->clientManipulator->getClient($connection)->getUsername();
-				
-// 				foreach ($this->character_sheets_in_game[$room] as &$character_sheet_in_game) {
-// 					if (self::getCharacterSheetUserUsername($character_sheet_in_game) == $user_username) {
-// 						self::deleteCharacterSheetInGame($room, self::getCharacterSheetId($character_sheet_in_game));
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
 	
 	private function getCharacterSheets($user_id, $rol_game_id)
 	{
@@ -1294,6 +1350,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        $random = rand(0, 10);
 		        $result = "The result is ".$random." hits";
 		        
+		        $room = $request->getAttributes()->get('room');
+		        $this->chat_history[$room][] = $result;
 		        $topic->broadcast([
 		            'section' => 'chat',
 		            'option' => 'add_text',

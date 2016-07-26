@@ -7,6 +7,8 @@ secondary_menu:
             remove_button: Kick out
         exit:
             title: Exit
+        show_users:
+            title: Show users
 
 navigation_sidebar:
     request_character_sheets: Request character sheets 
@@ -32,6 +34,16 @@ map:
     no_tokens_in_select: There are no tokens in game
     
 game_session:
+    join:
+        submit: Join
+        title: Join game session
+    login:
+        submit: Login
+        title: Login game session
+        incorrect_password: Incorrect password
+    re_login:
+        title: Re log in
+        message: Sorry, you need to re log in
     character_sheet:
         show_complete_button: Show/Hide
         delete_button: Delete
