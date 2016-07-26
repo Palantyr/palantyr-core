@@ -463,17 +463,18 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function onSuscribeChat(ConnectionInterface $connection, Topic $topic, WampRequest $request)
 	{
 	    $room = $request->getAttributes()->get('room');
-	     
-	    if (self::isFirstToConnectToTheRoom($topic) && empty($this->map_tokens[$room])) {
+
+	    if (self::isFirstToConnectToTheRoom($topic) && empty($this->chat_history[$room])) {
 	        $this->chat_history[$room] = array();
 	    }
-	    else {
-	        dump($this->chat_history[$room]);
-	        $connection->event($topic->getId(), [
-	            'section' => 'chat',
-	            'option' => 'add_chat_history',
-	            'text' => $this->chat_history[$room]
-	        ]);
+	    
+	    $user_id = $this->clientManipulator->getClient($connection)->getId();
+	    if (!isset($this->chat_history[$room][$user_id])) {
+	        $this->chat_history[$room][$user_id] = array();
+	    }
+
+	    if (isset($this->chat_history[$room][$user_id])) {
+            self::loadAndSendChatHistory($connection, $topic, $request);
 	    }
 	    
 		$user_username_sender = $this->clientManipulator->getClient($connection)->getUsername();
@@ -585,15 +586,18 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        self::chatCommands($connection, $topic, $request, $event);
 		    }
     		else {
-    		    $room = $request->getAttributes()->get('room');
-    		    $this->chat_history[$room][] = $event["msg"];
-    		    $topic->broadcast([
+    		    $date = self::getDateFormattedToChat();
+    		    $chat_content = array(
     		        'section' => 'chat',
     		        'option' => 'add_text',
-    		        'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+    		        'sender' =>  $this->clientManipulator->getClient($connection)->getUsername(),
     		        'text' => $event["msg"],
-    		        'date' => self::getDateFormattedToChat(),
-    		    ]);
+    		        'date' => $date
+    		    );
+    		    $topic->broadcast($chat_content);
+    		    
+    		    $room = $request->getAttributes()->get('room');
+    		    self::saveChatHistory($room, null, $chat_content);
     		}
 		}
 	}
@@ -607,28 +611,6 @@ class GameSessionTopic extends Controller implements TopicInterface
 	private function sendMessageAdaptToLanguage(ConnectionInterface $connection, Topic $topic, WampRequest $request, $yml_message, $message_options)
 	{
 	    $room = $request->getAttributes()->get('room');
-	    
-	    $game_session = $this->em->getRepository('GameSessionBundle:GameSession')->find($room);
-	    $game_session_language = $game_session->getLanguage()->getId();
-	    
-	    if(isset($message_options)) {
-	        $message_translated = $this->translator->trans(
-	            $yml_message,
-	            $message_options,
-	            'messages',
-	            $game_session_language
-	            );
-	    }
-	    else {
-	        $message_translated = $this->translator->trans(
-	            $yml_message,
-	            array(),
-	            'messages',
-	            $game_session_language
-	            );
-	    }
-	    
-	    $this->chat_history[$room][] = $message_translated;
 	    
 	    foreach ($topic as $client) {
 	        $user_id = $this->clientManipulator->getClient($client)->getId();
@@ -650,15 +632,43 @@ class GameSessionTopic extends Controller implements TopicInterface
 	                $user_language
 	                );
 	        }
-	        	
-	        $client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
-	        $client_connection['connection']->event($topic->getId(), [
-	            'section' => 'chat',
-	            'option' => 'add_text',
-	            'sender' => 'system',
-	            'text' => $message_translated,
-	            'date' => self::getDateFormattedToChat()
-	        ]);
+
+            $client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
+            $date = self::getDateFormattedToChat();
+            $chat_content = array(
+                'section' => 'chat',
+                'option' => 'add_text',
+                'sender' => 'system',
+                'text' => $message_translated,
+                'date' => $date
+            );
+	        $client_connection['connection']->event($topic->getId(), $chat_content);
+
+	        $user_id = $this->clientManipulator->getClient($client)->getId();
+	        self::saveChatHistory($room, $user_id, $chat_content);
+	    }
+	}
+	
+	private function saveChatHistory($room, $user_id, $chat_content)
+	{
+	    if ($user_id) {
+	        $this->chat_history[$room][$user_id][] = $chat_content;
+	    }
+	    else {
+	        foreach ($this->chat_history[$room] as $user_id => $user_content) {
+	            $this->chat_history[$room][$user_id][] = $chat_content;
+	        }
+	    }
+	    
+	}
+	
+	private function loadAndSendChatHistory(ConnectionInterface $connection, Topic $topic, WampRequest $request)
+	{
+	    $room = $request->getAttributes()->get('room');
+	    $user_id = $this->clientManipulator->getClient($connection)->getId();
+	    
+	    foreach ($this->chat_history[$room][$user_id] as $chat_number => $chat_content) {
+	        $connection->event($topic->getId(), $chat_content);
 	    }
 	}
 // 	CHAT
@@ -773,13 +783,18 @@ class GameSessionTopic extends Controller implements TopicInterface
 					$dice_result_message = self::getThrowDiceMessage($dice_result, $user_language);
 					
 					$client_connection = $this->clientManipulator->findByUsername($topic, $this->clientManipulator->getClient($client)->getUsername());
-					$client_connection['connection']->event($topic->getId(), [
+					$date = self::getDateFormattedToChat();
+					$chat_content = array(
 					    'section' => 'chat',
 					    'option' => 'throw_dice',
 					    'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
 					    'text' => $dice_result_message,
-					    'date' => self::getDateFormattedToChat(),
-					]);
+					    'date' => $date
+					);
+					$client_connection['connection']->event($topic->getId(), $chat_content);
+					
+					$user_id = $this->clientManipulator->getClient($client)->getId();
+					self::saveChatHistory($room, $user_id, $chat_content);
 				}
 				break;
 		}
