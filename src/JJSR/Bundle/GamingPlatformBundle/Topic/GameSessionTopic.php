@@ -913,7 +913,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 					self::sendMessageAdaptToLanguage($connection, $topic, $request, $yml_message, $message_options);
 				}
 				else {
-					var_dump("ERROR !characterSheetExistInGame to delete");
+					dump("ERROR !characterSheetExistInGame to delete");
 				}
 				break;
 		}
@@ -1338,7 +1338,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        $date = $date->format('H:i:s');
 		        
 		        $character_sheet_functionality_executed = json_decode($event['character_sheet_functionality_executed_json']);
-                dump($character_sheet_functionality_executed);
+//                 dump($character_sheet_functionality_executed);
                 
                 //update character sheet test. The other complement is needed
                 foreach ($character_sheet_functionality_executed as $index => $value) {
