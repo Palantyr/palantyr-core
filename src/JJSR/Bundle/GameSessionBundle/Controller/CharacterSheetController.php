@@ -97,12 +97,6 @@ class CharacterSheetController extends Controller
             $em->flush();
             
             return $this->redirect($this->generateUrl('character_sheets_list'));
-            
-//             return $this->redirect($this->generateUrl(
-//                 'edit_character_sheet',
-//                 array(
-//                     'character_sheet_id' => $character_sheet->getId())
-//             ));
         }
 
         return $this->render('GameSessionBundle:CharacterSheet:add_character_sheet.html.twig', array(
@@ -312,16 +306,10 @@ class CharacterSheetController extends Controller
         $generation = new CharacterSheetData();
         $generation->setName('generation');
         $generation->setDatatype('field');
+        $generation->setValidationType('only_integer_numbers');
         $generation->setDisplayName('Generation');
         $generation->setCharacterSheetDataGroup($main_data);
         $main_data->addCharacterSheetDatum($generation);
-        
-        $player_name = new CharacterSheetData();
-        $player_name->setName('player_name');
-        $player_name->setDatatype('field');
-        $player_name->setDisplayName('Player name');
-        $player_name->setCharacterSheetDataGroup($main_data);
-        $main_data->addCharacterSheetDatum($player_name);
         
         $attributes = new CharacterSheetData();
         $attributes->setCharacterSheet($character_sheet);
@@ -340,6 +328,7 @@ class CharacterSheetController extends Controller
         $strength = new CharacterSheetData();
         $strength->setName('strength');
         $strength->setDatatype('field');
+        $strength->setValidationType('only_integer_numbers');
         $strength->setDisplayName('Strength');
         $strength->setCharacterSheetDataGroup($physical);
         $physical->addCharacterSheetDatum($strength);
@@ -347,6 +336,7 @@ class CharacterSheetController extends Controller
         $dexterity = new CharacterSheetData();
         $dexterity->setName('dexterity');
         $dexterity->setDatatype('field');
+        $dexterity->setValidationType('only_integer_numbers');
         $dexterity->setDisplayName('Dexterity');
         $dexterity->setCharacterSheetDataGroup($physical);
         $physical->addCharacterSheetDatum($dexterity);
@@ -368,6 +358,7 @@ class CharacterSheetController extends Controller
         $alert = new CharacterSheetData();
         $alert->setName('alert');
         $alert->setDatatype('field');
+        $alert->setValidationType('only_integer_numbers');
         $alert->setDisplayName('Alert');
         $alert->setCharacterSheetDataGroup($talents);
         $talents->addCharacterSheetDatum($alert);
@@ -375,6 +366,7 @@ class CharacterSheetController extends Controller
         $athletics = new CharacterSheetData();
         $athletics->setName('athletics');
         $athletics->setDatatype('field');
+        $athletics->setValidationType('only_integer_numbers');
         $athletics->setDisplayName('Athletics');
         $athletics->setCharacterSheetDataGroup($talents);
         $talents->addCharacterSheetDatum($athletics);
@@ -389,6 +381,7 @@ class CharacterSheetController extends Controller
         $hit_points_total = new CharacterSheetData();
         $hit_points_total->setName('hit_points_total');
         $hit_points_total->setDatatype('field');
+        $hit_points_total->setValidationType('only_integer_numbers');
         $hit_points_total->setDisplayName('Hit points total');
         $hit_points_total->setCharacterSheetDataGroup($hit_points);
         $hit_points->addCharacterSheetDatum($hit_points_total);
@@ -396,6 +389,7 @@ class CharacterSheetController extends Controller
         $hit_points_current = new CharacterSheetData();
         $hit_points_current->setName('hit_points_current');
         $hit_points_current->setDatatype('field');
+        $hit_points_current->setValidationType('only_integer_numbers');
         $hit_points_current->setDisplayName('Hit points current');
         $hit_points_current->setCharacterSheetDataGroup($hit_points);
         $hit_points->addCharacterSheetDatum($hit_points_current);
@@ -407,7 +401,6 @@ class CharacterSheetController extends Controller
         $main_data->setCharacterSheet($character_sheet);
         $main_data->setName('main_data');
         $main_data->setDatatype('group');
-        $main_data->setDisplayName('Main Data');
         $character_sheet->addCharacterSheetDatum($main_data);
         
         $alignment = new CharacterSheetData();
@@ -434,6 +427,7 @@ class CharacterSheetController extends Controller
         $strength_actual_score = new CharacterSheetData();
         $strength_actual_score->setName('strength_actual_score');
         $strength_actual_score->setDatatype('field');
+        $strength_actual_score->setValidationType('only_integer_numbers');
         $strength_actual_score->setDisplayName('Strength actual score');
         $strength_actual_score->setCharacterSheetDataGroup($strengrh_actual);
         $strengrh_actual->addCharacterSheetDatum($strength_actual_score);
@@ -454,6 +448,7 @@ class CharacterSheetController extends Controller
         $strength_temporary_score = new CharacterSheetData();
         $strength_temporary_score->setName('strength_temporary_score');
         $strength_temporary_score->setDatatype('field');
+        $strength_temporary_score->setValidationType('only_integer_numbers');
         $strength_temporary_score->setDisplayName('Strength temporary score');
         $strength_temporary_score->setCharacterSheetDataGroup($strength_temporary);
         $strength_temporary->addCharacterSheetDatum($strength_temporary_score);
@@ -475,6 +470,7 @@ class CharacterSheetController extends Controller
         $dexterity_actual_score = new CharacterSheetData();
         $dexterity_actual_score->setName('dexterity_actual_score');
         $dexterity_actual_score->setDatatype('field');
+        $dexterity_actual_score->setValidationType('only_integer_numbers');
         $dexterity_actual_score->setDisplayName('Dexterity actual score');
         $dexterity_actual_score->setCharacterSheetDataGroup($dexterity_actual);
         $dexterity_actual->addCharacterSheetDatum($dexterity_actual_score);
@@ -495,6 +491,7 @@ class CharacterSheetController extends Controller
         $dexterity_temporary_score = new CharacterSheetData();
         $dexterity_temporary_score->setName('dexterity_temporary_score');
         $dexterity_temporary_score->setDatatype('field');
+        $dexterity_temporary_score->setValidationType('only_integer_numbers');
         $dexterity_temporary_score->setDisplayName('Dexterity temporary score');
         $dexterity_temporary_score->setCharacterSheetDataGroup($dexterity_temporary);
         $dexterity_temporary->addCharacterSheetDatum($dexterity_temporary_score);
@@ -516,6 +513,7 @@ class CharacterSheetController extends Controller
         $constitution_actual_score = new CharacterSheetData();
         $constitution_actual_score->setName('constitution_actual_score');
         $constitution_actual_score->setDatatype('field');
+        $constitution_actual_score->setValidationType('only_integer_numbers');
         $constitution_actual_score->setDisplayName('Constitution actual score');
         $constitution_actual_score->setCharacterSheetDataGroup($constitution_actual);
         $constitution_actual->addCharacterSheetDatum($constitution_actual_score);
@@ -536,6 +534,7 @@ class CharacterSheetController extends Controller
         $constitution_temporary_score = new CharacterSheetData();
         $constitution_temporary_score->setName('constitution_temporary_score');
         $constitution_temporary_score->setDatatype('field');
+        $constitution_temporary_score->setValidationType('only_integer_numbers');
         $constitution_temporary_score->setDisplayName('Constitution temporary score');
         $constitution_temporary_score->setCharacterSheetDataGroup($constitution_temporary);
         $constitution_temporary->addCharacterSheetDatum($constitution_temporary_score);

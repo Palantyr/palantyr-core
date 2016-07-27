@@ -227,12 +227,18 @@ body .main-container .map-container {
 
 .character-sheet .character-sheet-extended {
 	display: table;
+	background-color: white;
 }
 
 .character-sheet-extended .character-sheet-complete {
 	display: none;
 	width: 220px;
 	border-style: groove;
+}
+
+.character-sheet-extended .character-sheet-complete .functional {
+	font-weight: bold;
+	cursor: pointer;
 }
 
 @media (min-width: 768px) {

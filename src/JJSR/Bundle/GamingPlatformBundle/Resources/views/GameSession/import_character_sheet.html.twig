@@ -180,6 +180,11 @@
 		  	}
 		});
 
+		$( "#"+character_sheet_id ).on('click', function() {
+			$( "#game_container .character-sheet" ).css("z-index", '');
+			$(this).css("z-index", 1);
+		});
+		
  		for (var key_sections in character_sheet) {
  	 		switch (key_sections) {
 	 			case 'character_sheet_settings':
@@ -242,6 +247,8 @@
 
  	function addIndividualFunctionalityToCharacterSheet(functionality, character_sheet_id)
  	{
+		$( "#"+character_sheet_id+" #"+functionality['identifier'] ).addClass('functional');
+		
  		character_sheets_functionality[character_sheet_id][functionality['identifier']] = functionality;
  		
 		$( "#"+character_sheet_id ).on("click", "#"+functionality['identifier'], function() {	
@@ -542,14 +549,9 @@
  	}
 
  	function typeFieldOfCharacterSheet(field, father_selector) 
- 	{
-		var new_class = '';
-		if ($.isNumeric(field.value)) {
-			new_class = 'functional';
-		}
- 		
+ 	{		
  		$( father_selector ).append(
-			'<div id='+field.id+' class='+new_class+'> \
+			'<div id='+field.id+'> \
 				<span id="name">'+field.name+'</span> \
 				<span id="value">'+field.value+'</span> \
 			</div>' );
@@ -557,13 +559,8 @@
 
  	function typeDerivedOfCharacterSheet(field, father_selector)
  	{
-		var new_class = '';
-		if ($.isNumeric(field.value)) {
-			new_class = 'functional';
-		}
-		
  		$( father_selector ).append(
-			'<div id='+field.id+' class='+new_class+'> \
+			'<div id='+field.id+'> \
 				<span id="name">'+field.name+'</span> \
 				<span id="value">'+field.value+'</span> \
 			</div>' );

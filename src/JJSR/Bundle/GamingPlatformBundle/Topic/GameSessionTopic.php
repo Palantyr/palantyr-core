@@ -14,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JJSR\Bundle\GameSessionBundle\Entity\GameSession;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet;
 use JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class GameSessionTopic extends Controller implements TopicInterface
 {
@@ -473,7 +472,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	        $this->chat_history[$room][$user_id] = array();
 	    }
 
-	    if (isset($this->chat_history[$room][$user_id])) {
+	    if (isset($this->chat_history[$room][$user_id]) && $this->chat_history[$room][$user_id]) {
             self::loadAndSendChatHistory($connection, $topic, $request);
 	    }
 	    
@@ -1099,6 +1098,29 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_strength_temporary_modifier;
 	    
 	    
+	    
+	    $pathfinder_owner_functionality_dexterity_temporary_modifier = array();
+	    $pathfinder_owner_functionality_dexterity_temporary_modifier['functionality_type'] = 'individual';
+	    $pathfinder_owner_functionality_dexterity_temporary_modifier['identifier'] = 'dexterity_temporary_modifier';
+	    $pathfinder_owner_functionality_dexterity_temporary_modifier['multiple_selection_list'] = null;
+	     
+	    $list_of_modifiers = array();
+	    $list_of_modifiers['type'] = 'sum';
+	    $list_of_modifiers['value'] = array();
+	    $list_of_modifiers['value'][] = array('type' => 'dice', 'name' => null, 'value' => 20);
+	    $list_of_modifiers['value'][] = array('type' => 'derived', 'name' => 'dexterity_temporary_modifier', 'value' => null);
+	    $pathfinder_owner_functionality_dexterity_temporary_modifier['list_of_modifiers'] = $list_of_modifiers;
+	     
+	    $launch_system = array();
+	    $launch_system['type'] = 'd20';
+	    $launch_system['value'] = array();
+	    $launch_system['value'][] = array('type' => 'difficulty', 'display_name' => 'Difficulty', 'value' => 20);
+	    $pathfinder_owner_functionality_dexterity_temporary_modifier['launch_system'] = $launch_system;
+	     
+	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_dexterity_temporary_modifier;
+	    
+	    
+	    
 	    $pathfinder_owner_functionality_constitution_temporary_modifier = array();
 	    $pathfinder_owner_functionality_constitution_temporary_modifier['functionality_type'] = 'individual';
 	    $pathfinder_owner_functionality_constitution_temporary_modifier['identifier'] = 'constitution_temporary_modifier';
@@ -1118,6 +1140,7 @@ class GameSessionTopic extends Controller implements TopicInterface
 	    $pathfinder_owner_functionality_constitution_temporary_modifier['launch_system'] = $launch_system;
 	     
 	    $pathfinder_owner_functionality[] = $pathfinder_owner_functionality_constitution_temporary_modifier;
+	    
 	    
 	    
 	    $pathfinder_owner_functionality_mele_attack = array();

@@ -21,10 +21,15 @@ class CharacterSheetData
     /**
      * @var string
      */
+    private $validation_type;
+
+    /**
+     * @var string
+     */
     private $display_name;
 
     /**
-     * @var array
+     * @var string
      */
     private $value;
 
@@ -108,6 +113,29 @@ class CharacterSheetData
     }
 
     /**
+     * Set validation_type
+     *
+     * @param string $validationType
+     * @return CharacterSheetData
+     */
+    public function setValidationType($validationType)
+    {
+        $this->validation_type = $validationType;
+
+        return $this;
+    }
+
+    /**
+     * Get validation_type
+     *
+     * @return string 
+     */
+    public function getValidationType()
+    {
+        return $this->validation_type;
+    }
+
+    /**
      * Set display_name
      *
      * @param string $displayName
@@ -133,7 +161,7 @@ class CharacterSheetData
     /**
      * Set value
      *
-     * @param array $value
+     * @param string $value
      * @return CharacterSheetData
      */
     public function setValue($value)
@@ -146,7 +174,7 @@ class CharacterSheetData
     /**
      * Get value
      *
-     * @return array 
+     * @return string 
      */
     public function getValue()
     {

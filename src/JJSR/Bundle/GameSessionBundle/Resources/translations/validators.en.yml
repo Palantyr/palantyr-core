@@ -20,3 +20,7 @@ language:
 version:
     not_blank: Version should not be blank
     must_be_integer: Version must be integer value
+
+constraints:
+    only_integer_numbers: Only integer numbers
+    alphanumeric: Only alphanumeric characters and spaces
