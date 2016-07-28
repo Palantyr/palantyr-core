@@ -1360,11 +1360,11 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        $date = new \DateTime();
 		        $date = $date->format('H:i:s');
 		        
-		        $character_sheet_functionality_executed = json_decode($event['character_sheet_functionality_executed_json']);
-//                 dump($character_sheet_functionality_executed);
+		        $character_sheet_functionalities_executed_json = json_decode($event['functionalities_executed_json']);
+//                 dump($character_sheet_functionalities_executed_json);
                 
                 //update character sheet test. The other complement is needed
-                foreach ($character_sheet_functionality_executed as $index => $value) {
+                foreach ($character_sheet_functionalities_executed_json as $index => $value) {
                     if ($index == 'damage_hit_points') {
                         $character_sheet_functionality_updates = array(array('id' => 'hit_points_current', 'value' => rand(5, 15)));
                         $topic->broadcast([
@@ -1384,7 +1384,37 @@ class GameSessionTopic extends Controller implements TopicInterface
                         ]);
                     }
                 }
-		        
+                
+                $character_sheet_name = $event['character_sheet_name'];
+                $character_sheet_tarjet_name = $event['character_sheet_target_name'];
+                $collective_action_name = $event['collective_action_name'];
+                if ($collective_action_name) {
+                    $result = $character_sheet_name." executed a ".$collective_action_name." to ".$character_sheet_tarjet_name;
+                    
+                    $room = $request->getAttributes()->get('room');
+                    $this->chat_history[$room][] = $result;
+                    $topic->broadcast([
+                        'section' => 'chat',
+                        'option' => 'add_text',
+                        'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+                        'text' => $result,
+                        'date' => $date,
+                    ]);
+                }
+                else {
+                    $result = $character_sheet_name." executed a action";
+                    
+                    $room = $request->getAttributes()->get('room');
+                    $this->chat_history[$room][] = $result;
+                    $topic->broadcast([
+                        'section' => 'chat',
+                        'option' => 'add_text',
+                        'sender' => $this->clientManipulator->getClient($connection)->getUsername(),
+                        'text' => $result,
+                        'date' => $date,
+                    ]);
+                }
+
 		        $random = rand(0, 10);
 		        $result = "The result is ".$random." hits";
 		        

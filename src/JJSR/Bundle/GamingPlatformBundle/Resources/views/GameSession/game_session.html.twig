@@ -185,43 +185,76 @@
      	$( ".main-container" ).on("click", "#functional_panel_throw_button", function() {
     		var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
     		if (character_sheet_id) {
-        		
-//     			An iterative system is needed
-    			var character_sheet_functionality_executed = character_sheets_current_functionality[character_sheet_id];
-				var launch_system = $( "#"+character_sheet_id+" #functional_panel_data #launch_system" );
-				if (launch_system.length) {
+    			var functionalities_executed = character_sheets_current_functionality[character_sheet_id];
+
+				for (functionality_executed in functionalities_executed) {
+					adaptFunctionalityOptions(character_sheet_id, functionalities_executed[functionality_executed]);
+				}
+				var functionalities_executed_json = JSON.stringify(character_sheets_current_functionality[character_sheet_id]);
+// 				alert(functionalities_executed_json);
+
+				var character_sheet_target = $( "#"+character_sheet_id+" #functional_panel_data #character_sheet_target" );
+				var character_sheet_target_name = 'null';
+				var character_sheet_name = getCharacterSheetProperty(this, 'character_sheet_name');
+				var collective_action_name = '';
+				if (character_sheet_target.length) {
+					character_sheet_target_name = character_sheet_target.attr('value');
 					
-					for (functionality_executed in character_sheet_functionality_executed) {
-						character_sheet_functionality_executed[functionality_executed]['launch_system']['dificulty'] = launch_system.children('#difficulty').val();
+					for (functionality_executed in functionalities_executed) {
+						collective_action_name = functionalities_executed[functionality_executed]['name'];
 					}
 				}
-
-				for (functionality_executed in character_sheet_functionality_executed) {
-					var new_field = $( "#"+character_sheet_id+" #functional_panel_data #new_field" );
-					if (new_field) {
-						for (list_of_modifiers in character_sheet_functionality_executed[functionality_executed]['list_of_modifiers']['value']) {
-// 							alert(JSON.stringify(character_sheet_functionality_executed[functionality_executed]['list_of_modifiers']['value'][list_of_modifiers]));
-							if (character_sheet_functionality_executed[functionality_executed]['list_of_modifiers']['value'][list_of_modifiers]['type'] == 'new_field') {
-								character_sheet_functionality_executed[functionality_executed]['list_of_modifiers']['value'][list_of_modifiers]['value'] = new_field.val();
-							}
-						}
-					}
-				}
-// 				alert(JSON.stringify(character_sheet_functionality_executed[functionality_executed]));
-//     			An iterative system is needed
-
-				character_sheet_functionality_executed_json = JSON.stringify(character_sheets_current_functionality[character_sheet_id]);
-// 				alert(character_sheet_functionality_executed_json);
     			
     			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
  	 			session.publish(route_game_session, {
  	 				section:'functionality_character_sheet',
  	 				option: 'execute_functionality', 
  	 				character_sheet_id: character_sheet_id,
- 	 				character_sheet_functionality_executed_json: character_sheet_functionality_executed_json
+ 	 				functionalities_executed_json: functionalities_executed_json,
+ 	 				character_sheet_name: character_sheet_name,
+ 	 				character_sheet_target_name: character_sheet_target_name,
+ 	 				collective_action_name: collective_action_name
  				});
     		}
      	});
+
+
+     	function adaptFunctionalityOptions(character_sheet_id, functionality_executed)
+     	{
+     		for (option in functionality_executed) {
+     			switch(option) {
+     			case 'launch_system':
+     				var launch_system = $( "#"+character_sheet_id+" #functional_panel_data #launch_system" );
+     				if (launch_system.length) {
+//          				add types of launch
+     					functionality_executed[option]['dificulty'] = launch_system.children('#difficulty').val();
+     				}
+     				break;
+
+     			case 'list_of_modifiers':
+// 					need to complete
+					for (list_of_modifiers in functionality_executed[option]) {
+// 						alert(functionality_executed[option][list_of_modifiers]);
+						adaptFunctionalityListOfModifiersOptions(character_sheet_id, functionality_executed[option][list_of_modifiers]);
+					}
+     				break;
+     			}
+     		}
+     	}
+
+     	function adaptFunctionalityListOfModifiersOptions(character_sheet_id, modifier)
+     	{
+//          	need to complete
+//          	alert(JSON.stringify(modifier));
+			if (modifier['type'] == 'field') {
+				
+			}
+			else {
+				for (sub_modifier in modifier['value']) {
+					adaptFunctionalityListOfModifiersOptions(character_sheet_id, modifier[sub_modifier]);
+				}
+			}
+     	}
 // FUNCTIONALITY CHARACTER SHEET
 
 // MAP

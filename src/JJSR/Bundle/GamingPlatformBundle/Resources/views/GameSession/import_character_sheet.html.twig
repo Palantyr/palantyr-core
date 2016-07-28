@@ -305,7 +305,8 @@
         					$( "#"+character_sheet_id+" > #character_sheet_extended > #functional_panel").append('<button id="functional_panel_throw_button" title="Throw" class="btn-sm glyphicon glyphicon-th-large"></button>');
         
         					var character_sheet_target_name = getCharacterSheetProperty(this, 'character_sheet_name');
-        					$( "#"+character_sheet_id+" #functional_panel_data" ).append('<div id="character_sheet_target">Target: '+character_sheet_target_name+'</div>');
+//         					var character_sheet_target_id = getCharacterSheetProperty(this, 'character_sheet_id');
+        					$( "#"+character_sheet_id+" #functional_panel_data" ).append('<div id="character_sheet_target" value="'+character_sheet_target_name+'">Target: '+character_sheet_target_name+'</div>');
         				}
     				    $("#game_container .character-sheet").unbind('click.selectCharacterSheetOfFunctionalPanel');
     				});
