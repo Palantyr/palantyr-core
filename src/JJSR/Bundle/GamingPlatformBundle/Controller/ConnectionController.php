@@ -12,11 +12,88 @@ class ConnectionController extends Controller
     {
         $game_sessions = $this->getDoctrine()
         ->getRepository('GameSessionBundle:GameSession')
-        ->findAll();
+        ->findBy(array(), array('name' => 'ASC'));
+
+        $defaultData = array();
+        $form_search = $this->createFormBuilder($defaultData)
+        ->add('search', 'text', array('attr' => array('placeholder' => 'game_session.search.placeholder')))
+        ->getForm();
+        
+        $form_search->handleRequest($request);
+        
+        if ($form_search->isValid()) {
+            $data = $form_search->getData();
+            $search = $data['search'];
+            if (strlen($search) < 50) {
+                $game_sessions = self::searchGameSession($search);
+        
+                if ($game_sessions) {
+                    return $this->render(
+                        'GamingPlatformBundle:Web:game_sessions_list.html.twig',
+                        array('game_sessions' => $game_sessions, 'form_search' => $form_search->createView())
+                        );
+                } 
+                else {
+                    return $this->render(
+                        'GamingPlatformBundle:Web:game_sessions_list.html.twig',
+                        array(
+                            'game_sessions' => 'unsuccessful_search',
+                            'form_search' => $form_search->createView(),
+                            'search' => $search
+                        )
+                        );
+                }
+            }
+        }
          
-        return $this->render('GamingPlatformBundle:Web:game_sessions_list.html.twig', array(
-            'game_sessions' => $game_sessions
-        ));
+        if ($game_sessions == null || $game_sessions == '') {
+            $game_sessions = 'empty';
+        }
+        return $this->render(
+            'GamingPlatformBundle:Web:game_sessions_list.html.twig',
+            array('game_sessions' => $game_sessions, 'form_search' => $form_search->createView())
+            );
+    }
+    
+    private function searchGameSession($text_to_search)
+    {
+        $em = $this->getDoctrine()->getManager();
+    
+        $users = $em->getRepository('UserBundle:User')->createQueryBuilder('o')
+        ->where('o.username LIKE :text_to_search')
+        ->setParameter('text_to_search','%'.$text_to_search.'%')
+        ->getQuery()
+        ->getResult();
+    
+        $game_sessions_aux = array();
+        foreach ($users as $user_key => $user_value) {
+            $user_id = $user_value->getId();
+            $game_sessions_found = $em->getRepository('GameSessionBundle:GameSession')->findBy(array('owner' => $user_id));  
+            foreach ($game_sessions_found as $game_session_found_key => $game_session_found_value) {
+                $game_sessions_aux[] = $game_session_found_value;
+            }
+        }
+    
+        $game_sessions = $em->getRepository('GameSessionBundle:GameSession')->createQueryBuilder('o')
+        ->where('o.name LIKE :text_to_search')
+        ->orWhere('o.comments LIKE :text_to_search')
+        ->setParameter('text_to_search','%'.$text_to_search.'%')
+        ->getQuery()
+        ->getResult();
+        
+        foreach ($game_sessions_aux as $game_session_aux_index => $game_session_aux_value) {
+            $exist = false;
+            foreach ($game_sessions as $game_session_index => $game_session_value) {
+                if ($game_session_aux_value->getId() == $game_session_value->getId()) {
+                    $exist = true;
+                }
+            }
+            if ($exist == false) {
+                $game_sessions[] = $game_session_aux_value;
+            }
+        }
+    
+        return $game_sessions;
     }
     
     public function loginGameSessionAction(Request $request)

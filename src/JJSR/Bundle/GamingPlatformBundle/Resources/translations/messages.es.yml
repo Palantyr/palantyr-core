@@ -34,6 +34,10 @@ map:
     no_tokens_in_game: No hay fichas en el juego
     
 game_session:
+    search:
+        placeholder: Buscar por...
+        there_are_not: No existen sesiones de juego
+        unsuccessful: 'La búsqueda %search%, no fue existosa'
     join:
         submit: Unirse
         title: Unirse a sesión de juego

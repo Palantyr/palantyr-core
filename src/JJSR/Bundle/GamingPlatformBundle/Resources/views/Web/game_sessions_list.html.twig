@@ -5,8 +5,28 @@
 {% block body %}
 
 	<h1>{% trans %}game_session.join.title{% endtrans %}</h1>
-	
 	</br>
+	
+	{% if game_sessions == 'empty' %}
+		<form action="{{ path('create_game_session') }}">
+			<h3>{% trans %}game_session.search.there_are_not{% endtrans %}
+	    		<input class="btn btn-primary" type="submit" value="{% trans %}game_session.create.title{% endtrans %}">
+	    	</h3>
+		</form>
+		
+	{% elseif game_sessions == 'unsuccessful_search' %}
+		{{ form_start(form_search, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_search'} }) }}
+			{{ form_row(form_search.search, { 'label': ' '}) }}
+			{{ form_widget(form_search) }}
+		{{ form_end(form_search) }}
+	
+		<h3>{{ "game_session.search.unsuccessful"|trans({'%search%': search}) }}</h3> 
+    
+	{% else %}
+		{{ form_start(form_search, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form_search'} }) }}
+			{{ form_row(form_search.search, { 'label': ' '}) }}
+			{{ form_widget(form_search) }}
+		{{ form_end(form_search) }}
 
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -41,5 +61,6 @@
 			</tbody>
 		</table>
 	</div>
+	{% endif %}
 	
 {% endblock %}

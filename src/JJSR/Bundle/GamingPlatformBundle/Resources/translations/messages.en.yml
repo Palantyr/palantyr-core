@@ -34,6 +34,10 @@ map:
     no_tokens_in_select: There are no tokens in game
     
 game_session:
+    search:
+        placeholder: Search for...
+        there_are_not: There are no game sessions
+        unsuccessful: 'The search %search%, was unsuccessful'
     join:
         submit: Join
         title: Join game session
@@ -69,5 +73,6 @@ game_session:
     throw_dice:
         title: Throw dice
         throw_button: Throw
-        
+
+#game_session.search.unsuccessful %search%: asdasd %search%
 game_session.throw_dice.partial_message %die_type% %number_of_dice%: 'The %number_of_dice%d%die_type% result is: '
