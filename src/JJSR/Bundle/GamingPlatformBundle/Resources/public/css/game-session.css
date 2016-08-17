@@ -270,6 +270,23 @@ body .main-container .map-container {
 .character-sheet-functional-panel {
 	border-style: solid;
 	width: 220px;
+	display: inherit;
+}
+
+.character-sheet-functional-panel #functional_panel_data {
+	display: inherit;
+}
+
+.character-sheet-functional-panel #functional_panel_data #launch_system {
+	float: left;
+}
+
+.character-sheet-functional-panel #functional_panel_data #character_sheet_target {
+	display: inherit;
+}
+
+.character-sheet-functional-panel #functional_panel_data span {
+	display: inherit;
 }
 /* Character Sheet */
 
