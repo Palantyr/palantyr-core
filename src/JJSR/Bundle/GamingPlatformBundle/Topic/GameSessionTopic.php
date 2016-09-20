@@ -1391,8 +1391,8 @@ class GameSessionTopic extends Controller implements TopicInterface
                 if ($collective_action_name) {
                     $result = $character_sheet_name." executed a ".$collective_action_name." to ".$character_sheet_tarjet_name;
                     
-                    $room = $request->getAttributes()->get('room');
-                    $this->chat_history[$room][] = $result;
+//                     $room = $request->getAttributes()->get('room');
+//                     $this->chat_history[$room][] = $result;
                     $topic->broadcast([
                         'section' => 'chat',
                         'option' => 'add_text',
@@ -1404,8 +1404,8 @@ class GameSessionTopic extends Controller implements TopicInterface
                 else {
                     $result = $character_sheet_name." executed a action";
                     
-                    $room = $request->getAttributes()->get('room');
-                    $this->chat_history[$room][] = $result;
+//                     $room = $request->getAttributes()->get('room');
+//                     $this->chat_history[$room][] = $result;
                     $topic->broadcast([
                         'section' => 'chat',
                         'option' => 'add_text',
@@ -1418,8 +1418,8 @@ class GameSessionTopic extends Controller implements TopicInterface
 		        $random = rand(0, 10);
 		        $result = "The result is ".$random." hits";
 		        
-		        $room = $request->getAttributes()->get('room');
-		        $this->chat_history[$room][] = $result;
+// 		        $room = $request->getAttributes()->get('room');
+// 		        $this->chat_history[$room][] = $result;
 		        $topic->broadcast([
 		            'section' => 'chat',
 		            'option' => 'add_text',

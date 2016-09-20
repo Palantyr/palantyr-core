@@ -20,3 +20,4 @@
 /composer.phar
 #/vendor/
 /vendor/*
+/vendor/
