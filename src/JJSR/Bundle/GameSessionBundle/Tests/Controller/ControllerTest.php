@@ -149,8 +149,8 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
     public function urlRoleUserProvider()
     {
         return array(
-            array('en/game/sessions'),
-            array('es/game/sessions'),
+//             array('en/game/sessions'),
+//             array('es/game/sessions'),
             array('en/game/create-game-session'),
             array('es/game/create-game-session'),
             array('en/game/add-character-sheet'),

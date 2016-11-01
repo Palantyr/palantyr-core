@@ -4,7 +4,7 @@ namespace UserBundle\Tests\Controller;
 
 use UserBundle\Entity\User;
 
-class UnitTests extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateUser()
     {

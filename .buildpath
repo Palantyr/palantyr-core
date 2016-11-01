@@ -14,7 +14,6 @@
 	<buildpathentry kind="src" path="vendor/sebastian/comparator/src"/>
 	<buildpathentry kind="src" path="vendor/phpunit/phpunit-mock-objects/src"/>
 	<buildpathentry kind="src" path="vendor/gos/web-socket-bundle"/>
-	<buildpathentry kind="src" path="vendor/psr/log"/>
 	<buildpathentry kind="src" path="vendor/doctrine/collections/lib"/>
 	<buildpathentry kind="src" path="vendor/sebastian/resource-operations/src"/>
 	<buildpathentry kind="src" path="vendor/phpunit/php-timer/src"/>
@@ -41,6 +40,7 @@
 	<buildpathentry kind="src" path="vendor/sebastian/code-unit-reverse-lookup/src"/>
 	<buildpathentry excluding="lib/" kind="src" path="vendor/oyejorge/less.php"/>
 	<buildpathentry kind="src" path="vendor/webmozart/assert/src"/>
+	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib/Doctrine/Common/Annotations"/>
 	<buildpathentry kind="src" path="vendor/incenteev/composer-parameter-handler"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bridge/ProxyManager"/>
 	<buildpathentry kind="src" path="vendor/symfony/symfony/src/Symfony/Bundle"/>
@@ -63,7 +63,6 @@
 	<buildpathentry kind="src" path="vendor/monolog/monolog/src/Monolog"/>
 	<buildpathentry kind="src" path="vendor/phpunit/php-text-template/src"/>
 	<buildpathentry kind="src" path="vendor/sebastian/object-enumerator/src"/>
-	<buildpathentry kind="src" path="vendor/doctrine/annotations/lib"/>
 	<buildpathentry kind="src" path="vendor/symfony/monolog-bundle"/>
 	<buildpathentry kind="src" path="vendor/twig/twig/lib"/>
 	<buildpathentry kind="src" path="vendor/sebastian/version/src"/>
@@ -85,6 +84,7 @@
 	<buildpathentry kind="src" path="vendor/sebastian/global-state/src"/>
 	<buildpathentry kind="src" path="vendor/phpdocumentor/reflection-docblock/src"/>
 	<buildpathentry kind="src" path="vendor/guzzle/parser"/>
+	<buildpathentry kind="src" path="vendor/psr/log/Psr/Log"/>
 	<buildpathentry kind="src" path="vendor/doctrine/lexer/lib"/>
 	<buildpathentry kind="src" path="vendor/symfony/polyfill-intl-icu"/>
 	<buildpathentry kind="src" path="vendor/kriswallsmith/assetic/src"/>

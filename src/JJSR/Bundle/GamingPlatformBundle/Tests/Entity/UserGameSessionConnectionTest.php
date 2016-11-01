@@ -8,7 +8,7 @@ use UserBundle\Entity\User;
 use JJSR\Bundle\GameSessionBundle\Entity\GameSession;
 use JJSR\Bundle\GameSessionBundle\Entity\Language;
 
-class UnitTests extends \PHPUnit_Framework_TestCase
+class UserGameSessionConnectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateUserGameSessionConnection() {
         $user = new User();
