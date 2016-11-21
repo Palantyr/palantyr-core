@@ -20,7 +20,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
     
 //         $this->assertTrue($this->client->getResponse()->isSuccessful());
 //     }
-    
+
     /**
      * @dataProvider urlRoleUserProvider
      */
@@ -32,7 +32,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
         $this->assertTrue(!$this->client->getResponse()->isSuccessful());
         $this->assertTrue($this->client->getResponse()->isRedirection());
     }
-    
+
     /**
      * @dataProvider urlRoleAdminProvider
      */
@@ -44,7 +44,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
         $this->assertTrue(!$this->client->getResponse()->isSuccessful());
         $this->assertTrue($this->client->getResponse()->isRedirection());
     }
-    
+
     /**
      * @dataProvider urlRoleAnonymousProvider
      */
@@ -56,7 +56,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
     
 //         $this->assertTrue($this->client->getResponse()->isSuccessful());
 //     }
-    
+
     /**
      * @dataProvider urlRoleUserProvider
      */
@@ -68,7 +68,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
     
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
-    
+
     /**
      * @dataProvider urlRoleAdminProvider
      */
