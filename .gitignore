@@ -2,22 +2,27 @@
 #/app/bootstrap.php.cache
 
 #Cache
-/app/cache/*
+var/cache/
 
 #Data base configuration. We use alike.
 #/app/config/parameters.yml
 
 #Logs
-/app/logs/*
+var/logs/
 
 #Files needed for git.
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+!var/cache/.gitkeep
+!var/logs/.gitkeep
 
 #/app/phpunit.xml
 /build/
 /bin/
 /composer.phar
 #/vendor/
-/vendor/*
 /vendor/
+
+#PhpStorm
+.idea/
+
+#Eclipse
+.project

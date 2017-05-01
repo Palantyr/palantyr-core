@@ -1,9 +1,0 @@
-parameters:
-    gos_web_socket.port: 1337
-    gos_web_socket.host: palantir.local
-    
-    app.locales_string: en|es
-    app.locales: 
-        - en 
-        - es
-    app.locale_default: en

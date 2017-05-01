@@ -1,7 +1,0 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}{% trans %}register.confirmed.title{% endtrans %}{% endblock %}
-
-{% block body %}
-	<h3>{% trans with {'%username%': app.user.username}%}register.confirmed.message{% endtrans %}</h3>
-{% endblock %}
