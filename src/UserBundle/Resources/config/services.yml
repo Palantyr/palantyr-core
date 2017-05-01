@@ -5,7 +5,7 @@ services:
     user.form.registration:
         class: UserBundle\Form\Type\RegistrationType
         tags:
-            - { name: form.type, alias: user_registration }
+            - { name: form.type, alias: app_user_registration }
             
     user.profile.form.type:
         class: UserBundle\Form\Type\ProfileType
