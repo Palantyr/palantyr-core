@@ -1,0 +1,54 @@
+AppBundle\Entity\CharacterSheetData:
+    type: entity
+    repositoryClass: AppBundle\Entity\CharacterSheetDataRepository
+#    inheritanceType: JOINED #SINGLE_TABLE
+#    DiscriminatorColumn:
+#        name: type
+#        type: string
+#    DiscriminatorMap:
+#        character_sheet_data: GameSessionBundle\Entity\CharacterSheetData
+#        character_sheet_data_field: GameSessionBundle\Entity\CharacterSheetDataField
+#        character_sheet_data_group: GameSessionBundle\Entity\CharacterSheetDataGroup
+    table: character_sheet_data
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 50
+        datatype:
+            type: string
+            length: 50
+        validation_type:
+            type: string
+            length: 50
+            nullable: TRUE
+        display_name:
+            type: string
+            length: 50
+            nullable: TRUE
+        value:
+            type: string
+#            type: json_array
+            length: 50
+            nullable: TRUE
+    manyToOne:
+        character_sheet:
+            targetEntity: CharacterSheet
+            inversedBy: character_sheet_data
+            joinColumn:
+                name: character_sheet_id
+                referencedColumnName: id
+        character_sheet_data_group:
+            targetEntity: AppBundle\Entity\CharacterSheetData
+            inversedBy: character_sheet_data
+            joinColumn:
+                name: character_sheet_data_group_id
+                referencedColumnName: id
+    oneToMany:
+        character_sheet_data:
+            targetEntity: AppBundle\Entity\CharacterSheetData
+            mappedBy: character_sheet_data_group
+            cascade: ["persist", "remove"]

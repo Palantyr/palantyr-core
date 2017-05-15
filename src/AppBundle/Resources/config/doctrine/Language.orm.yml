@@ -1,0 +1,15 @@
+AppBundle\Entity\Language:
+    type: entity
+    repositoryClass: AppBundle\Entity\LanguageRepository
+    table: language
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 255
+        display_name:
+            type: string
+            length: 255
