@@ -1,14 +1,13 @@
 #/web/bundles/
 #/app/bootstrap.php.cache
 
-#Cache
-var/cache/
-
 #Data base configuration. We use alike.
 #/app/config/parameters.yml
 
-#Logs
+#Logs/cache/sessions
 var/logs/
+var/cache/
+var/sessions
 
 #Files needed for git.
 !var/cache/.gitkeep
@@ -26,3 +25,7 @@ var/logs/
 
 #Eclipse
 .project
+
+#web
+web/css
+web/js

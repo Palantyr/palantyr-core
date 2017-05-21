@@ -19,14 +19,14 @@ class IndexController extends Controller
 //        ]);
 //    }
 
-    /**
-     * @Route("/", name="homepage")
-     */
+//    /**
+//     * @Route("/", name="homepage")
+//     */
     public function homepageAction(Request $request)
     {
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
-//        return $this->render('AppBundle:Web:homepage.html.twig');
+//        return $this->render('default/index.html.twig', [
+//            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+//        ]);
+        return $this->render('AppBundle:Web:homepage.html.twig');
     }
 }
