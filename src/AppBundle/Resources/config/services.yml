@@ -4,3 +4,8 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - @translator.default
+
+    app.form.registration:
+        class: AppBundle\Form\Type\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }

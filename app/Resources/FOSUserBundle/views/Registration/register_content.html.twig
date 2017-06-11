@@ -1,0 +1,20 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{#{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}#}
+    {#{{ form_widget(form) }}#}
+    {#<div>#}
+        {#<input type="submit" value="{{ 'registration.submit'|trans }}" />#}
+    {#</div>#}
+{#{{ form_end(form) }}#}
+
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'style': 'horizontal', 'attr': {'class': 'fos_user_registration_register', novalidate: 'novalidate'}}) }}
+    {{ form_row(form.username, { 'label': 'user.username', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 3}) }}
+    {{ form_row(form.email, { 'label': 'user.email', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 5}) }}
+    {{ form_row(form.plainPassword.first, { 'label': 'user.password', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 2}) }}
+    {{ form_row(form.plainPassword.second, { 'label': 'user.password_confirmation', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 2}) }}
+    {{ form_row(form.real_name, { 'label': 'user.real_name', 'translation_domain': 'messages', 'label_col': 2, 'widget_col': 3}) }}
+    {{ form_row(form.real_surname, { 'label': 'user.real_surname', 'label_col': 2, 'widget_col': 3}) }}
+    {{ form_row(form.termsAccepted, { 'label': 'register.terms_accepted'}) }}
+    {{ form_row(form.submit_button, {'label': 'register.submit', 'translation_domain': 'messages'}) }}
+    {{ form_widget(form) }}
+{{ form_end(form) }}
