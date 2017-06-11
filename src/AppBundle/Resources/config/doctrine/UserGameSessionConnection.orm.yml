@@ -1,0 +1,35 @@
+AppBundle\Entity\UserGameSessionConnection:
+    type: entity
+    repositoryClass: AppBundle\Entity\UserGameSessionConnectionRepository
+    table: user_game_session_connection
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        connection_option:
+            type: string
+#        user_id:
+#            type: integer
+#        game_session_id:
+#            type: integer
+#        allow_access: 
+#            type: boolean
+#        connected:
+#            type: boolean
+    manyToOne:
+        user:
+            targetEntity: AppBundle\Entity\User
+            joinColum:
+                name: user_id
+                referecedColumnName: id
+        game_session:
+            targetEntity: AppBundle\Entity\GameSession
+            joinColum:
+                name: game_session_id
+                referecedColumnName: id
+        language:
+            targetEntity: AppBundle\Entity\Language
+            joinColumn:
+                name: language_id
+                referencedColumnName: id
