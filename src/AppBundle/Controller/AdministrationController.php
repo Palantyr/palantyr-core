@@ -65,7 +65,7 @@ class AdministrationController extends Controller
             }
         }
         
-        return $this->render('GameSessionBundle:Administration:main_menu.html.twig',
+        return $this->render('AppBundle:Administration:main_menu.html.twig',
             array(
                 'default_data_form' => $default_data_form->createView()
             ));
@@ -74,9 +74,9 @@ class AdministrationController extends Controller
     public function addAllDefaultDataAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
-        $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
-        $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
+        $languages = $em->getRepository('AppBundle:Language')->findAll();
+        $rol_games = $em->getRepository('AppBundle:RolGame')->findAll();
+        $character_sheet_templates = $em->getRepository('AppBundle:CharacterSheetTemplate')->findAll();
         if (!$languages && !$rol_games && !$character_sheet_templates) {
             self::addLanguages();
             self::addRolGames();
@@ -144,14 +144,14 @@ class AdministrationController extends Controller
         
         $character_sheet_template = new CharacterSheetTemplate();
         $character_sheet_template->setName('Vampire character');
-        $rol_game = $em->getRepository('GameSessionBundle:RolGame')->findOneBy(array('name' => 'Vampire The Masquerade'));
+        $rol_game = $em->getRepository('AppBundle:RolGame')->findOneBy(array('name' => 'Vampire The Masquerade'));
         $character_sheet_template->setRolGame($rol_game);
         $character_sheet_template->setVersion(1);
         $em->persist($character_sheet_template);
         
         $character_sheet_template = new CharacterSheetTemplate();
         $character_sheet_template->setName('Pathfinder character');
-        $rol_game = $em->getRepository('GameSessionBundle:RolGame')->findOneBy(array('name' => 'Pathfinder'));
+        $rol_game = $em->getRepository('AppBundle:RolGame')->findOneBy(array('name' => 'Pathfinder'));
         $character_sheet_template->setRolGame($rol_game);
         $character_sheet_template->setVersion(1);
         $em->persist($character_sheet_template);
@@ -162,7 +162,7 @@ class AdministrationController extends Controller
     public function deleteLanguages()
     {
         $em = $this->getDoctrine()->getManager();
-        $languages = $em->getRepository('GameSessionBundle:Language')->findAll();
+        $languages = $em->getRepository('AppBundle:Language')->findAll();
         
         foreach ($languages as $language) {
             $em->remove($language);
@@ -173,7 +173,7 @@ class AdministrationController extends Controller
     public function deleteRolGames()
     {
         $em = $this->getDoctrine()->getManager();
-        $rol_games = $em->getRepository('GameSessionBundle:RolGame')->findAll();
+        $rol_games = $em->getRepository('AppBundle:RolGame')->findAll();
 
         foreach ($rol_games as $rol_game) {
             $em->remove($rol_game);
@@ -184,7 +184,7 @@ class AdministrationController extends Controller
     public function deleteCharacterSheets()
     {
         $em = $this->getDoctrine()->getManager();
-        $character_sheets = $em->getRepository('GameSessionBundle:CharacterSheet')->findAll();
+        $character_sheets = $em->getRepository('AppBundle:CharacterSheet')->findAll();
         
         foreach ($character_sheets as $character_sheet) {
             $em->remove($character_sheet);
@@ -195,7 +195,7 @@ class AdministrationController extends Controller
     public function deleteCharacterSheetTemplates()
     {
         $em = $this->getDoctrine()->getManager();
-        $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
+        $character_sheet_templates = $em->getRepository('AppBundle:CharacterSheetTemplate')->findAll();
     
         foreach ($character_sheet_templates as $character_sheet_template) {
             $em->remove($character_sheet_template);
@@ -206,7 +206,7 @@ class AdministrationController extends Controller
     public function deleteGameSessions()
     {
         $em = $this->getDoctrine()->getManager();
-        $game_sessions = $em->getRepository('GameSessionBundle:GameSession')->findAll();
+        $game_sessions = $em->getRepository('AppBundle:GameSession')->findAll();
     
         foreach ($game_sessions as $game_session) {
             $em->remove($game_session);
@@ -217,9 +217,9 @@ class AdministrationController extends Controller
     public function manageCharacterSheetTemplatesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $character_sheet_templates = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->findAll();
+        $character_sheet_templates = $em->getRepository('AppBundle:CharacterSheetTemplate')->findAll();
         
-        return $this->render('GameSessionBundle:Administration:manage_character_sheet_templates.html.twig', array(
+        return $this->render('AppBundle:Administration:manage_character_sheet_templates.html.twig', array(
             'character_sheet_templates' => $character_sheet_templates
         ));
     }
@@ -237,10 +237,10 @@ class AdministrationController extends Controller
         ->add('rol_game', 'entity', array(
             'required'    => true,
             'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
-            'class'    => 'GameSessionBundle:RolGame',
+            'class'    => 'AppBundle:RolGame',
             'property' => 'name',
             'choices' => $this->getDoctrine()
-            ->getRepository('GameSessionBundle:RolGame')
+            ->getRepository('AppBundle:RolGame')
             ->findAllActives()
         ))
         ->add(
@@ -260,7 +260,7 @@ class AdministrationController extends Controller
             return $this->redirectToRoute('manage_character_sheet_templates');
         }
     
-        return $this->render('GameSessionBundle:Administration:add_character_sheet_template.html.twig', array(
+        return $this->render('AppBundle:Administration:add_character_sheet_template.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -269,7 +269,7 @@ class AdministrationController extends Controller
     {
         $character_sheet_template_id = $request->get('character_sheet_template_id');
         $em = $this->getDoctrine()->getManager();
-        $character_sheet_template = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
+        $character_sheet_template = $em->getRepository('AppBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
         
         if (isset($character_sheet_template)) {
                 $em->remove($character_sheet_template);
@@ -285,7 +285,7 @@ class AdministrationController extends Controller
     
         $character_sheet_template_id = $request->get('character_sheet_template_id');
         $em = $this->getDoctrine()->getManager();
-        $character_sheet_template = $em->getRepository('GameSessionBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
+        $character_sheet_template = $em->getRepository('AppBundle:CharacterSheetTemplate')->find($character_sheet_template_id);
     
         $form = $this->createFormBuilder($character_sheet_template,
             array('validation_groups' => array('Update')))
@@ -294,10 +294,10 @@ class AdministrationController extends Controller
         ->add('rol_game', 'entity', array(
             'required'    => true,
             'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
-            'class'    => 'GameSessionBundle:RolGame',
+            'class'    => 'AppBundle:RolGame',
             'property' => 'name',
             'choices' => $this->getDoctrine()
-            ->getRepository('GameSessionBundle:RolGame')
+            ->getRepository('AppBundle:RolGame')
             ->findAllActives()
         ))
         ->add(
@@ -317,7 +317,7 @@ class AdministrationController extends Controller
             return $this->redirectToRoute('manage_character_sheet_templates');
         }
 
-        return $this->render('GameSessionBundle:Administration:edit_character_sheet_template.html.twig', array(
+        return $this->render('AppBundle:Administration:edit_character_sheet_template.html.twig', array(
             'form' => $form->createView()
         ));
     }

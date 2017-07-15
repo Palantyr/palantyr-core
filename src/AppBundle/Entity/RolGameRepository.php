@@ -14,7 +14,7 @@ class RolGameRepository extends \Doctrine\ORM\EntityRepository
     {
         $query = $this->getEntityManager()
             ->createQuery(
-                'SELECT rolGame FROM GameSessionBundle:RolGame rolGame'
+                'SELECT rolGame FROM AppBundle:RolGame rolGame'
             );
 
         try {
@@ -28,7 +28,7 @@ class RolGameRepository extends \Doctrine\ORM\EntityRepository
     {
         $query = $this->getEntityManager()
             ->createQuery(
-                'SELECT rolGame FROM GameSessionBundle:RolGame rolGame
+                'SELECT rolGame FROM AppBundle:RolGame rolGame
 				 WHERE rolGame.active = 1'
             );
 

@@ -32,14 +32,14 @@ class AddCharacterSheetMenuType extends AbstractType
             'rol_game',
             'entity',
             array(
-                'class'    => 'GameSessionBundle:RolGame',
+                'class'    => 'AppBundle:RolGame',
                 'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
                 'property' => 'name',
                 'constraints' => array(new NotBlank()),
                 'label' => 'character_sheet.rol_game',
                 'attr' => array('label_col' => 2, 'widget_col' => 3),
                 'choices' => $this->em
-                ->getRepository('GameSessionBundle:RolGame')
+                ->getRepository('AppBundle:RolGame')
                 ->findAllActives(),
                 'choice_translation_domain' => true
             ));
@@ -54,7 +54,7 @@ class AddCharacterSheetMenuType extends AbstractType
             'character_sheet_template',
             EntityType::class,
             array(
-                'class'       => 'GameSessionBundle:CharacterSheetTemplate',
+                'class'       => 'AppBundle:CharacterSheetTemplate',
                 'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
                 'property' => 'name',
                 'constraints' => array(new NotBlank()),
@@ -91,7 +91,7 @@ class AddCharacterSheetMenuType extends AbstractType
         $rol_game = $data['rol_game'];
         $form = $event->getForm();
 
-        $rol_game = $this->em->getRepository('GameSessionBundle:RolGame')->find($rol_game);
+        $rol_game = $this->em->getRepository('AppBundle:RolGame')->find($rol_game);
         
         $character_sheet_templates = null === $rol_game ? array() : $rol_game->getCharacterSheetTemplates();
         $this->addElements($form, $character_sheet_templates);    

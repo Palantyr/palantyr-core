@@ -14,7 +14,7 @@ class LanguageRepository extends \Doctrine\ORM\EntityRepository
     {
         $query = $this->getEntityManager()
             ->createQuery(
-                'SELECT language FROM GameSessionBundle:Language language'
+                'SELECT language FROM AppBundle:Language language'
             );
 
         try {

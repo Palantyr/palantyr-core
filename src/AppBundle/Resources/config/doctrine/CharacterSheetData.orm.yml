@@ -6,9 +6,9 @@ AppBundle\Entity\CharacterSheetData:
 #        name: type
 #        type: string
 #    DiscriminatorMap:
-#        character_sheet_data: GameSessionBundle\Entity\CharacterSheetData
-#        character_sheet_data_field: GameSessionBundle\Entity\CharacterSheetDataField
-#        character_sheet_data_group: GameSessionBundle\Entity\CharacterSheetDataGroup
+#        character_sheet_data: AppBundle\Entity\CharacterSheetData
+#        character_sheet_data_field: AppBundle\Entity\CharacterSheetDataField
+#        character_sheet_data_group: AppBundle\Entity\CharacterSheetDataGroup
     table: character_sheet_data
     id:
         id:

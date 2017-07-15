@@ -26,10 +26,10 @@ class CharacterSheetEditableType extends AbstractType
 //         $builder->add('character_sheet_template', 'entity', array(
 //             'required'    => true,
 //             'placeholder' => $translator->trans('character_sheet.create.choose_template'),
-//             'class'    => 'GameSessionBundle:CharacterSheetTemplate',
+//             'class'    => 'AppBundle:CharacterSheetTemplate',
 //             'property' => 'name',
 //             'choices' => $this->getDoctrine()
-//             ->getRepository('GameSessionBundle:CharacterSheetTemplate')
+//             ->getRepository('AppBundle:CharacterSheetTemplate')
 //             ->findAll()
 //         ));
 
@@ -42,7 +42,7 @@ class CharacterSheetEditableType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet'
+            'data_class' => 'JJSR\Bundle\AppBundle\Entity\CharacterSheet'
         ));
     }
 }

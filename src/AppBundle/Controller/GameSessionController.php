@@ -6,12 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\GameSession;
 use AppBundle\Entity\RolGame;
 
+
 class GameSessionController extends Controller
 {
     public function createGameSessionAction(Request $request)
     {
     	$translator = $this->get('translator');
-    	
+
     	$game_session = new GameSession();
     	$game_session->setName("Epic Game");
     	
@@ -22,20 +23,20 @@ class GameSessionController extends Controller
     	->add('rol_game', 'entity', array(
     		'required'    => true,
     		'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
-		    'class'    => 'GameSessionBundle:RolGame',
+		    'class'    => 'AppBundle:RolGame',
 		    'property' => 'name',
     		'choices' => $this->getDoctrine()
-    					->getRepository('GameSessionBundle:RolGame')
+    					->getRepository('AppBundle:RolGame')
     					->findAllActives(),
     	    'choice_translation_domain' => true
 			))
     	->add('language', 'entity', array(
     		'required'    => true,
     		'placeholder' => $translator->trans('game_session.create.choose_language'),
-		    'class'    => 'GameSessionBundle:Language',
+		    'class'    => 'AppBundle:Language',
 		    'property' => 'display_name',
     		'choices' => $this->getDoctrine()
-    					->getRepository('GameSessionBundle:Language')
+    					->getRepository('AppBundle:Language')
     					->findAll(),
     	    'choice_translation_domain' => true
 			))
@@ -43,7 +44,7 @@ class GameSessionController extends Controller
         	'required' => false))
         ->add('submit_button', 'submit')
     	->getForm();
-    	
+
     	$form->handleRequest($request);
     	
     	if ($form->isValid()) {
@@ -51,7 +52,7 @@ class GameSessionController extends Controller
     		return $this->redirect($this->generateUrl('login_game_session', array('game_session_id' => $game_session->getId())));
     	}
 
-    	return $this->render('GameSessionBundle:Web:add_game_session.html.twig', array(
+    	return $this->render('AppBundle :Web:add_game_session.html.twig', array(
     			'form' => $form->createView()
     	));
     }

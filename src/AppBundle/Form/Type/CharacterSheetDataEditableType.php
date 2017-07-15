@@ -102,7 +102,7 @@ class CharacterSheetDataEditableType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData'
+            'data_class' => 'JJSR\Bundle\AppBundle\Entity\CharacterSheetData'
         ));
     }
 }

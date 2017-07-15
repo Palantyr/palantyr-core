@@ -11,7 +11,7 @@ class ConnectionController extends Controller
     public function displayGameSessionsAction(Request $request)
     {
         $game_sessions = $this->getDoctrine()
-        ->getRepository('GameSessionBundle:GameSession')
+        ->getRepository('AppBundle:GameSession')
         ->findBy(array(), array('name' => 'ASC'));
 
         $defaultData = array();
@@ -68,13 +68,13 @@ class ConnectionController extends Controller
         $game_sessions_aux = array();
         foreach ($users as $user_key => $user_value) {
             $user_id = $user_value->getId();
-            $game_sessions_found = $em->getRepository('GameSessionBundle:GameSession')->findBy(array('owner' => $user_id));  
+            $game_sessions_found = $em->getRepository('AppBundle:GameSession')->findBy(array('owner' => $user_id));
             foreach ($game_sessions_found as $game_session_found_key => $game_session_found_value) {
                 $game_sessions_aux[] = $game_session_found_value;
             }
         }
     
-        $game_sessions = $em->getRepository('GameSessionBundle:GameSession')->createQueryBuilder('o')
+        $game_sessions = $em->getRepository('AppBundle:GameSession')->createQueryBuilder('o')
         ->where('o.name LIKE :text_to_search')
         ->orWhere('o.comments LIKE :text_to_search')
         ->setParameter('text_to_search','%'.$text_to_search.'%')
@@ -109,7 +109,7 @@ class ConnectionController extends Controller
         }
         
         $em = $this->getDoctrine()->getManager();
-        $game_session = $em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+        $game_session = $em->getRepository('AppBundle:GameSession')->find($game_session_id);
         $user_game_session_connection = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
         ->findOneBy(array('user' => $this->getUser()->getId(), 'game_session' => $game_session_id));
         
@@ -153,7 +153,7 @@ class ConnectionController extends Controller
         $game_session_id = $request->get('game_session_id');
 
         $game_session = $em
-        ->getRepository('GameSessionBundle:GameSession')
+        ->getRepository('AppBundle:GameSession')
         ->find($game_session_id);
          
         $password_game_session = new GameSession();
@@ -176,7 +176,7 @@ class ConnectionController extends Controller
             }
              
             else {
-                $game_session = $em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+                $game_session = $em->getRepository('AppBundle:GameSession')->find($game_session_id);
                 self::loginGameSessionAllowAccess($request, $game_session);
                 return self::gameSessionRender($request);
             }
@@ -196,7 +196,7 @@ class ConnectionController extends Controller
 
         if ($user_game_session_connection) {
             $user_game_session_connection->setConnectionOption('access_granted');
-            $language = $em->getRepository('GameSessionBundle:Language')->findOneBy(array('name' => $request->getLocale()));
+            $language = $em->getRepository('AppBundle:Language')->findOneBy(array('name' => $request->getLocale()));
             $user_game_session_connection->setLanguage($language);
             $em->persist($user_game_session_connection);
             $em->flush();
@@ -206,7 +206,7 @@ class ConnectionController extends Controller
             $user_game_session_connection->setUser($this->getUser());
             $user_game_session_connection->setGameSession($game_session);
             $user_game_session_connection->setConnectionOption('access_granted');
-            $language = $em->getRepository('GameSessionBundle:Language')->findOneBy(array('name' => $request->getLocale()));
+            $language = $em->getRepository('AppBundle:Language')->findOneBy(array('name' => $request->getLocale()));
             $user_game_session_connection->setLanguage($language);
             $em->persist($user_game_session_connection);
             $em->flush();
@@ -216,7 +216,7 @@ class ConnectionController extends Controller
     private function gameSessionRender(Request $request)
     {
         $game_session = $this->getDoctrine()
-        ->getRepository('GameSessionBundle:GameSession')
+        ->getRepository('AppBundle:GameSession')
         ->find($request->get('game_session_id'));
 
         return $this->render('GamingPlatformBundle:GameSession:game_session.html.twig', array(
@@ -228,7 +228,7 @@ class ConnectionController extends Controller
 //     {
 //         $em = $this->getDoctrine()->getManager();
 //         $game_session = $em
-//         ->getRepository('GameSessionBundle:GameSession')
+//         ->getRepository('AppBundle:GameSession')
 //         ->find($request->get('game_session_id'));
          
 //         return $this->render('GamingPlatformBundle:Security:re_login_game_session.html.twig', array(
@@ -240,7 +240,7 @@ class ConnectionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $game_session = $em
-        ->getRepository('GameSessionBundle:GameSession')
+        ->getRepository('AppBundle:GameSession')
         ->find($request->get('game_session_id'));
         
         if (isset($game_session)) {
@@ -257,7 +257,7 @@ class ConnectionController extends Controller
     {   
         $em = $this->getDoctrine()->getManager();
         $game_session = $em
-        ->getRepository('GameSessionBundle:GameSession')
+        ->getRepository('AppBundle:GameSession')
         ->find($request->get('game_session_id'));
         
         if (isset($game_session)) {
@@ -276,7 +276,7 @@ class ConnectionController extends Controller
         $em = $this->getDoctrine()->getManager();
     
         $game_session_id = $request->get('game_session_id');
-        $game_session = $em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+        $game_session = $em->getRepository('AppBundle:GameSession')->find($game_session_id);
     
         if(isset($game_session)) {
             if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') ||
@@ -329,6 +329,6 @@ class ConnectionController extends Controller
     private function gameSessionExist($game_session_id)
     {
         $em = $this->getDoctrine()->getManager();
-        return (boolean)$em->getRepository('GameSessionBundle:GameSession')->find($game_session_id);
+        return (boolean)$em->getRepository('AppBundle:GameSession')->find($game_session_id);
     }
 }
