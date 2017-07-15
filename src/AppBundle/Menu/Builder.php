@@ -35,7 +35,7 @@ class Builder implements ContainerAwareInterface
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
 
-        self::languageSubMenu($menu);
+//        self::languageSubMenu($menu);
 
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
 

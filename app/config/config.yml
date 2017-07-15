@@ -126,6 +126,15 @@ fos_user:
     registration:
         form:
             type: AppBundle\Form\Type\RegistrationType
+            validation_groups: [ My_registration, Default ]
+    profile:
+        form:
+            type: AppBundle\Form\Type\ProfileType
+            validation_groups: [ My_profile, Default ]
+    change_password:
+        form:
+            type: AppBundle\Form\Type\ChangePasswordType
+            validation_groups: [ My_change_password, Default ]
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
