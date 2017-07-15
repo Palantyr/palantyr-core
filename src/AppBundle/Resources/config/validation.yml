@@ -1,3 +1,23 @@
+AppBundle\Entity\User:
+    properties:
+        real_name:
+            - NotBlank:
+                message: real_name.not_blank
+            - Length:
+                min: 1
+                max: 255
+                minMessage: real_name.minimum_characters
+                maxMessage: real_name.maximum_characters
+
+        real_surname:
+            - NotBlank:
+                message: real_surname.not_blank
+            - Length:
+                min: 1
+                max: 255
+                minMessage: real_surname.minimum_characters
+                maxMessage: real_surname.maximum_characters
+
 AppBundle\Entity\GameSession:
     properties:
         id:
