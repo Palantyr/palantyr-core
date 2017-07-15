@@ -1,11 +1,9 @@
 <?php
-
 namespace AppBundle\Entity;
 
 
 class GameSession
 {
-
     /**
      * @var integer
      */
@@ -32,17 +30,17 @@ class GameSession
     private $comments;
 
     /**
-     * @var \UserBundle\Entity\User
+     * @var \AppBundle\Entity\User
      */
     private $owner;
 
     /**
-     * @var \JJSR\Bundle\GameSessionBundle\Entity\RolGame
+     * @var \AppBundle\Entity\RolGame
      */
     private $rol_game;
 
     /**
-     * @var \JJSR\Bundle\GameSessionBundle\Entity\Language
+     * @var \AppBundle\Entity\Language
      */
     private $language;
 
@@ -156,11 +154,11 @@ class GameSession
     /**
      * Set owner
      *
-     * @param \UserBundle\Entity\User $owner
+     * @param \AppBundle\Entity\User $owner
      *
      * @return GameSession
      */
-    public function setOwner(\UserBundle\Entity\User $owner = null)
+    public function setOwner(\AppBundle\Entity\User $owner = null)
     {
         $this->owner = $owner;
 
@@ -170,7 +168,7 @@ class GameSession
     /**
      * Get owner
      *
-     * @return \UserBundle\Entity\User
+     * @return \AppBundle\Entity\User
      */
     public function getOwner()
     {
@@ -180,11 +178,11 @@ class GameSession
     /**
      * Set rolGame
      *
-     * @param \JJSR\Bundle\GameSessionBundle\Entity\RolGame $rolGame
+     * @param \AppBundle\Entity\RolGame $rolGame
      *
      * @return GameSession
      */
-    public function setRolGame(\JJSR\Bundle\GameSessionBundle\Entity\RolGame $rolGame = null)
+    public function setRolGame(\AppBundle\Entity\RolGame $rolGame = null)
     {
         $this->rol_game = $rolGame;
 
@@ -194,7 +192,7 @@ class GameSession
     /**
      * Get rolGame
      *
-     * @return \JJSR\Bundle\GameSessionBundle\Entity\RolGame
+     * @return \AppBundle\Entity\RolGame
      */
     public function getRolGame()
     {
@@ -204,11 +202,11 @@ class GameSession
     /**
      * Set language
      *
-     * @param \JJSR\Bundle\GameSessionBundle\Entity\Language $language
+     * @param \AppBundle\Entity\Language $language
      *
      * @return GameSession
      */
-    public function setLanguage(\JJSR\Bundle\GameSessionBundle\Entity\Language $language = null)
+    public function setLanguage(\AppBundle\Entity\Language $language = null)
     {
         $this->language = $language;
 
@@ -218,7 +216,7 @@ class GameSession
     /**
      * Get language
      *
-     * @return \JJSR\Bundle\GameSessionBundle\Entity\Language
+     * @return \AppBundle\Entity\Language
      */
     public function getLanguage()
     {

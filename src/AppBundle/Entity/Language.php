@@ -1,11 +1,9 @@
 <?php
-
 namespace AppBundle\Entity;
 
 
 class Language
 {
-
     /**
      * @var integer
      */

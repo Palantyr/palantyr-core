@@ -1,11 +1,9 @@
 <?php
-
 namespace AppBundle\Entity;
 
 
 class CharacterSheet
 {
-
     /**
      * @var integer
      */
@@ -27,7 +25,7 @@ class CharacterSheet
     private $character_sheet_template;
 
     /**
-     * @var \UserBundle\Entity\User
+     * @var \AppBundle\Entity\User
      */
     private $user;
 
@@ -134,11 +132,11 @@ class CharacterSheet
     /**
      * Set user
      *
-     * @param \UserBundle\Entity\User $user
+     * @param \AppBundle\Entity\User $user
      *
      * @return CharacterSheet
      */
-    public function setUser(\UserBundle\Entity\User $user = null)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -148,7 +146,7 @@ class CharacterSheet
     /**
      * Get user
      *
-     * @return \UserBundle\Entity\User
+     * @return \AppBundle\Entity\User
      */
     public function getUser()
     {

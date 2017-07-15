@@ -1,11 +1,9 @@
 <?php
-
 namespace AppBundle\Entity;
 
 
 class CharacterSheetData
 {
-
     /**
      * @var integer
      */
@@ -47,7 +45,7 @@ class CharacterSheetData
     private $character_sheet;
 
     /**
-     * @var \JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData
+     * @var \AppBundle\Entity\CharacterSheetData
      */
     private $character_sheet_data_group;
 
@@ -192,11 +190,11 @@ class CharacterSheetData
     /**
      * Add characterSheetDatum
      *
-     * @param \JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData $characterSheetDatum
+     * @param \AppBundle\Entity\CharacterSheetData $characterSheetDatum
      *
      * @return CharacterSheetData
      */
-    public function addCharacterSheetDatum(\JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData $characterSheetDatum)
+    public function addCharacterSheetDatum(\AppBundle\Entity\CharacterSheetData $characterSheetDatum)
     {
         $this->character_sheet_data[] = $characterSheetDatum;
 
@@ -206,9 +204,9 @@ class CharacterSheetData
     /**
      * Remove characterSheetDatum
      *
-     * @param \JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData $characterSheetDatum
+     * @param \AppBundle\Entity\CharacterSheetData $characterSheetDatum
      */
-    public function removeCharacterSheetDatum(\JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData $characterSheetDatum)
+    public function removeCharacterSheetDatum(\AppBundle\Entity\CharacterSheetData $characterSheetDatum)
     {
         $this->character_sheet_data->removeElement($characterSheetDatum);
     }
@@ -250,11 +248,11 @@ class CharacterSheetData
     /**
      * Set characterSheetDataGroup
      *
-     * @param \JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData $characterSheetDataGroup
+     * @param \AppBundle\Entity\CharacterSheetData $characterSheetDataGroup
      *
      * @return CharacterSheetData
      */
-    public function setCharacterSheetDataGroup(\JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData $characterSheetDataGroup = null)
+    public function setCharacterSheetDataGroup(\AppBundle\Entity\CharacterSheetData $characterSheetDataGroup = null)
     {
         $this->character_sheet_data_group = $characterSheetDataGroup;
 
@@ -264,7 +262,7 @@ class CharacterSheetData
     /**
      * Get characterSheetDataGroup
      *
-     * @return \JJSR\Bundle\GameSessionBundle\Entity\CharacterSheetData
+     * @return \AppBundle\Entity\CharacterSheetData
      */
     public function getCharacterSheetDataGroup()
     {

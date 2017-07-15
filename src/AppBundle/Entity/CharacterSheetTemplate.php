@@ -1,11 +1,9 @@
 <?php
-
 namespace AppBundle\Entity;
 
 
 class CharacterSheetTemplate
 {
-
     /**
      * @var integer
      */
