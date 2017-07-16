@@ -1,0 +1,7 @@
+{{ form_start(form, {'method': 'POST', 'style': 'horizontal', 'attr': {'id': 'form', 'novalidate': 'novalidate'} }) }}
+    {{ form_row(form.name) }}
+    {% for character_sheet_datum in form.character_sheet_data %}
+    	{{ include('GameSessionBundle:CharacterSheet:character_sheet_data_editable_form.html.twig', {'character_sheet_data': character_sheet_datum}, with_context = false) }}
+    {% endfor %}
+    {{ form_row(form, {'label': false}) }}
+{{ form_end(form) }}

@@ -21,6 +21,45 @@ game_session:
         message: Has sido desconectado de la sesión de juego
     leave:
         confirmation_message: Are you sure you want to leave?
+    search:
+        placeholder: Buscar por...
+        there_are_not: No existen sesiones de juego
+        unsuccessful: 'La búsqueda %search%, no fue existosa'
+    join:
+        submit: Unirse
+        title: Unirse a sesión de juego
+    login:
+        submit: Acceder
+        title: Acceder a sesión de juego
+        incorrect_password: Contraseña incorrecta
+    re_login:
+        title: Volver a acceder
+        message: Lo siento, necesita volver a acceder
+    character_sheet:
+        show_complete_button: Ver/Esconder
+        delete_button: Eliminar
+        actions:
+            title: Acciones
+    not_exist:
+        title: La sesión de juego no existe
+        message: La sesión de juego no existe
+    already_connected:
+        title: Ya estás conectado a la sesión de juego
+        message: Ya estás conectado a la session de juego
+    already_users_connected:
+        title: Hay usuarios conectados
+        message: Hay usuarios conectados
+    without_permission:
+        title: Sin permiso
+        message: No tienes suficientes permisos
+    request_character_sheets:
+        title: Pedir fichas de personaje
+        not_to_import: No tienes ninguna ficha de personaje para importar
+        import_button: Importar personaje
+        delete_button: Eliminar personaje
+    throw_dice:
+        title: Lanzar dados
+        throw_button: Lanzar
 
 character_sheet_template:
     name: Nombre
@@ -56,7 +95,6 @@ english: english
 Vampire The Masquerade: Vampiro La Mascarada
 Legend of Five Rings: La Leyenda de los Cinco Anillos
 
-
 main_menu:
     administration: Administrar
     game_session:
@@ -73,6 +111,16 @@ secondary_menu:
     sign_in: Acceder
     register: Registrarse
     character_sheet_list: Fichas de personaje
+    settings:
+        title: Ajustes
+        manage_users:
+            title: Gestión de usuarios
+            no_other_users_connected: No hay otros usuarios conectados
+            remove_button: Expulsar
+        exit:
+            title: Salir
+        show_users:
+            title: Ver usuarios
 
 secondary_menu.welcome %user_username%: Bienvenido %user_username%
 
@@ -90,7 +138,6 @@ homepage:
         description: Vampiro la mascarada es un juego de rol. Fue creado por Mark Rein·Hagen como el primer juego de rol de la compañía White Wolf Game Studio. El juego versa sobre la existencia de vampiros en la edad contemporánea, en un mundo gótico punk parecido al nuestro pero más oscuro, y fue el primero de un conjunto de juegos que describen las diferentes criaturas sobrenaturales del mundo y que recibe el nombre de Mundo de Tinieblas.
     legend_of_five_rings:
         description: La Leyenda de los Cinco Anillos (Legend of The Five Rings en inglés) es un juego de rol escrito originalmente por John Wick y editado actualmente por AEG bajo la licencia de Five Rings Publishing Group.
-
 
 role:
     super_admin: SUPER ADMINISTRADOR
@@ -133,3 +180,28 @@ change_password:
     repeat_new_password: Repetir nueva contraseña
     submit: Cambiar contraseña
     title: Cambiar contraseña
+
+navigation_sidebar:
+    request_character_sheets: Pedir fichas de personaje
+    dice: Dados
+    map: Mapa
+
+chat:
+    send_button: Enviar
+    placeholder: Escribe aquí tu mensaje...
+chat.user_is_online %user_username%: %user_username% está en línea
+chat.user_is_offline %user_username%: %user_username% se ha desconectado
+chat.character_sheet.import %user_username% %character_sheet_name%: %user_username% importó a %character_sheet_name%
+chat.character_sheet.delete %user_username% %character_sheet_name%: %user_username% eliminó a %character_sheet_name%
+
+are_you_sure: ¿Estás seguro?
+map:
+    name: Nombre
+    css_color: Color CSS
+    add_token_button: Añadir ficha
+    delete_token_button: Eliminar ficha
+    delete_all_tokens_button: Eliminar todas las fichas
+    no_token_select: No hay una ficha seleccionada
+    no_tokens_in_game: No hay fichas en el juego
+
+game_session.throw_dice.partial_message %die_type% %number_of_dice%: 'El resultado de %number_of_dice%d%die_type% es: '

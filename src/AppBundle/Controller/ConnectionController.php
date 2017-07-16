@@ -2,6 +2,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\GameSession;
 use AppBundle\Entity\UserGameSessionConnection;
@@ -16,7 +17,7 @@ class ConnectionController extends Controller
 
         $defaultData = array();
         $form_search = $this->createFormBuilder($defaultData)
-        ->add('search', 'text', array('attr' => array('placeholder' => 'game_session.search.placeholder')))
+        ->add('search', TextType::class, array('attr' => array('placeholder' => 'game_session.search.placeholder')))
         ->getForm();
         
         $form_search->handleRequest($request);
@@ -29,13 +30,13 @@ class ConnectionController extends Controller
         
                 if ($game_sessions) {
                     return $this->render(
-                        'GamingPlatformBundle:Web:game_sessions_list.html.twig',
+                        'AppBundle:GameSession:game_sessions_list.html.twig',
                         array('game_sessions' => $game_sessions, 'form_search' => $form_search->createView())
                         );
                 } 
                 else {
                     return $this->render(
-                        'GamingPlatformBundle:Web:game_sessions_list.html.twig',
+                        'AppBundle:GameSession:game_sessions_list.html.twig',
                         array(
                             'game_sessions' => 'unsuccessful_search',
                             'form_search' => $form_search->createView(),
@@ -50,7 +51,7 @@ class ConnectionController extends Controller
             $game_sessions = 'empty';
         }
         return $this->render(
-            'GamingPlatformBundle:Web:game_sessions_list.html.twig',
+            'AppBundle:GameSession:game_sessions_list.html.twig',
             array('game_sessions' => $game_sessions, 'form_search' => $form_search->createView())
             );
     }
@@ -59,7 +60,7 @@ class ConnectionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
     
-        $users = $em->getRepository('UserBundle:User')->createQueryBuilder('o')
+        $users = $em->getRepository('AppBundle:User')->createQueryBuilder('o')
         ->where('o.username LIKE :text_to_search')
         ->setParameter('text_to_search','%'.$text_to_search.'%')
         ->getQuery()
@@ -110,7 +111,7 @@ class ConnectionController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $game_session = $em->getRepository('AppBundle:GameSession')->find($game_session_id);
-        $user_game_session_connection = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
+        $user_game_session_connection = $em->getRepository('AppBundle:UserGameSessionConnection')
         ->findOneBy(array('user' => $this->getUser()->getId(), 'game_session' => $game_session_id));
         
         if(isset($user_game_session_connection)) {
@@ -128,7 +129,7 @@ class ConnectionController extends Controller
                 case 'access_granted':
                     return self::gameSessionRender($request);
                     break;
-            
+
                 case 'connected':
                     return $this->redirectToRoute('game_session_already_connected', array('game_session_id' => $game_session_id));
                     break;
@@ -182,7 +183,7 @@ class ConnectionController extends Controller
             }
         }
         
-        return $this->render('GamingPlatformBundle:Security:login_game_session.html.twig', array(
+        return $this->render('AppBundle:Security:login_game_session.html.twig', array(
             'form' => $form->createView(), 'game_session' => $game_session
         ));
     }
@@ -191,7 +192,7 @@ class ConnectionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $user_game_session_connection = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')
+        $user_game_session_connection = $em->getRepository('AppBundle:UserGameSessionConnection')
         ->findOneBy(array('user' => $this->getUser(), 'game_session' => $game_session));
 
         if ($user_game_session_connection) {
@@ -219,7 +220,7 @@ class ConnectionController extends Controller
         ->getRepository('AppBundle:GameSession')
         ->find($request->get('game_session_id'));
 
-        return $this->render('GamingPlatformBundle:GameSession:game_session.html.twig', array(
+        return $this->render('AppBundle:GameSession:game_session.html.twig', array(
             'game_session' => $game_session
         ));
     }
@@ -231,7 +232,7 @@ class ConnectionController extends Controller
 //         ->getRepository('AppBundle:GameSession')
 //         ->find($request->get('game_session_id'));
          
-//         return $this->render('GamingPlatformBundle:Security:re_login_game_session.html.twig', array(
+//         return $this->render('AppBundle:Security:re_login_game_session.html.twig', array(
 //             'game_session' => $game_session
 //         ));
 //     }
@@ -244,7 +245,7 @@ class ConnectionController extends Controller
         ->find($request->get('game_session_id'));
         
         if (isset($game_session)) {
-            return $this->render('GamingPlatformBundle:Security:disconnected_game_session.html.twig', array(
+            return $this->render('AppBundle:Security:disconnected_game_session.html.twig', array(
                 'game_session' => $game_session
             ));
         }
@@ -261,7 +262,7 @@ class ConnectionController extends Controller
         ->find($request->get('game_session_id'));
         
         if (isset($game_session)) {
-            return $this->render('GamingPlatformBundle:Security:already_connected_to_game_session.html.twig', array(
+            return $this->render('AppBundle:Security:already_connected_to_game_session.html.twig', array(
                 'game_session' => $game_session
             ));
         }
@@ -282,7 +283,7 @@ class ConnectionController extends Controller
             if($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN') ||
                 $this->getUser() == $game_session->getOwner()) {
     
-                    $users_game_session_connection = $em->getRepository('GamingPlatformBundle:UserGameSessionConnection')->findBy(array('game_session' => $game_session));
+                    $users_game_session_connection = $em->getRepository('AppBundle:UserGameSessionConnection')->findBy(array('game_session' => $game_session));
     
                     $is_allowed_to_delete = true;
                     foreach ($users_game_session_connection as $user_game_session_connection) {
@@ -310,20 +311,20 @@ class ConnectionController extends Controller
     
     public function gameSessionNotExistAction(Request $request)
     {
-        return $this->render('GamingPlatformBundle:Security:game_session_not_exist.html.twig');
+        return $this->render('AppBundle:Security:game_session_not_exist.html.twig');
     }
     
 //     private function gameSessionNotExistRender()
 //     {
-//         return $this->render('GamingPlatformBundle:Security:game_session_not_exist.html.twig');
+//         return $this->render('AppBundle:Security:game_session_not_exist.html.twig');
 //     }
 
     public function withoutPermissionAction(Request $request) {
-        return $this->render('GamingPlatformBundle:Security:without_permission_to_game_session.html.twig');
+        return $this->render('AppBundle:Security:without_permission_to_game_session.html.twig');
     }
     
     public function alreadyUsersConnectedAction(Request $request) {
-        return $this->render('GamingPlatformBundle:Security:already_users_connected_to_game_session.html.twig');
+        return $this->render('AppBundle:Security:already_users_connected_to_game_session.html.twig');
     }
     
     private function gameSessionExist($game_session_id)

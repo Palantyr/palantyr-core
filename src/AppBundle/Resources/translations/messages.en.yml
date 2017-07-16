@@ -21,6 +21,45 @@ game_session:
         message: You have been disconnected from the game session
     leave:
         confirmation_message: Are you sure you want to leave?
+    search:
+        placeholder: Search for...
+        there_are_not: There are no game sessions
+        unsuccessful: 'The search %search%, was unsuccessful'
+    join:
+        submit: Join
+        title: Join game session
+    login:
+        submit: Login
+        title: Login game session
+        incorrect_password: Incorrect password
+    re_login:
+        title: Re log in
+        message: Sorry, you need to re log in
+    character_sheet:
+        show_complete_button: Show/Hide
+        delete_button: Delete
+        actions:
+            title: Actions
+    not_exist:
+        title: Game session not exist
+        message: The game session not exist
+    already_connected:
+        title: You are connected to game session
+        message: You are connected to game session
+    already_users_connected:
+        title: Users are connected yet
+        message: Users are connected yet
+    without_permission:
+        title: Without permission
+        message: You do not have enough permissions
+    request_character_sheets:
+        title: Request character sheets
+        not_to_import: You haven\'t any character sheet to import
+        import_button: Import character
+        delete_button: Delete character
+    throw_dice:
+        title: Throw dice
+        throw_button: Throw
 
 character_sheet_template:
     name: Name
@@ -53,7 +92,6 @@ character_sheet.add.error.message %rol_game_name% %character_sheet_template_name
 spanish: español
 english: english
 
-
 main_menu:
     administration: Administer
     game_session:
@@ -70,6 +108,16 @@ secondary_menu:
     sign_in: Sign in
     register: Register
     character_sheet_list: Character sheets
+    settings:
+        title: Settings
+        manage_users:
+            title: Manage users
+            no_other_users_connected: There are no other users connected
+            remove_button: Kick out
+        exit:
+            title: Exit
+        show_users:
+            title: Show users
 
 secondary_menu:
     welcome %user_username%: Welcome %user_username%
@@ -90,7 +138,6 @@ homepage:
         description: Vampire The Masquerade is a Tabletop role-playing game (Tabletop RPG) created by Mark Rein-Hagen and released in 1991 by White Wolf Publishing as the first of several Storyteller System games for its World of Darkness setting line. It's set in a fictionalized "gothic-punk" version of the modern world, where players assume the roles of vampires, who are referred to as "Kindred", and deal with their night-to-night struggles against their own bestial natures, vampire hunters and each other.
     legend_of_five_rings:
         description: The Legend of the Five Rings Roleplaying Game is a role-playing game originally written by John Wick and published by Alderac Entertainment Group, under license from Five Rings Publishing Group, in 1997. The game uses the Legend of the Five Rings setting, and primarily the nation of Rokugan, which is based on feudal Japan with influences from other East Asian cultures.
-
 
 role:
     super_admin: SUPER ADMIN
@@ -119,7 +166,6 @@ register:
         title: Confirmed
         message: Your registration has been successful, %username%, welcome.
 
-
 profile:
     show:
         edit_button: Edit profile
@@ -135,3 +181,28 @@ change_password:
     submit: Change password
     title: Change password
 
+navigation_sidebar:
+    request_character_sheets: Request character sheets
+    dice: Dice
+    map: Map
+
+chat:
+    send_button: Send
+    placeholder: Type your message here...
+chat.user_is_online %user_username%: %user_username% is online
+chat.user_is_offline %user_username%: %user_username% is offline
+chat.character_sheet.import %user_username% %character_sheet_name%: %user_username% import %character_sheet_name%
+chat.character_sheet.delete %user_username% %character_sheet_name%: %user_username% deleted %character_sheet_name%
+
+are_you_sure: Are you sure?
+map:
+    name: Name
+    css_color: CSS color
+    add_token_button: Add token
+    delete_token_button: Delete token
+    delete_all_tokens_button: Delete all tokens
+    no_token_select: There is no token selected
+    no_tokens_in_select: There are no tokens in game
+
+#game_session.search.unsuccessful %search%: asdasd %search%
+game_session.throw_dice.partial_message %die_type% %number_of_dice%: 'The %number_of_dice%d%die_type% result is: '

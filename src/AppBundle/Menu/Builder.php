@@ -19,9 +19,9 @@ class Builder implements ContainerAwareInterface
         self::mainMenuSharedContent($menu);
 
         $user_permissions = $this->container->get('security.authorization_checker');
-        if ($user_permissions->isGranted('ROLE_SUPER_ADMIN')){
+        if ($user_permissions->isGranted('ROLE_SUPER_ADMIN')) {
             $menu->addChild($translator->trans('main_menu.administration'),
-                array('route' => 'web_platform_administration_menu'))
+                array('route' => 'administration_menu'))
                 ->setExtra('icon', 'fa fa-list');
 
         }

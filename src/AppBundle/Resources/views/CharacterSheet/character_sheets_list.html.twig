@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}character_sheet.list.title{% endtrans %}{% endblock %}
+
+{% block body %}
+	<h1>{% trans %}character_sheet.list.title{% endtrans %}</h1>
+	</br>
+	
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>{% trans %}character_sheet.title{% endtrans %}</th>
+					<th>{% trans %}character_sheet.rol_game{% endtrans %}</th>
+					<th>{% trans %}character_sheet.edit.submit{% endtrans %}</th>
+					<th>{% trans %}character_sheet.remove.submit{% endtrans %}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for character_sheet in character_sheets %}
+				    <tr>
+						<td>{{ character_sheet.getName() }}</td>
+						<td>{{ character_sheet.getCharacterSheetTemplate().getRolGame().getName()|trans }}</td>
+						<td>
+							<form action="{{ path('edit_character_sheet', {'character_sheet_id': character_sheet.getId()}) }}">
+					    		<input class="btn btn-primary" type="submit" value={% trans %}character_sheet.edit.submit{% endtrans %}>
+							</form>	
+						</td>
+						<td>
+							<form action="{{ path('delete_character_sheet', {'character_sheet_id': character_sheet.getId()}) }}" onsubmit="return confirm('{% trans %}are_you_sure{% endtrans %}');">
+					    		<input class="btn btn-danger" type="submit" value={% trans %}character_sheet.remove.submit{% endtrans %}>
+							</form>	
+						</td>
+				    </tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

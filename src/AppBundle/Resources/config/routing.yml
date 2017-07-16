@@ -6,6 +6,23 @@ homepage:
     requirements:
         _locale: %app.locales_string%
 
+administration_menu:
+    path:     /{_locale}/administration
+    defaults:
+        _controller: AppBundle:Administration:mainMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+insufficient_permissions:
+    path: /{_locale}/insufficient-permissions
+    defaults:
+        _controller: AppBundle:Administration:insufficientPermissions
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
 # GameSession
 create_game_session:
     path:     /{_locale}/game/create-game-session
@@ -24,10 +41,18 @@ game_sessions:
         _locale: %app.locales_string%
 
 # AdministrationController
+gaming_platform_administration_main_menu:
+    path:     /{_locale}/administration/gaming-platform-bundle
+    defaults:
+        _controller: AppBundle:Administration:gamingPlatformMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
 game_session_administration_main_menu:
     path:     /{_locale}/administration/game-session-bundle
     defaults:  
-        _controller: AppBundle:Administration:administrationMenu
+        _controller: AppBundle:Administration:gameSessionMenu
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%

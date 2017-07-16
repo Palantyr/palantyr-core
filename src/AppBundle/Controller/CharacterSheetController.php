@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\CharacterSheet;
-use AppBundle\CharacterSheetData;
+use AppBundle\Entity\CharacterSheetData;
 use AppBundle\Entity\CharacterSheetTemplate;
 use AppBundle\Form\Type\CharacterSheetEditableType;
 use AppBundle\Entity\RolGame;
@@ -216,7 +216,7 @@ class CharacterSheetController extends Controller
         $character_sheet = $em->getRepository('AppBundle:CharacterSheet')->find($character_sheet_id);
         
         if (!isset($character_sheet) || $this->getUser() != $character_sheet->getUser()) {
-            return $this->redirect($this->generateUrl('web_platform_insufficient_permissions'));
+            return $this->redirect($this->generateUrl('insufficient_permissions'));
         }
         
         $em->remove($character_sheet);
@@ -247,7 +247,7 @@ class CharacterSheetController extends Controller
         $character_sheet = $em->getRepository('AppBundle:CharacterSheet')->find($character_sheet_id);
 
         if (!isset($character_sheet) || $this->getUser() != $character_sheet->getUser()) {
-            return $this->redirect($this->generateUrl('web_platform_insufficient_permissions'));
+            return $this->redirect($this->generateUrl('insufficient_permissions'));
         }
         
         $form = $this->createForm(CharacterSheetEditableType::class, $character_sheet);

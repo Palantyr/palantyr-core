@@ -1,7 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\RolGame;
 use AppBundle\Entity\Language;
@@ -21,40 +24,50 @@ class AdministrationController extends Controller
      $user = $this->getUser()->getRoles();
      var_dump($user);die();
      */
-    public function administrationMenuAction(Request $request)
+    public function mainMenuAction()
+    {
+        return $this->render('AppBundle:Administration:main_menu.html.twig');
+    }
+
+    public function insufficientPermissionsAction()
+    {
+        return $this->render('AppBundle:Security:insufficient_permissions.html.twig');
+    }
+
+    public function gameSessionMenuAction(Request $request)
     {
         $data = array();
         $default_data_form = $this->createFormBuilder($data)
         ->add(
-            'add_all_default_data', 
-            'submit', 
+            'add_all_default_data',
+            SubmitType::class,
             array(
-                'label' => 'Add all default data', 
+                'label' => 'Add all default data',
                 'attr' => array('class' => 'btn btn-success')
             ))
         ->add(
-            'delete_all_default_data', 
-            'submit',
+            'delete_all_default_data',
+            SubmitType::class,
             array(
                 'label' => 'Delete all default data',
                 'attr' => array('class' => 'btn btn-danger')
             ))
         ->getForm();
-         
+
         $default_data_form->handleRequest($request);
-        
+
         if ($default_data_form->isSubmitted() && $default_data_form->isValid()) {
             $flash = $this->get('braincrafted_bootstrap.flash');
-            
+
             if ($default_data_form->get('add_all_default_data')->isClicked()) {
                 if (self::addAllDefaultDataAction() == true) {
                     $flash->success('Operation completed successfully.');
                 }
                 else {
                     $flash->error('Error. There is some data in the database, remove it first.');
-                }                
+                }
             }
-            
+
             elseif ($default_data_form->get('delete_all_default_data')->isClicked()) {
                 if (self::deleteAllDefaultDataAction() == true) {
                     $flash->success('Operation completed successfully.');
@@ -64,8 +77,8 @@ class AdministrationController extends Controller
                 }
             }
         }
-        
-        return $this->render('AppBundle:Administration:main_menu.html.twig',
+
+        return $this->render('AppBundle:Administration:game_session_menu.html.twig',
             array(
                 'default_data_form' => $default_data_form->createView()
             ));
@@ -232,20 +245,20 @@ class AdministrationController extends Controller
     
         $form = $this->createFormBuilder($character_sheet_template, 
             array('validation_groups' => array('Create')))
-        ->add('name', 'text')
-        ->add('version', 'text')
-        ->add('rol_game', 'entity', array(
+        ->add('name', TextType::class)
+        ->add('version', TextType::class)
+        ->add('rol_game', EntityType::class, array(
             'required'    => true,
             'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
             'class'    => 'AppBundle:RolGame',
-            'property' => 'name',
             'choices' => $this->getDoctrine()
-            ->getRepository('AppBundle:RolGame')
-            ->findAllActives()
+                ->getRepository('AppBundle:RolGame')
+                ->findAllActives(),
+            'choice_label' => 'name'
         ))
         ->add(
             'submit_button',
-            'submit',
+            SubmitType::class,
             array(
                 'attr' => array('class' => 'btn btn-success')
             ))
@@ -320,5 +333,49 @@ class AdministrationController extends Controller
         return $this->render('AppBundle:Administration:edit_character_sheet_template.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    public function gamingPlatformMenuAction(Request $request)
+    {
+        $data = array();
+        $user_game_session_connection_form = $this->createFormBuilder($data)
+            ->add(
+                'remove_all_user_game_session_connection',
+                SubmitType::class,
+                array(
+                    'label' => 'Remove all user game session connection',
+                    'attr' => array('class' => 'btn btn-danger')
+                ))
+            ->getForm();
+
+        $user_game_session_connection_form->handleRequest($request);
+
+        if ($user_game_session_connection_form->isSubmitted() && $user_game_session_connection_form->isValid()) {
+            $flash = $this->get('braincrafted_bootstrap.flash');
+
+            if ($user_game_session_connection_form->get('remove_all_user_game_session_connection')->isClicked()) {
+                self::removeAllUserGameSessionConnection();
+                $flash->success('Operation completed successfully.');
+            }
+        }
+
+        return $this->render('AppBundle:Administration:gaming_platform_menu.html.twig',
+            array(
+                'user_game_session_connection_form' => $user_game_session_connection_form->createView()
+            ));
+    }
+
+    private function removeAllUserGameSessionConnection()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $user_game_session_connections = $this->getDoctrine()
+            ->getRepository('AppBundle:UserGameSessionConnection')
+            ->findAll();
+
+        foreach ($user_game_session_connections as $user_game_session_connection) {
+            $em->remove($user_game_session_connection);
+        }
+        $em->flush();
     }
 }

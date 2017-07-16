@@ -2,9 +2,11 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\GameSession;
-use AppBundle\Entity\RolGame;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 class GameSessionController extends Controller
@@ -18,31 +20,27 @@ class GameSessionController extends Controller
     	
     	$form = $this->createFormBuilder($game_session, array(
     		'validation_groups' => array('Create')))
-    	->add('name', 'text')
-    	->add('password', 'password')
-    	->add('rol_game', 'entity', array(
-    		'required'    => true,
-    		'placeholder' => $translator->trans('game_session.create.choose_rol_game'),
-		    'class'    => 'AppBundle:RolGame',
-		    'property' => 'name',
-    		'choices' => $this->getDoctrine()
-    					->getRepository('AppBundle:RolGame')
-    					->findAllActives(),
-    	    'choice_translation_domain' => true
-			))
-    	->add('language', 'entity', array(
-    		'required'    => true,
-    		'placeholder' => $translator->trans('game_session.create.choose_language'),
-		    'class'    => 'AppBundle:Language',
-		    'property' => 'display_name',
-    		'choices' => $this->getDoctrine()
-    					->getRepository('AppBundle:Language')
-    					->findAll(),
-    	    'choice_translation_domain' => true
-			))
-    	->add('comments', 'textarea', array(
+    	->add('name')
+    	->add('password')
+        ->add('rol_game', EntityType::class, array(
+            'class' => 'AppBundle:RolGame',
+            'required' => true,
+            'choices' => $this->getDoctrine()
+                ->getRepository('AppBundle:RolGame')
+                ->findAllActives(),
+            'choice_label' => 'name'
+        ))
+        ->add('language', EntityType::class, array(
+            'class' => 'AppBundle:Language',
+            'required' => true,
+            'choices' => $this->getDoctrine()
+                ->getRepository('AppBundle:Language')
+                ->findAll(),
+            'choice_label' => 'name'
+        ))
+    	->add('comments', TextareaType::class, array(
         	'required' => false))
-        ->add('submit_button', 'submit')
+        ->add('submit_button', SubmitType::class)
     	->getForm();
 
     	$form->handleRequest($request);
@@ -52,7 +50,7 @@ class GameSessionController extends Controller
     		return $this->redirect($this->generateUrl('login_game_session', array('game_session_id' => $game_session->getId())));
     	}
 
-    	return $this->render('AppBundle :Web:add_game_session.html.twig', array(
+    	return $this->render('AppBundle:GameSession:add_game_session.html.twig', array(
     			'form' => $form->createView()
     	));
     }
