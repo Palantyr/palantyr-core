@@ -79,7 +79,7 @@ class CharacterSheetDataEditableType extends AbstractType
                     }
                     
                     $form->add('value', TextType::class, array(
-                        'cascade_validation' => true,
+//                        'cascade_validation' => true,
                         'constraints' => array(
                             new NotBlank(),
                             new Length(array('min' => 1, 'max' => 50)),
@@ -102,7 +102,7 @@ class CharacterSheetDataEditableType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JJSR\Bundle\AppBundle\Entity\CharacterSheetData'
+            'data_class' => 'AppBundle\Entity\CharacterSheetData'
         ));
     }
 }

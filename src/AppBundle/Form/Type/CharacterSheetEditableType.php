@@ -33,16 +33,20 @@ class CharacterSheetEditableType extends AbstractType
 //             ->findAll()
 //         ));
 
-        $builder->add('character_sheet_data', CollectionType::class, array(
+        $builder->add(
+            'character_sheet_data',
+            CollectionType::class,
+            array(
             'entry_type' => CharacterSheetDataEditableType::class
 //             'label' => false
-        ));
+            )
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JJSR\Bundle\AppBundle\Entity\CharacterSheet'
+            'data_class' => 'AppBundle\Entity\CharacterSheet'
         ));
     }
 }

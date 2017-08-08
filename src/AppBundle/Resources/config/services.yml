@@ -1,9 +1,9 @@
 services:
-    add_character_sheet_menu_type.service:
-        class: AppBundle\Form\Type\AddCharacterSheetMenuType
-        arguments:
-            - @doctrine.orm.entity_manager
-            - @translator.default
+#    add_character_sheet_menu_type.service:
+#        class: AppBundle\Form\Type\AddCharacterSheetMenuType
+#        arguments:
+#            $entityManager: '@doctrine.orm.entity_manager'
+#            $translator: '@translator.default'
 
     app.form.registration:
         class: AppBundle\Form\Type\RegistrationType

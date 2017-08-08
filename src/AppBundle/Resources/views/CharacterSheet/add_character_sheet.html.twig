@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle::base.html.twig' %}
 
 {% block title %}{% trans %}character_sheet.add.title{% endtrans %}{% endblock %}
 
@@ -7,7 +7,7 @@
 	<h1>{% trans %}character_sheet.add.title{% endtrans %}</h1>
 	</br>
 	
-	{{ include('GameSessionBundle:CharacterSheet:character_sheet_editable_form.html.twig', {'form': form}, with_context = false) }}
+	{{ include('AppBundle:CharacterSheet:character_sheet_editable_form.html.twig', {'form': form}, with_context = false) }}
 
 {% endblock %}
 

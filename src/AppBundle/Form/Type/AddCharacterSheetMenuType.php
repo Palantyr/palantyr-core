@@ -1,15 +1,17 @@
 <?php
 namespace AppBundle\Form\Type;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use AppBundle\Entity\CharacterSheetTemplate;
 use AppBundle\Entity\RolGame;
 
@@ -17,32 +19,34 @@ class AddCharacterSheetMenuType extends AbstractType
 {
     protected $em;
     protected $translator;
+    public $rol_game;
+    public $character_sheet_template;
 
     public function __construct(
-        EntityManager $entityManager,
-        Translator $translator) 
+        EntityManagerInterface $em,
+        TranslatorInterface $translator)
     {
-        $this->em = $entityManager;
+        $this->em = $em;
         $this->translator = $translator;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'rol_game',
-            'entity',
-            array(
-                'class'    => 'AppBundle:RolGame',
-                'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
-                'property' => 'name',
-                'constraints' => array(new NotBlank()),
-                'label' => 'character_sheet.rol_game',
-                'attr' => array('label_col' => 2, 'widget_col' => 3),
-                'choices' => $this->em
-                ->getRepository('AppBundle:RolGame')
-                ->findAllActives(),
-                'choice_translation_domain' => true
-            ));
+        $builder
+            ->add(
+                'rol_game',
+                EntityType::class,
+                array(
+                    'class' => 'AppBundle:RolGame',
+                    'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
+                    'required' => true,
+                    'attr' => array('label_col' => 2, 'widget_col' => 3),
+                    'choices' => $this->em
+                        ->getRepository('AppBundle:RolGame')
+                        ->findAllActives(),
+                    'choice_label' => 'name'
+                )
+            );
         
 //         $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
@@ -56,7 +60,7 @@ class AddCharacterSheetMenuType extends AbstractType
             array(
                 'class'       => 'AppBundle:CharacterSheetTemplate',
                 'placeholder' => $this->translator->trans('game_session.create.choose_rol_game'),
-                'property' => 'name',
+                'choice_label' => 'name',
                 'constraints' => array(new NotBlank()),
                 'label' => 'character_sheet.character_sheet_template',
                 'attr' => array('label_col' => 2, 'widget_col' => 3),
@@ -65,8 +69,8 @@ class AddCharacterSheetMenuType extends AbstractType
             ));
         
         $form->add(
-            'submit_button', 
-            'submit',
+            'submit_button',
+            SubmitType::class,
             array(
                 'label' => 'character_sheet.add.continue'
             ));

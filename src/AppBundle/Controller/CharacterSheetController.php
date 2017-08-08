@@ -1,7 +1,9 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Form\Type\AddCharacterSheetMenuType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\CharacterSheet;
 use AppBundle\Entity\CharacterSheetData;
@@ -14,22 +16,23 @@ class CharacterSheetController extends Controller
 {  
     public function addCharacterSheetMenuAction(Request $request)
     {
-        $add_character_sheet_service = $this->get('add_character_sheet_menu_type.service');
-        $form = $this->createForm($add_character_sheet_service);        
+        $add_character_sheet_service = $this->get(AddCharacterSheetMenuType::class);
+
+        $form = $this->createForm(AddCharacterSheetMenuType::class, $add_character_sheet_service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $rol_game_url = str_replace(" ", "-", $form->getData()['rol_game']->getName());
-            $character_sheet_template_url = str_replace(" ", "-", $form->getData()['character_sheet_template']->getName());
-            
+            $rol_game_url = strtolower(str_replace(" ", "-", $form->get('rol_game')->getData()->getName()));
+            $character_sheet_template_url = strtolower(str_replace(" ", "-", $form->get('character_sheet_template')->getData()->getName()));
+
             return $this->redirect($this->generateUrl(
                 'add_character_sheet',
                 array(
-                    'rol_game_name' => $rol_game_url, 
+                    'rol_game_name' => $rol_game_url,
                     'character_sheet_template_name' => $character_sheet_template_url)
             ));
         }
-        
+
         return $this->render('AppBundle:CharacterSheet:add_character_sheet_menu.html.twig', array(
             'form' => $form->createView()
         ));
@@ -67,21 +70,21 @@ class CharacterSheetController extends Controller
 
         $character_sheet = new CharacterSheet();
         switch ($rol_game_name) {
-            case 'Vampire The Masquerade':
+            case 'vampire the masquerade':
                 self::vampireCharacterSheet($character_sheet);
                 break;
 
-            case 'Pathfinder':
+            case 'pathfinder':
                 self::pathfinderCharacterSheet($character_sheet);
                 break;
         }
         $requestDerivationFields = self::requestDerivationFields($character_sheet_template->getId());
-        
+
         $form = $this->createForm(CharacterSheetEditableType::class, $character_sheet);
 
         $form->add(
             'submit_button',
-            'submit',
+            SubmitType::class,
             array(
                 'label' => 'character_sheet.add.create'
             ));
@@ -148,7 +151,7 @@ class CharacterSheetController extends Controller
     
     private function getCharacterSheetFormAjax(Request $request, $character_sheet_template)
     {
-        $request = $this->get('request');
+//        $request = $this->get('request');
         $data = $request->request->all();
         $character_sheet_array = $data['character_sheet_editable'];
         $character_sheet = new CharacterSheet();
@@ -254,7 +257,7 @@ class CharacterSheetController extends Controller
 
         $form->add(
             'submit_button',
-            'submit',
+            SubmitType::class,
             array(
                 'label' => 'character_sheet.edit.submit'
             ));
