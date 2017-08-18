@@ -53,7 +53,8 @@
         "components/jquery": "3.2.*",
         "jquery/jquery":  "1.11.*",
         "leafo/scssphp": "0.6.*",
-        "braincrafted/bootstrap-bundle": "2.2.*"
+        "braincrafted/bootstrap-bundle": "2.2.*",
+        "gos/web-socket-bundle" : "1.8.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.*",

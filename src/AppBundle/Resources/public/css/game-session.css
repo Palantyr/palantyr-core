@@ -1,0 +1,332 @@
+@CHARSET "UTF-8";
+
+html, body {
+  	height: 100%;
+	width: 100%;
+	overflow: visible;
+/* 	overflow: hidden; */
+/* 	position: relative; */
+}
+
+body .header-menu {
+  	height: 50px;
+	width: 100%;
+/*  	overflow: auto; */
+ 	position: relative;
+}
+
+body .left-menu {
+	height: calc(100% - 50px);
+	width: 50px;
+	position: fixed;
+}
+
+body .main-container {        
+  	height: calc(100% - 50px);
+	width: calc(100% - 50px);
+	left: 50px;
+/*  	overflow: auto; */
+ 	position: relative;
+}
+
+body .main-container .game-container {        
+  	height: 100%;
+	width: 100%;
+ 	position: inherit;
+}
+
+body .main-container .map-container {        
+  	height: 100%;
+	width: 100%;
+ 	position: inherit;
+ 	display: none;
+ 	background: url('../images/map-background.png');
+}
+
+/* Chat */
+.chat-box {
+	height: 200px;
+	min-height: 150px;
+	width: 400px;
+	min-width: 300px;
+	position: relative;
+}
+
+.chat-box-body {
+   	height: calc(100% - 35px);
+   	width: 100%;
+ 	position: relative;
+	overflow-y: scroll;
+    padding: 5px;
+}
+
+.chat-box-footer {
+   	height: 35px;
+  	max-height: 35px;
+	width: 100%;
+ 	position: relative;
+   	display: flex;
+    padding: 2px;
+}
+
+.chat-box-footer .input {
+	height: 100%;
+	width: calc(100% - 75px);
+	position: relative;
+}
+
+.chat-box-footer .button {
+	height: 100%;
+	max-height: 35px;
+	width: 55px;
+	position: relative;
+}
+
+.chat-box-footer .resizable {
+	height: 100%;
+	width: 15px;
+	position: relative;
+}
+
+.chat
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat li
+{
+    margin-bottom: 2px;
+    padding-bottom: 1px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li.left .chat-body
+{
+    margin-left: 10px;
+}
+
+.chat li.right .chat-body
+{
+    margin-right: 10px;
+}
+
+
+.chat li .chat-body p
+{
+    margin: 0;
+    color: #777777;
+}
+
+.panel .slidedown .glyphicon, .chat .glyphicon
+{
+    margin-right: 5px;
+}
+
+.panel-body
+{
+    overflow-y: scroll;
+   	height: 87.5%;
+ 	position: relative;
+    padding: 5px;
+}
+
+.panel-footer
+{
+   	height: 12.5%;
+    padding: 2px;
+}
+
+.input-sm {
+	font-size: 14px;
+}
+
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}
+
+.whisper {
+	color: #FE2EC8;
+}
+/* Chat */
+
+/* Character sheet */
+.character-sheet {
+	position: absolute;
+	min-height: 50px;
+	max-height: 300px;
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	display: inline-table;
+	color: #000000;
+}
+
+.character-sheet-owner {
+	background-color: #CEE3F6;
+/* 	display: flex; */
+}
+
+.character-sheet-external {
+	background-color: #81F79F;
+/* 	display: flex; */
+}
+
+.character-sheet-gamemaster {
+	background-color: #F78181;
+/* 	display: flex; */
+}
+
+.character-sheet-reduced .user-username {
+	background-color: #F5F5F5;
+	font-size: x-small;
+	text-align: center;
+    margin-bottom: 0px;
+}
+
+.character-sheet-owner .character-sheet-reduced .character-name {
+	background-color: #CEE3F6;
+	font-size: small;
+	text-align: center;
+}
+.character-sheet-external .character-sheet-reduced .character-name {
+	background-color: #81F79F;
+	font-size: small;
+	text-align: center;
+}
+.character-sheet-gamemaster .character-sheet-reduced .character-name {
+	background-color: #F78181;
+	font-size: small;
+	text-align: center;
+}
+
+.character-sheet-reduced #character_sheet_show_complete_button {
+	width: 150px;
+}
+
+.character-sheet-reduced .private-options {
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.character-sheet .character-sheet-extended {
+	display: table;
+	background-color: white;
+}
+
+.character-sheet-extended .character-sheet-complete {
+	display: none;
+	width: 220px;
+	border-style: groove;
+}
+
+.character-sheet-extended .character-sheet-complete .functional {
+	font-weight: bold;
+	cursor: pointer;
+}
+
+@media (min-width: 768px) {
+	#character-sheet-access-list {
+		float: left;
+		width: 150px;
+		height: 32px;
+		padding: 0px;
+		margin-bottom: 5px;
+		z-index: inherit;
+    }
+   	#character-sheet-access-list a {
+		font-size: 14px;
+    }
+}
+
+.checkmark {
+	position:absolute;
+	top:0;
+	left:0;
+	width:20px;
+	height:20px;
+	background: #f00;
+	border-radius:50%;
+	opacity: 0.5;
+	pointer-events:none;
+}
+
+.character-sheet-functional-panel {
+	border-style: solid;
+	width: 220px;
+	display: inherit;
+}
+
+.character-sheet-functional-panel #functional_panel_data {
+	display: inherit;
+}
+
+.character-sheet-functional-panel #functional_panel_data #launch_system {
+	float: left;
+}
+
+.character-sheet-functional-panel #functional_panel_data #character_sheet_target {
+	display: inherit;
+}
+
+.character-sheet-functional-panel #functional_panel_data span {
+	display: inherit;
+}
+/* Character Sheet */
+
+/* MAP */
+.map-panel {
+	position: absolute;
+	background-color: #e7e7e7;
+	text-align: center;
+	max-width: 400px;
+}
+
+.map-panel-select-option {
+	color: #e7e7e7; 
+	font-weight: bold;
+}
+
+.map-token {
+	position: absolute;
+	background-color: red;
+	border: 2px solid #000000;
+	height: 40px;
+	width: 40px;
+	border-radius: 20px;
+}
+
+.map-token-name {
+	font-weight: bold;
+	color: #e7e7e7;
+}
+/* MAP */
+
+/* Utilities */
+.standard-size {
+  	height: 100%;
+	width: 100%;
+ 	overflow: auto;
+ 	position: relative;
+}
+
+.select-dice {
+    display: inline-flex;
+}
+/* Utilities */

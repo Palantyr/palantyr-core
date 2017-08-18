@@ -1,0 +1,195 @@
+<div id="map_container" class="map-container map-background"></div>
+
+<script type="text/javascript">
+
+	function subscribeMap(payload) {
+		
+ 		switch (payload.option) {
+ 		case 'add_token':
+ 			if (payload.data_json != null) {
+ 				addMapToken(payload.data_json);
+ 			}
+ 	 		break;
+
+ 		case 'add_all_tokens':
+ 	 		for (map_token in payload.map_tokens) {
+ 	 	 		var token_id = map_token;
+ 	 	 		var token_name = payload.map_tokens[map_token]['token_name'];
+ 	 	 		var token_css_color = payload.map_tokens[map_token]['token_css_color'];
+ 	 	 		var token_top = payload.map_tokens[map_token]['token_top'];
+ 	 	 		var token_left = payload.map_tokens[map_token]['token_left'];
+ 	 	 		var data_json = {token_id: token_id, token_name: token_name, token_css_color: token_css_color, token_top: token_top, token_left: token_left};
+
+ 	 	 		addMapToken(data_json);
+ 	 	 	}
+
+ 	 	 	if (isGamemaster()) {
+ 	 	 		updateTokensCount();
+ 	 	 	}
+ 	 		break;
+
+ 		case 'move_token':
+ 			if (payload.data_json != null) {
+ 				moveMapToken(payload.data_json);
+ 			}
+ 	 		break;
+
+ 		case 'delete_token':
+ 	 		deleteMapToken(payload.token_id);
+ 	 		break;
+
+ 		case 'delete_all_tokens':
+ 			deleteAllMapTokens();
+ 	 		break;
+ 		}
+ 	}
+ 	
+	$( "#map_open_panel_button" ).on('click', function() {
+		if ($( ".game-container" ).css('display') == 'none') {
+			$( ".game-container" ).show();
+		}
+		else {
+			$( ".game-container" ).hide();
+		}
+
+		if ($( ".map-container" ).css('display') == 'none') {
+			$( ".map-container" ).show();
+		}
+		else {
+			$( ".map-container" ).hide();
+		}
+	});
+
+	function addMapToken(data_json)
+	{		
+		$( "#map_container" ).append(' \
+				<div id="'+data_json.token_id+'" class="map-token"> \
+					<span id="map_token_name" class="map-token-name">'+data_json.token_name+'</span> \
+				</div> \
+			');
+		$( "#map_container #"+data_json.token_id ).css("background-color", data_json.token_css_color);
+		if (data_json.token_top) {
+			$( "#map_container #"+data_json.token_id ).css("top", data_json.token_top);
+		}
+		if (data_json.token_top) {
+			$( "#map_container #"+data_json.token_id ).css("left", data_json.token_left);
+		}
+
+		if (isGamemaster()) {
+		    $( "#map_container #"+data_json.token_id ).draggable({
+		      	scroll: false,
+		      	containment: 'parent',
+		   		drag: function( event, ui ) {
+		   			updateZIndexMapToken(data_json.token_id);
+		 	  	},
+	            stop: function() {
+	            	var token_id = data_json.token_id;
+	                var token_top = $( this ).css('top');
+	                var token_left = $( this ).css('left');
+	                var new_data_json = {token_id: token_id, token_top: token_top, token_left: token_left };
+	                $( "#map_container #"+token_id ).trigger( "myDraggTokenMapEvent", [ new_data_json ] );
+	            }
+		    });
+		}
+	}
+
+	function moveMapToken(data_json)
+	{
+		updateZIndexMapToken(data_json.token_id);
+		$( "#map_container #"+data_json.token_id ).css('top', data_json.token_top);
+		$( "#map_container #"+data_json.token_id ).css('left', data_json.token_left);
+	}
+
+	function deleteAllMapTokens()
+	{
+		$( "#map_container .map-token" ).remove();
+	}
+
+	function deleteMapToken(token_id)
+	{
+		$( "#map_container #"+token_id ).remove();
+	}
+
+	var map_token_z_index_count = 0;
+	function updateZIndexMapToken(token_id)
+	{
+		map_token_z_index_count++;
+		$( "#map_container #"+token_id ).css("z-index", map_token_z_index_count);
+	}
+
+
+
+    if (isGamemaster()) {
+    	var map_name_trans = '{% trans %}map.name{% endtrans %}';
+    	var map_css_color_trans = '{% trans %}map.css_color{% endtrans %}';
+    	var map_add_token_trans = '{% trans %}map.add_token_button{% endtrans %}';
+    	var map_delete_token_trans = '{% trans %}map.delete_token_button{% endtrans %}';
+    	var map_delete_all_tokens_trans = '{% trans %}map.delete_all_tokens_button{% endtrans %}';
+
+    	$( "#map_container" ).append(' \
+    		<div id="map_panel" class="map-panel"> \
+    		    <input id="map_panel_text" type="text" placeholder="'+map_name_trans+'" /> \
+    		    	'+map_css_color_trans+' <select id="map_panel_color" class="map-panel-select-option" style="background-color: red;" required> \
+                    <option value="red" selected="selected" class="map-panel-select-option" style="background-color: red;">Red</option> \
+                    <option value="blue" class="map-panel-select-option" style="background-color: blue;">Blue</option> \
+                    <option value="green" class="map-panel-select-option" style="background-color: green;">Green</option> \
+                    <option value="brown" class="map-panel-select-option" style="background-color: brown;">Brown</option> \
+                    <option value="orange" class="map-panel-select-option" style="background-color: orange;">Orange</option> \
+                    <option value="violet" class="map-panel-select-option" style="background-color: violet;">Violet</option> \
+    	    	</select> \
+    		    <button id="map_panel_add_token_button">'+map_add_token_trans+'</button> \
+    		    <button id="map_panel_delete_token_button">'+map_delete_token_trans+'</button> \
+    		    <button id="map_panel_delete_all_tokens_button">'+map_delete_all_tokens_trans+'</button> \
+    		</div> \
+    	');
+
+        $( "#map_panel" ).draggable({
+          	scroll: false,
+          	containment: 'parent'
+        });
+
+        $( "#map_panel #map_panel_color" ).on('change', function() {
+			$( this ).css('background-color', this.value);
+        });
+
+    	var tokens_count = 0;
+    	function updateTokensCount()
+    	{
+        	$( "#map_container .map-token" ).each(function() {
+      		  var token_id = $( this ).attr('id');
+      		  if(token_id > tokens_count) 
+      			  tokens_count = token_id;
+    		});
+    	}
+
+    	$( "#map_container" ).on("click", "#map_panel_add_token_button", function() {
+    		var token_id = parseInt(tokens_count) + 1;
+    		var token_name = $(this).siblings("#map_panel_text").val();
+    		var token_css_color = $(this).siblings("#map_panel_color").val();
+
+    		var data_json = {token_id: token_id, token_name: token_name, token_css_color: token_css_color};
+    		$( "#map_container" ).trigger( "myAddTokenMapEvent", [ data_json ] );
+    		
+    		tokens_count++;
+    	});
+
+    	var last_map_token_selected_id;
+    	var last_map_token_selected_background_color;
+    	$( "#map_container" ).on("click", ".map-token", function() {
+    		var actual_map_token_selected_id = $( this ).attr('id');
+
+    		if (last_map_token_selected_id != actual_map_token_selected_id) {
+    			$( "#map_container #"+last_map_token_selected_id ).css("background", '');
+    			$( "#map_container #"+last_map_token_selected_id ).css("background-color", last_map_token_selected_background_color);
+        		
+    			var actual_map_token_selected_background_color = $( this ).css('background-color');
+    			$( this ).css({
+    			    'background':'radial-gradient(circle, '+actual_map_token_selected_background_color+', black, '+actual_map_token_selected_background_color+')'      
+    			});
+
+    			last_map_token_selected_background_color = actual_map_token_selected_background_color;
+    			last_map_token_selected_id = actual_map_token_selected_id;
+    		}
+    	});
+    }
+</script>

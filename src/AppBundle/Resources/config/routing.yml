@@ -145,3 +145,61 @@ edit_character_sheet:
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
+
+# ConnectionController
+login_game_session:
+    path:     /{_locale}/game/session/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:loginGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
+delete_game_session:
+    path:     /{_locale}/game/session/delete/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:deleteGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_disconnected:
+    path:     /{_locale}/game/disconected/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:disconnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_already_connected:
+    path:     /{_locale}/game/already-connected/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:alreadyConnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_not_exist:
+    path:     /{_locale}/game/not-exist/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:gameSessionNotExist
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_without_permission:
+    path:     /{_locale}/game/without-permission/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:withoutPermission
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_already_users_connected:
+    path:     /{_locale}/game/already-users-connected/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:alreadyUsersConnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%

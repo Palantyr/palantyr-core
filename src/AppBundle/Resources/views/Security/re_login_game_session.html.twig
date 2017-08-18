@@ -1,0 +1,11 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block title %}{% trans %}game_session.re_login.title{% endtrans %}{% endblock %}
+
+{% block body %}
+	<h2>{{ game_session.getName() }}</h2>
+	<h3>{% trans %}game_session.re_login.message {% endtrans %}</h3>
+	<form action="{{ path('login_game_session', {'game_session_id': game_session.getId()}) }}">
+		<input class="btn btn-primary" type="submit" value={% trans %}game_session.join.submit{% endtrans %}>
+	</form>	
+{% endblock %}

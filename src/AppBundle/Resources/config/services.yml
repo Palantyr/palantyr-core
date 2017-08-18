@@ -5,6 +5,11 @@ services:
 #            $entityManager: '@doctrine.orm.entity_manager'
 #            $translator: '@translator.default'
 
+#    _defaults:
+#        autowire: true
+#        autoconfigure: true
+#        public: false
+
     app.form.registration:
         class: AppBundle\Form\Type\RegistrationType
         tags:
@@ -20,3 +25,15 @@ services:
         class: AppBundle\Form\Type\ChangePasswordType
         tags:
             - { name: form.type, alias: user_change_password }
+
+    game_session.topic:
+        class: AppBundle\Topic\GameSessionTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments:
+            - @gos_web_socket.websocket.client_manipulator
+            - @doctrine.orm.entity_manager
+            - @form.factory
+            - @validator.builder
+            - @translator.default
+#           - @gos_web_socket.client_storage

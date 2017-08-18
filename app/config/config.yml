@@ -79,6 +79,7 @@ assetic:
 #            file: %kernel.root_dir%/../vendor/leafo/scssphp/scss.inc.php
 #            apply_to: '\.scss$'
         cssrewrite: ~
+    bundles: [ AppBundle ]
 
 braincrafted_bootstrap:
     assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap-sass/assets
@@ -138,3 +139,19 @@ fos_user:
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
+
+#gos_web_socket:
+#    server:
+#        port: 8080        #The port the socket server will listen on
+#        host: 127.0.0.1   #The host ip to bind to
+
+gos_web_socket:
+    server:
+        port: "%gos_web_socket.port%"   #The port the socket server will listen on
+        host: "%gos_web_socket.host%"   #The host ip to bind to
+#        router:
+#            resources:
+#                - @GamingPlatformBundle/Resources/config/pubsub/routing.yml
+#    client:
+#        firewall: main #can be an array of firewalls
+#        session_handler: @session.handler.pdo

@@ -1,0 +1,159 @@
+<div class="chat-box">
+	<div class="chat-box-body">
+		<ul id="chat" class="chat"></ul>
+	</div>
+	<div class="chat-box-footer">
+		<input id="chat_new_text" class="chat-box-footer input" type="text" placeholder="{% trans %}chat.placeholder{% endtrans %}" />
+		<button id="chat_send_button" class="chat-box-footer button">{% trans %}chat.send_button{% endtrans %}</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+    $( ".chat-box" ).draggable({
+      	scroll: false,
+      	containment: 'parent'
+    });
+    $( ".chat-box" ).resizable();
+    $( ".chat-box" ).css('position', 'absolute');
+
+ 	function subscribeChat(payload) {
+ 		if (payload.text != null) {
+ 			addTextToChat(payload);
+ 			if (payload.sender && payload.sender == user_username) {
+ 	 			$('.panel-body').animate({scrollTop: $('.panel-body').prop('scrollHeight')});
+ 	 		}
+ 		}
+ 	}
+
+//  	Change values instead of general values
+ 	function addTextToChat(payload)
+ 	{
+		switch(payload.option) {
+		case 'throw_dice':
+			if(payload.sender == user_username) {
+    			var picture = 
+    				'<span class="chat-img pull-right"> \
+    					'+"{% image "@AppBundle/Resources/public/images/throw-me.png" output="images/throw-me.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show);
+			}
+			else {
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@AppBundle/Resources/public/images/throw-other.png" output="images/throw-other.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+        		head_class = 'chat-head-whisper';
+				addTextToChatFormatted(payload, picture, head_to_show, head_class);
+			}
+			break;
+
+		case 'whisper':
+			if(payload.sender == user_username) {
+				var text_class = 'whisper';
+    			var picture = 
+    				'<span class="chat-img pull-right"> \
+    					'+"{% image "@AppBundle/Resources/public/images/chat-me.png" output="images/chat-me.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show, '', text_class);
+			}
+			else {
+				var text_class = 'whisper';
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@AppBundle/Resources/public/images/chat-other.png" output="images/chat-other.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+        		head_class = 'chat-head-whisper';
+				addTextToChatFormatted(payload, picture, head_to_show, head_class, text_class);
+			}
+			break;
+
+		case 'add_text':
+			switch(payload.sender) {
+			case 'system':
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@AppBundle/Resources/public/images/chat-system.png" output="images/chat-system.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+				addTextToChatFormatted(payload, picture);
+				break;
+				
+			case user_username: //himself
+				var picture = 
+					'<span class="chat-img pull-right"> \
+						'+"{% image "@AppBundle/Resources/public/images/chat-me.png" output="images/chat-me.png" %}"+' \
+	    		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+	    		 		'+"{% endimage %}"+' \
+	    			</span>';
+        		head_to_show = payload.sender;
+				addTextToChatFormatted(payload, picture, head_to_show);
+				break;
+
+			default:
+    			var picture = 
+    				'<span class="chat-img pull-left"> \
+    					'+"{% image "@AppBundle/Resources/public/images/chat-other.png" output="images/chat-other.png" %}"+' \
+        		 		<img src="{{ asset_url }}" alt="Avatar" class="img-circle"> \
+        		 		'+"{% endimage %}"+' \
+        			</span>';
+        		head_to_show = payload.sender;
+        		head_class = 'chat-head-whisper';
+				addTextToChatFormatted(payload, picture, head_to_show, head_class);
+				break;
+			}
+			break;
+		}
+ 	}
+
+	function addTextToChatFormatted(payload, picture, head_to_show, head_class, text_class)
+	{
+	    if (text_class === undefined) {
+	    	text_class = '';
+	    }
+	    if (head_class === undefined) {
+	    	head_class = '';
+	    }
+
+	    var new_text = ' \
+			<li class="right clearfix"> \
+					'+picture+' \
+	    		<div class="chat-body clearfix"> \
+	    	        <div class="header"> \
+                       	<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>'+payload.date+'</small>';
+                		if (head_to_show !== undefined && head_to_show != null && head_to_show != '') {
+                    		if (head_class == 'chat-head-whisper') {
+                    			new_text = new_text.concat('<a role="button" tabindex="0"><strong class="pull-right primary-font '+head_class+'">'+head_to_show+'</strong></a>');
+                        	}
+                    		else {
+                    			new_text = new_text.concat('<strong class="pull-right primary-font '+head_class+'">'+head_to_show+'</strong>');
+                        	}
+                		}
+					new_text = new_text.concat('</div> \
+        	   		<span class="'+text_class+'">'+payload.text+'</span> \
+       			</div> \
+        	</li>');
+
+		$ ( "#chat" ).append(new_text);
+	    $( ".chat-box-body" ).animate({
+	        scrollTop: $( ".chat-box-body" )[0].scrollHeight}, 500);
+	}
+
+	$( "#chat" ).on("click", ".chat-head-whisper", function() {
+		$( "#chat_new_text" ).val('/w '+$(this).text()+' ');
+		$( "#chat_new_text" ).focus();
+	});
+</script>

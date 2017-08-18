@@ -1,0 +1,69 @@
+<script type="text/javascript">
+
+ 	function subscribeConnection(payload) {
+ 		switch(payload.option) {
+ 		case "add_all_users":
+ 			var other_users_connected = JSON.parse(payload.other_users_connected);
+ 			addAllUsers(other_users_connected);
+ 			break;
+
+ 		case "add_new_user":
+ 			addUser(payload.user_username);
+ 			break;
+
+ 		case "delete_disconnected_user":
+ 			deleteUser(payload.user_username);
+ 			break;
+ 		case "already_connected":
+ 	 		redirect(payload.option);
+ 			break;
+ 		case "remove_user":
+ 	 		redirect(payload.option);
+ 	 		break;
+ 		case "remove_game_session":
+ 			redirect(payload.option);
+ 	 		break;
+ 		}
+ 	}
+		
+ 	function addAllUsers(other_users_connected) { //to delete
+ 		for (var other_user_connected in other_users_connected) {
+ 			addUser(other_users_connected[other_user_connected]);
+ 		}
+ 	}
+
+ 	function addUser(user_username) { //to delete
+ 		$( "#other_users_connected" ).append("<div id="+user_username+" class='character-sheets-external'></div> ");
+ 	}
+
+ 	function deleteUser(user_username) { //to delete
+ 		$( "#other_users_connected > #"+user_username ).remove();
+ 	}
+
+ 	function redirect (option) {
+
+ 		$( 'body' ).empty();
+ 		var new_route;
+ 	 	
+ 	 	switch(option) {
+ 	 	case 'already_connected':
+ 	 		new_route = "{{ path('game_session_already_connected', { 'game_session_id': game_session.getId() }) }}";
+ 	 	 	break;
+ 	 	case 'remove_user':
+ 	 		new_route = "{{ path('game_session_disconnected', { 'game_session_id': game_session.getId() }) }}";
+ 	 	 	break;
+ 	 	case 'remove_game_session':
+ 	 		new_route = "{{ path('game_session_disconnected', { 'game_session_id': game_session.getId() }) }}";
+ 	 	 	break;
+ 	 	}
+ 		$(window).attr('location', new_route);
+ 	 }
+
+ 	$(window).on('beforeunload', function() {
+ 		if ($('body').is(':empty')){}
+ 		else {
+ 			return "{% trans %}game_session.leave.confirmation_message{% endtrans %}";
+ 	 	}
+ 	});
+ 	
+</script>
