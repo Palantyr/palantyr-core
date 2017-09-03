@@ -80,6 +80,12 @@ assetic:
 #            apply_to: '\.scss$'
         cssrewrite: ~
     bundles: [ AppBundle ]
+#    assets:
+#        game_session_js:
+#            inputs:
+##            vendor/components/jqueryui/themes/ui-darkness/jquery-ui.css
+#                - '@AppBundle/Resources/public/js/thirdparty/jquery.js'
+#                - '@AppBundle/Resources/public/js/thirdparty/jquery.ui.js'
 
 braincrafted_bootstrap:
     assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap-sass/assets

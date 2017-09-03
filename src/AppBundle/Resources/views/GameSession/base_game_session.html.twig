@@ -9,12 +9,17 @@
         {% endblock %}
         
         {% block stylesheets %}
-        	<link href="{{ asset('css/navigation_sidebar.css') }}" rel="stylesheet" media="screen">
-        	<link href="{{ asset('css/jquery-ui-darkness/jquery-ui.css') }}" rel="stylesheet" media="screen">
-        	<link href="{{ asset('css/jquery-ui-darkness/theme.css') }}" rel="stylesheet" media="screen">
-        	<link href="{{ asset('css/smartmenu/sm-core-css.css') }}" rel="stylesheet" type="text/css" />
-        	<link href="{{ asset('css/smartmenu/sm-clean.css') }}" rel="stylesheet" type="text/css" />
-        	{% stylesheets 'bundles/gamingplatform/css/*' filter='cssrewrite' %}
+        	{#<link href="{{ asset('css/navigation_sidebar.css') }}" rel="stylesheet" media="screen">#}
+        	{#<link href="{{ asset('../vendor/components/jqueryui/themes/ui-darkness/jquery-ui.css') }}" rel="stylesheet" media="screen">#}
+        	{#<link href="{{ asset('../vendor/components/jqueryui/themes/ui-darkness/theme.css') }}" rel="stylesheet" media="screen">#}
+        	{#<link href="{{ asset('css/smartmenu/sm-core-css.css') }}" rel="stylesheet" type="text/css" />#}
+        	{#<link href="{{ asset('css/smartmenu/sm-clean.css') }}" rel="stylesheet" type="text/css" />#}
+        	{% stylesheets
+				'bundles/app/css/*'
+            	'../vendor/components/jqueryui/themes/ui-darkness/*'
+				'../vendor/drmonty/smartmenus/css/sm-core-css.css'
+				'../vendor/drmonty/smartmenus/css/sm-clean.css'
+				filter='cssrewrite' %}
     			<link rel="stylesheet" href="{{ asset_url }}" type="text/css">
             {% endstylesheets %}
         {% endblock %}
