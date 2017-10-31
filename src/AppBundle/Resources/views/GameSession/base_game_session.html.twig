@@ -3,22 +3,12 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}{{ game_session.getName() }}{% endblock %}</title>
-        
-        {% block bootstrap_stylesheets %}
-        	<link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-        {% endblock %}
-        
+
         {% block stylesheets %}
-        	{#<link href="{{ asset('css/navigation_sidebar.css') }}" rel="stylesheet" media="screen">#}
-        	{#<link href="{{ asset('../vendor/components/jqueryui/themes/ui-darkness/jquery-ui.css') }}" rel="stylesheet" media="screen">#}
-        	{#<link href="{{ asset('../vendor/components/jqueryui/themes/ui-darkness/theme.css') }}" rel="stylesheet" media="screen">#}
-        	{#<link href="{{ asset('css/smartmenu/sm-core-css.css') }}" rel="stylesheet" type="text/css" />#}
-        	{#<link href="{{ asset('css/smartmenu/sm-clean.css') }}" rel="stylesheet" type="text/css" />#}
         	{% stylesheets
+				'@bootstrap_css'
 				'bundles/app/css/*'
-            	'../vendor/components/jqueryui/themes/ui-darkness/*'
-				'../vendor/drmonty/smartmenus/css/sm-core-css.css'
-				'../vendor/drmonty/smartmenus/css/sm-clean.css'
+            	'@game_session_css'
 				filter='cssrewrite' %}
     			<link rel="stylesheet" href="{{ asset_url }}" type="text/css">
             {% endstylesheets %}
@@ -52,12 +42,11 @@
 		    {{ include('AppBundle:GameSession:navigation_sidebar.html.twig') }}
 		
     	{% endblock %}
-    	
+
     	{% block jquery_javascripts %}
-        	{% javascripts 
-        		'../vendor/components/jquery/jquery.js'
-        		'../vendor/components/jqueryui/jquery-ui.js'
-        	    '../vendor/drmonty/smartmenus/js/jquery.smartmenus.js'%}
+        	{% javascripts
+                '@bootstrap_js_and_jquery'
+        		'@game_session_js' %}
     			<script src="{{ asset_url }}"></script>
 			{% endjavascripts %}
         {% endblock %}
@@ -65,9 +54,5 @@
         <div id="main_container" class="main-container">
 			{% block body %}{% endblock %}
     	</div>
-        
-        {% block bootstrap_javascripts %}
-        	<script src="{{ asset('js/bootstrap.js') }}"></script>
-        {% endblock %}
     </body>
 </html>

@@ -54,7 +54,7 @@
 			    break;
 		    }
 		});
-		
+
 // GAMEMASTER SETTINGS
 		$( "#game_session_edit_button" ).on('click', function() {
 			session.publish(route_game_session, {
@@ -117,7 +117,7 @@
 			var newText = $( "#chat_new_text" ).val();
 			if (newText != '') {
 				session.publish(route_game_session, {
-					section:"chat", 
+					section:"chat",
 					msg: newText
 				});
 				$( "#chat_new_text" ).val('');
@@ -130,7 +130,7 @@
 	 				var newText = $( "#chat_new_text" ).val();
 	 				if (newText != '') {
 		 				session.publish(route_game_session, {
-		 					section:"chat", 
+		 					section:"chat",
 		 					msg: newText
 		 				});
 		 				$( "#chat_new_text" ).val('');
@@ -162,7 +162,7 @@
 			closePopup();
 			session.publish(route_game_session, {
 				section:'import_character_sheet',
-				option: 'import', 
+				option: 'import',
 				character_sheet_id: character_sheet_id});
  		});
 
@@ -170,10 +170,10 @@
  	 		var are_you_sure_trans = '{% trans %}are_you_sure{% endtrans %}';
  		    if (confirm(are_you_sure_trans)) {
  	 			var character_sheet_id = getCharacterSheetProperty(this, 'character_sheet_id');
- 	 			
+
  	 			session.publish(route_game_session, {
  	 				section:'import_character_sheet',
- 	 				option: 'delete', 
+ 	 				option: 'delete',
  	 				character_sheet_id: character_sheet_id});
  		    }
  		    return false;
@@ -199,16 +199,16 @@
 				var collective_action_name = '';
 				if (character_sheet_target.length) {
 					character_sheet_target_name = character_sheet_target.attr('value');
-					
+
 					for (functionality_executed in functionalities_executed) {
 						collective_action_name = functionalities_executed[functionality_executed]['name'];
 					}
 				}
-    			
+
     			deleteFunctionalPanelFromCharacterSheet(character_sheet_id);
  	 			session.publish(route_game_session, {
  	 				section:'functionality_character_sheet',
- 	 				option: 'execute_functionality', 
+ 	 				option: 'execute_functionality',
  	 				character_sheet_id: character_sheet_id,
  	 				functionalities_executed_json: functionalities_executed_json,
  	 				character_sheet_name: character_sheet_name,
@@ -247,7 +247,7 @@
 //          	need to complete
 //          	alert(JSON.stringify(modifier));
 			if (modifier['type'] == 'field') {
-				
+
 			}
 			else {
 				for (sub_modifier in modifier['value']) {
@@ -261,7 +261,7 @@
         $( "#map_container" ).on( "myAddTokenMapEvent", function( event, data_json ) {
  			session.publish(route_game_session, {
  				section: 'map',
- 				option: 'add_token', 
+ 				option: 'add_token',
  				data_json: data_json
  			});
         });
@@ -269,7 +269,7 @@
         $( "#map_container" ).on( "myDraggTokenMapEvent", ".map-token", function( event, data_json ) {
  			session.publish(route_game_session, {
  				section: 'map',
- 				option: 'move_token', 
+ 				option: 'move_token',
  				data_json: data_json
  			});
         });
@@ -280,7 +280,7 @@
     			if (confirm(are_you_sure_trans)) {
     	 			session.publish(route_game_session, {
     	 				section: 'map',
-    	 				option: 'delete_token', 
+    	 				option: 'delete_token',
     	 				token_id: last_map_token_selected_id
     	 			});
     				last_map_token_selected_id = null;
@@ -325,10 +325,10 @@
 				dice_to_roll[dice_value] = number_of_dice;
 			});
 			dice_to_roll_json = JSON.stringify(dice_to_roll);
-			
+
  			session.publish(route_game_session, {
  				section: 'utilities',
- 				option: 'throw_dice', 
+ 				option: 'throw_dice',
  				dice_to_roll_json: dice_to_roll_json
  			});
 
@@ -339,7 +339,7 @@
  	websocket.on("socket/disconnect", function(error){ //CHANGE
  	    $( "#chat #written-text" ).append("Disconnected for " + error.reason + " with code " + error.code);
  	    $( "#chat #written-text" ).append("&#10;");
- 	}); 
+ 	});
  // ||||||||||||||||||||||||||||||||||||| END WEBSOCKET |||||||||||||||||||||||||||||||||||||||||||
 </script>
 

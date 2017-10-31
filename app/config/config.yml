@@ -80,7 +80,43 @@ assetic:
 #            apply_to: '\.scss$'
         cssrewrite: ~
     bundles: [ AppBundle ]
-#    assets:
+    assets:
+        bootstrap_js_and_jquery:
+            inputs:
+                - '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/dist/js/bootstrap.js'
+        game_session_css:
+            inputs:
+                - '%kernel.root_dir%/../vendor/components/jqueryui/themes/ui-darkness/*'
+                - '%kernel.root_dir%/../vendor/drmonty/smartmenus/css/sm-core-css.css'
+                - '%kernel.root_dir%/../vendor/drmonty/smartmenus/css/sm-clean.css'
+        game_session_js:
+            inputs:
+                - '%kernel.root_dir%/../vendor/components/jqueryui/jquery-ui.js'
+                - '%kernel.root_dir%/../vendor/drmonty/smartmenus/js/jquery.smartmenus.js'
+        bootstrap_css:
+            inputs:
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/dist/css/bootstrap.css'
+        bootstrap_glyphicons_ttf:
+            inputs:
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
+            output: "fonts/glyphicons-halflings-regular.ttf"
+        bootstrap_glyphicons_eot:
+            inputs:
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.eot'
+            output: "fonts/glyphicons-halflings-regular.eot"
+        bootstrap_glyphicons_svg:
+            inputs:
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.svg'
+            output: "fonts/glyphicons-halflings-regular.svg"
+        bootstrap_glyphicons_woff:
+            inputs:
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.woff'
+            output: "fonts/glyphicons-halflings-regular.woff"
+        bootstrap_glyphicons_woff2:
+            inputs:
+                - '%kernel.root_dir%/../vendor/twbs/bootstrap/fonts/glyphicons-halflings-regular.woff2'
+            output: "fonts/glyphicons-halflings-regular.woff2"
 #        game_session_js:
 #            inputs:
 ##            vendor/components/jqueryui/themes/ui-darkness/jquery-ui.css
