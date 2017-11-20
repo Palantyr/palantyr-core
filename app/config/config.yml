@@ -27,7 +27,7 @@ framework:
 #    trusted_proxies: ~
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
-        handler_id:  session.handler.native_file
+        handler_id:  session.handler.pdo
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
     fragments: ~
     http_method_override: true
@@ -189,11 +189,11 @@ fos_user:
 
 gos_web_socket:
     server:
-        port: "%gos_web_socket.port%"   #The port the socket server will listen on
-        host: "%gos_web_socket.host%"   #The host ip to bind to
-#        router:
-#            resources:
-#                - @GamingPlatformBundle/Resources/config/pubsub/routing.yml
-#    client:
-#        firewall: main #can be an array of firewalls
-#        session_handler: @session.handler.pdo
+        port: '%gos_web_socket.port%'   #The port the socket server will listen on
+        host: '%gos_web_socket.host%'   #The host ip to bind to
+        router:
+            resources:
+                - '%kernel.project_dir%/src/AppBundle/Resources/config/pubsub/routing.yml'
+    client:
+        firewall: 'main' #can be an array of firewalls
+        session_handler: '@session.handler.pdo'

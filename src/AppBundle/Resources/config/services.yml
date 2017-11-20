@@ -1,3 +1,5 @@
+# todo: this file not working. Leave him white
+
 services:
 #    add_character_sheet_menu_type.service:
 #        class: AppBundle\Form\Type\AddCharacterSheetMenuType
@@ -26,14 +28,19 @@ services:
         tags:
             - { name: form.type, alias: user_change_password }
 
+    acme_hello.topic_sample_service:
+        class: Acme\HelloBundle\Topic\AcmeTopic
+        tags:
+            - { name: gos_web_socket.topic }
+
     game_session.topic:
         class: AppBundle\Topic\GameSessionTopic
         tags:
             - { name: gos_web_socket.topic }
         arguments:
-            - @gos_web_socket.websocket.client_manipulator
-            - @doctrine.orm.entity_manager
-            - @form.factory
-            - @validator.builder
-            - @translator.default
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+            - '@form.factory'
+            - '@validator.builder'
+            - '@translator.default'
 #           - @gos_web_socket.client_storage

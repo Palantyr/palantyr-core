@@ -13,7 +13,8 @@
 	var rol_game_name = "{{ game_session.getRolGame.getName() }}";
 	var user_username = "{{ app.user.username }}";
 	var game_session_owner_username = "{{ game_session.getOwner().getUsername() }}";
-	var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
+	var _WS_URI = "ws://127.0.0.1:8081";
+	{#var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";#}
 	var websocket = WS.connect(_WS_URI);
 // 	GLOBAL VARIABLES FROM TWIG 
 

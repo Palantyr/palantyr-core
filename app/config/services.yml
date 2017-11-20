@@ -18,3 +18,29 @@ services:
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
         exclude: '../../src/AppBundle/{Entity,Repository}'
+
+    pdo:
+        class: PDO
+        arguments:
+            - 'mysql:host=%database_host%;port=%database_port%;dbname=%database_name%'
+            - '%database_user%'
+            - '%database_password%'
+            - []
+        calls:
+            - [ setAttribute, [3, 2] ] # \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
+
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        arguments: ['@pdo', {lock_mode: 0}]
+
+    game_session.topic:
+        class: AppBundle\Topic\GameSessionTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments:
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+            - '@form.factory'
+            - '@validator.builder'
+            - '@translator.default'
+#           - @gos_web_socket.client_storage

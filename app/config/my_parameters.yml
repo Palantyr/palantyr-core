@@ -1,8 +1,8 @@
 parameters:
     mailer_user: jaimejesusserrano@gmail.com
-    gos_web_socket.port: 1337
-    gos_web_socket.host: 127.0.0.1
-#
+    gos_web_socket.port: 28081
+    gos_web_socket.host: 0.0.0.0
+
     app.locales_string: en|es
     app.locales:
         - en
