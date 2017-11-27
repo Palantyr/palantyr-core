@@ -85,7 +85,7 @@ class Builder implements ContainerAwareInterface
         return $menu;
     }
 
-    private function mainMenuSharedContent ($menu) {
+    private function mainMenuSharedContent (\Knp\Menu\ItemInterface $menu) {
         $translator = $this->container->get('translator');
 
         $menu->addChild('game_session',

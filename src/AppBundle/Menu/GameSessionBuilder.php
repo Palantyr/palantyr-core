@@ -27,7 +27,7 @@ class GameSessionBuilder implements ContainerAwareInterface
 		return $menu;
 	}
 	
-	private function settingsSubMenu($menu) {
+	private function settingsSubMenu(\Knp\Menu\ItemInterface $menu) {
 		$translator = $this->container->get('translator');
 
 		$menu->addChild('settings',
@@ -40,20 +40,20 @@ class GameSessionBuilder implements ContainerAwareInterface
 		if (self::isOwnerToGameSession($user, $game_session_id)) {
 			$menu['settings']->addChild($translator->trans('game_session.edit.title'),
 					array('uri' => 'javascript:void(0)'))
-				->setExtra('id', 'game_session_edit_button');
+				->setAttribute('id', 'game_session_edit_button');
 			$menu['settings']->addChild($translator->trans('secondary_menu.settings.manage_users.title'),
 					array('uri' => 'javascript:void(0)'))
-				->setExtra('id', 'manage_users_button');
+				->setAttribute('id', 'manage_users_button');
 		}
 		else {
 		    $menu['settings']->addChild($translator->trans('secondary_menu.settings.show_users.title'),
 		        array('uri' => 'javascript:void(0)'))
-		        ->setExtra('id', 'show_users_button');
+		        ->setAttribute('id', 'show_users_button');
 		}
 
 		$menu['settings']->addChild($translator->trans('secondary_menu.settings.exit.title'),
 				array('route' => 'game_sessions'))
-				->setExtra('icon', 'fa fa-edit');
+				->setAttribute('icon', 'fa fa-edit');
 
 		return $menu;
 	}
