@@ -41,6 +41,6 @@ services:
             - '@gos_web_socket.websocket.client_manipulator'
             - '@doctrine.orm.entity_manager'
             - '@form.factory'
-            - '@validator.builder'
+#            - '@validator.builder'
             - '@translator.default'
 #           - @gos_web_socket.client_storage

@@ -20,7 +20,7 @@ class GameSessionTopic extends Controller implements TopicInterface
     protected $clientManipulator;
     protected $em;
     protected $formFactory;
-    protected $validation;
+//    protected $validation;
     protected $translator;
 
     public $character_sheets_in_game = array();
@@ -34,13 +34,13 @@ class GameSessionTopic extends Controller implements TopicInterface
     public function __construct(ClientManipulatorInterface $clientManipulator,
                                 EntityManager $em,
                                 FormFactory $formFactory,
-                                ValidatorBuilder $validation,
+//                                ValidatorBuilder $validation,
                                 Translator $translator)
     {
         $this->clientManipulator = $clientManipulator;
         $this->em = $em;
         $this->formFactory = $formFactory;
-        $this->validation = $validation;
+//        $this->validation = $validation;
         $this->translator = $translator;
     }
 
