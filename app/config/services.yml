@@ -44,3 +44,10 @@ services:
 #            - '@validator.builder'
             - '@translator.default'
 #           - @gos_web_socket.client_storage
+
+    app.menu_builder:
+        public: true
+        class: AppBundle\Menu\Builder
+        tags:
+            - { name: knp_menu.menu_builder, method: createHomepageMainMenu, alias: homepage_main_menu }
+            - { name: knp_menu.menu_builder, method: createHomepageRightMenu, alias: homepage_right_menu }

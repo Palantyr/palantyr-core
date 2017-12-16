@@ -3,8 +3,9 @@ parameters:
     gos_web_socket.port: 28081
     gos_web_socket.host: 0.0.0.0
 
-    app.locales_string: en|es
+    app.locales_string: en|es|es_ES
     app.locales:
         - en
         - es
+        - es_ES
     app.locale_default: en

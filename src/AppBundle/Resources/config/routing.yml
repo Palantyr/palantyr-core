@@ -1,21 +1,15 @@
 homepage:
-    path:     /{_locale}
+    path:     /
     defaults:
         _controller: AppBundle:Index:homepage
-        _locale: %app.locale_default%
-    requirements:
-        _locale: %app.locales_string%
 
 administration_menu:
-    path:     /{_locale}/administration
+    path:     /administration
     defaults:
         _controller: AppBundle:Administration:mainMenu
-        _locale: %app.locale_default%
-    requirements:
-        _locale: %app.locales_string%
 
 insufficient_permissions:
-    path: /{_locale}/insufficient-permissions
+    path: /insufficient-permissions
     defaults:
         _controller: AppBundle:Administration:insufficientPermissions
         _locale: %app.locale_default%
@@ -25,7 +19,7 @@ insufficient_permissions:
 
 # GameSession
 create_game_session:
-    path:     /{_locale}/game/create-game-session
+    path:     /game/create-game-session
     defaults:  
         _controller: AppBundle:GameSession:createGameSession
         _locale: %app.locale_default%
@@ -33,16 +27,17 @@ create_game_session:
         _locale: %app.locales_string%
 
 game_sessions:
-    path:     /{_locale}/game/sessions
+    path:     /game/sessions
     defaults:
         _controller: AppBundle:Connection:displayGameSessions
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
 
+
 # AdministrationController
 gaming_platform_administration_main_menu:
-    path:     /{_locale}/administration/gaming-platform-bundle
+    path:     /administration/gaming-platform-bundle
     defaults:
         _controller: AppBundle:Administration:gamingPlatformMenu
         _locale: %app.locale_default%
@@ -50,7 +45,7 @@ gaming_platform_administration_main_menu:
         _locale: %app.locales_string%
 
 game_session_administration_main_menu:
-    path:     /{_locale}/administration/game-session-bundle
+    path:     /administration/game-session-bundle
     defaults:  
         _controller: AppBundle:Administration:gameSessionMenu
         _locale: %app.locale_default%
@@ -58,7 +53,7 @@ game_session_administration_main_menu:
         _locale: %app.locales_string%
         
 game_session_add_all_default_data:
-    path:     /{_locale}/administration/game-session-bundle/add-all-default-data
+    path:     /administration/game-session-bundle/add-all-default-data
     defaults:  
         _controller: AppBundle:Administration:addAllDefaultData
         _locale: %app.locale_default%
@@ -66,7 +61,7 @@ game_session_add_all_default_data:
         _locale: %app.locales_string%
         
 game_session_delete_all_default_data:
-    path:     /{_locale}/administration/game-session-bundle/delete-all-default-data
+    path:     /administration/game-session-bundle/delete-all-default-data
     defaults:  
         _controller: AppBundle:Administration:deleteAllDefaultData
         _locale: %app.locale_default%
@@ -74,7 +69,7 @@ game_session_delete_all_default_data:
         _locale: %app.locales_string%
         
 manage_character_sheet_templates:
-    path:     /{_locale}/administration/game-session-bundle/character-sheet-templates
+    path:     /administration/game-session-bundle/character-sheet-templates
     defaults:  
         _controller: AppBundle:Administration:manageCharacterSheetTemplates
         _locale: %app.locale_default%
@@ -82,7 +77,7 @@ manage_character_sheet_templates:
         _locale: %app.locales_string%
         
 add_character_sheet_template:
-    path:     /{_locale}/administration/game-session-bundle/add-character-sheet-template
+    path:     /administration/game-session-bundle/add-character-sheet-template
     defaults:  
         _controller: AppBundle:Administration:addCharacterSheetTemplate
         _locale: %app.locale_default%
@@ -90,7 +85,7 @@ add_character_sheet_template:
         _locale: %app.locales_string%
         
 remove_character_sheet_template:
-    path:     /{_locale}/administration/game-session-bundle/remove-character-sheet-template/{character_sheet_template_id}
+    path:     /administration/game-session-bundle/remove-character-sheet-template/{character_sheet_template_id}
     defaults:  
         _controller: AppBundle:Administration:removeCharacterSheetTemplate
         _locale: %app.locale_default%
@@ -98,16 +93,17 @@ remove_character_sheet_template:
         _locale: %app.locales_string%
         
 edit_character_sheet_template:
-    path:     /{_locale}/administration/game-session-bundle/edit-character-sheet-template/{character_sheet_template_id}
+    path:     /administration/game-session-bundle/edit-character-sheet-template/{character_sheet_template_id}
     defaults:  
         _controller: AppBundle:Administration:editCharacterSheetTemplate
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-              
+
+
 # CharacterSheetController              
 add_character_sheet_menu:
-    path:     /{_locale}/game/add-character-sheet
+    path:     /game/add-character-sheet
     defaults:  
         _controller: AppBundle:CharacterSheet:addCharacterSheetMenu
         _locale: %app.locale_default%
@@ -115,7 +111,7 @@ add_character_sheet_menu:
         _locale: %app.locales_string%
 
 add_character_sheet:
-    path:     /{_locale}/game/add-character-sheet/{rol_game_name}/{character_sheet_template_name}
+    path:     /game/add-character-sheet/{rol_game_name}/{character_sheet_template_name}
     defaults:  
         _controller: AppBundle:CharacterSheet:addCharacterSheet
         _locale: %app.locale_default%
@@ -123,7 +119,7 @@ add_character_sheet:
         _locale: %app.locales_string%
         
 delete_character_sheet:
-    path:     /{_locale}/game/delete-character-sheet/{character_sheet_id}
+    path:     /game/delete-character-sheet/{character_sheet_id}
     defaults:  
         _controller: AppBundle:CharacterSheet:deleteCharacterSheet
         _locale: %app.locale_default%
@@ -131,7 +127,7 @@ delete_character_sheet:
         _locale: %app.locales_string%
 
 character_sheets_list:
-    path:     /{_locale}/game/character-sheets-list
+    path:     /game/character-sheets-list
     defaults:  
         _controller: AppBundle:CharacterSheet:characterSheetList
         _locale: %app.locale_default%
@@ -139,16 +135,17 @@ character_sheets_list:
         _locale: %app.locales_string%
         
 edit_character_sheet:
-    path:     /{_locale}/game/character-sheet/edit/{character_sheet_id}
+    path:     /game/character-sheet/edit/{character_sheet_id}
     defaults:  
         _controller: AppBundle:CharacterSheet:editCharacterSheet
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
 
+
 # ConnectionController
 login_game_session:
-    path:     /{_locale}/game/session/{game_session_id}
+    path:     /game/session/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:loginGameSession
         _locale: %app.locale_default%
@@ -157,7 +154,7 @@ login_game_session:
 
 
 delete_game_session:
-    path:     /{_locale}/game/session/delete/{game_session_id}
+    path:     /game/session/delete/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:deleteGameSession
         _locale: %app.locale_default%
@@ -165,7 +162,7 @@ delete_game_session:
         _locale: %app.locales_string%
 
 game_session_disconnected:
-    path:     /{_locale}/game/disconected/{game_session_id}
+    path:     /game/disconected/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:disconnected
         _locale: %app.locale_default%
@@ -173,7 +170,7 @@ game_session_disconnected:
         _locale: %app.locales_string%
 
 game_session_already_connected:
-    path:     /{_locale}/game/already-connected/{game_session_id}
+    path:     /game/already-connected/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:alreadyConnected
         _locale: %app.locale_default%
@@ -181,7 +178,7 @@ game_session_already_connected:
         _locale: %app.locales_string%
 
 game_session_not_exist:
-    path:     /{_locale}/game/not-exist/{game_session_id}
+    path:     /game/not-exist/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:gameSessionNotExist
         _locale: %app.locale_default%
@@ -189,7 +186,7 @@ game_session_not_exist:
         _locale: %app.locales_string%
 
 game_session_without_permission:
-    path:     /{_locale}/game/without-permission/{game_session_id}
+    path:     /game/without-permission/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:withoutPermission
         _locale: %app.locale_default%
@@ -197,7 +194,7 @@ game_session_without_permission:
         _locale: %app.locales_string%
 
 game_session_already_users_connected:
-    path:     /{_locale}/game/already-users-connected/{game_session_id}
+    path:     /game/already-users-connected/{game_session_id}
     defaults:
         _controller: AppBundle:Connection:alreadyUsersConnected
         _locale: %app.locale_default%

@@ -30,13 +30,8 @@
 
                     {# Collect the nav links, forms, and other content for toggling #}
 					<div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
-                        {% if app.user %}
-                        {{ knp_menu_render('AppBundle:Builder:mainMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
-                        {{ knp_menu_render('AppBundle:Builder:userMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
-                        {% else %}
-                        {{ knp_menu_render('AppBundle:Builder:userUnregisteredMainMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
-                        {{ knp_menu_render('AppBundle:Builder:userUnregisteredMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
-                        {% endif %}
+						{{ knp_menu_render('homepage_main_menu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
+						{{ knp_menu_render('homepage_right_menu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
 					</div>
 				</div>
 			</div>
