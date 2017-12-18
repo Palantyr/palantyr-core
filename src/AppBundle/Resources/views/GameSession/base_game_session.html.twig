@@ -34,8 +34,8 @@
 			
 					{# Collect the nav links, forms, and other content for toggling #}
 					<div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
-						{{ knp_menu_render('AppBundle:GameSessionBuilder:mainMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
-						{{ knp_menu_render('AppBundle:GameSessionBuilder:secondaryMenu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
+                        {{ knp_menu_render('game_session_main_menu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
+                        {{ knp_menu_render('game_session_right_menu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
 					</div>
 				</div>
 			</div>

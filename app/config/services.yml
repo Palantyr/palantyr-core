@@ -51,3 +51,10 @@ services:
         tags:
             - { name: knp_menu.menu_builder, method: createHomepageMainMenu, alias: homepage_main_menu }
             - { name: knp_menu.menu_builder, method: createHomepageRightMenu, alias: homepage_right_menu }
+
+    app.game_session_menu_builder:
+        public: true
+        class: AppBundle\Menu\GameSessionBuilder
+        tags:
+            - { name: knp_menu.menu_builder, method: createGameSessionMainMenu, alias: game_session_main_menu }
+            - { name: knp_menu.menu_builder, method: createGameSessionRightMenu, alias: game_session_right_menu }

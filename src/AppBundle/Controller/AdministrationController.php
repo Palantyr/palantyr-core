@@ -121,7 +121,7 @@ class AdministrationController extends Controller
     public function addLanguages()
     {
         $em = $this->getDoctrine()->getManager();
-        $language_names = array("es", "en");
+        $language_names = array("es_ES", "en_EN");
         $language_display_names = array("spanish", "english");
         
         for ($count_languages = 0;

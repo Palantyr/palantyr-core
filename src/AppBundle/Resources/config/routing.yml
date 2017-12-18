@@ -20,7 +20,7 @@ insufficient_permissions:
 # GameSession
 create_game_session:
     path:     /game/create-game-session
-    defaults:  
+    defaults:
         _controller: AppBundle:GameSession:createGameSession
         _locale: %app.locale_default%
     requirements:
@@ -46,65 +46,65 @@ gaming_platform_administration_main_menu:
 
 game_session_administration_main_menu:
     path:     /administration/game-session-bundle
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:gameSessionMenu
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 game_session_add_all_default_data:
     path:     /administration/game-session-bundle/add-all-default-data
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:addAllDefaultData
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 game_session_delete_all_default_data:
     path:     /administration/game-session-bundle/delete-all-default-data
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:deleteAllDefaultData
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 manage_character_sheet_templates:
     path:     /administration/game-session-bundle/character-sheet-templates
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:manageCharacterSheetTemplates
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 add_character_sheet_template:
     path:     /administration/game-session-bundle/add-character-sheet-template
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:addCharacterSheetTemplate
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 remove_character_sheet_template:
     path:     /administration/game-session-bundle/remove-character-sheet-template/{character_sheet_template_id}
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:removeCharacterSheetTemplate
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 edit_character_sheet_template:
     path:     /administration/game-session-bundle/edit-character-sheet-template/{character_sheet_template_id}
-    defaults:  
+    defaults:
         _controller: AppBundle:Administration:editCharacterSheetTemplate
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
 
 
-# CharacterSheetController              
+# CharacterSheetController
 add_character_sheet_menu:
     path:     /game/add-character-sheet
-    defaults:  
+    defaults:
         _controller: AppBundle:CharacterSheet:addCharacterSheetMenu
         _locale: %app.locale_default%
     requirements:
@@ -112,15 +112,15 @@ add_character_sheet_menu:
 
 add_character_sheet:
     path:     /game/add-character-sheet/{rol_game_name}/{character_sheet_template_name}
-    defaults:  
+    defaults:
         _controller: AppBundle:CharacterSheet:addCharacterSheet
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 delete_character_sheet:
     path:     /game/delete-character-sheet/{character_sheet_id}
-    defaults:  
+    defaults:
         _controller: AppBundle:CharacterSheet:deleteCharacterSheet
         _locale: %app.locale_default%
     requirements:
@@ -128,15 +128,15 @@ delete_character_sheet:
 
 character_sheets_list:
     path:     /game/character-sheets-list
-    defaults:  
+    defaults:
         _controller: AppBundle:CharacterSheet:characterSheetList
         _locale: %app.locale_default%
     requirements:
         _locale: %app.locales_string%
-        
+
 edit_character_sheet:
     path:     /game/character-sheet/edit/{character_sheet_id}
-    defaults:  
+    defaults:
         _controller: AppBundle:CharacterSheet:editCharacterSheet
         _locale: %app.locale_default%
     requirements:
