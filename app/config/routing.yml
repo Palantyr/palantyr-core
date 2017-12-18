@@ -6,14 +6,14 @@ app:
     resource: '@AppBundle/Resources/config/routing.yml'
     prefix: /{_locale}
     defaults:
-        _locale: %app.locale_default%
+        _locale: '%app.locale_default%'
     requirements:
-        _locale: %app.locales_string%
+        _locale: '%app.locales_string%'
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
     prefix: /{_locale}
     defaults:
-        _locale: %app.locale_default%
+        _locale: '%app.locale_default%'
     requirements:
-        _locale: %app.locales_string%
+        _locale: '%app.locales_string%'

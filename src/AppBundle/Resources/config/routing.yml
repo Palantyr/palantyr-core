@@ -1,5 +1,5 @@
 homepage:
-    path:     /
+    path: /
     defaults:
         _controller: AppBundle:Index:homepage
 
