@@ -1,7 +1,0 @@
-game_session_topic:
-    channel: gameSession/{room}
-    handler:
-        callback: 'game_session.topic' #related to the getName() of your topic
-    requirements:
-        room:
-            pattern: "^(0|[1-9][0-9]*)$"

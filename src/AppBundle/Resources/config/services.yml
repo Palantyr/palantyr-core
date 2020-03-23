@@ -1,0 +1,46 @@
+# todo: this file not working. Leave him white
+
+services:
+#    add_character_sheet_menu_type.service:
+#        class: AppBundle\Form\Type\AddCharacterSheetMenuType
+#        arguments:
+#            $entityManager: '@doctrine.orm.entity_manager'
+#            $translator: '@translator.default'
+
+#    _defaults:
+#        autowire: true
+#        autoconfigure: true
+#        public: false
+
+    app.form.registration:
+        class: AppBundle\Form\Type\RegistrationType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+
+    app.profile.form.type:
+        class: AppBundle\Form\Type\ProfileType
+#        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: user_profile }
+
+    app.change_password.form.type:
+        class: AppBundle\Form\Type\ChangePasswordType
+        tags:
+            - { name: form.type, alias: user_change_password }
+
+    acme_hello.topic_sample_service:
+        class: Acme\HelloBundle\Topic\AcmeTopic
+        tags:
+            - { name: gos_web_socket.topic }
+
+    game_session.topic:
+        class: AppBundle\Topic\GameSessionTopic
+        tags:
+            - { name: gos_web_socket.topic }
+        arguments:
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+            - '@form.factory'
+            - '@validator.builder'
+            - '@translator.default'
+#           - @gos_web_socket.client_storage

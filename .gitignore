@@ -1,23 +1,59 @@
+/.web-server-pid
+/app/config/parameters.yml
+/build/
+/phpunit.xml
+/var/*
+!/var/cache
+/var/cache/*
+!var/cache/.gitkeep
+!/var/logs
+/var/logs/*
+!var/logs/.gitkeep
+!/var/sessions
+/var/sessions/*
+!var/sessions/.gitkeep
+!var/SymfonyRequirements.php
+/vendor/
+/web/bundles/
+
+
 #/web/bundles/
 #/app/bootstrap.php.cache
-
-#Cache
-/app/cache/*
 
 #Data base configuration. We use alike.
 #/app/config/parameters.yml
 
-#Logs
-/app/logs/*
+#Logs/cache/sessions
+#var/logs/
+#var/cache/
+#var/sessions
 
 #Files needed for git.
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+#!var/cache/.gitkeep
+#!var/logs/.gitkeep
 
 #/app/phpunit.xml
-/build/
-/bin/
-/composer.phar
+#/build/
+#/bin/
+#/composer.phar
 #/vendor/
-/vendor/*
-/vendor/
+#/vendor/
+
+#PhpStorm
+.idea/
+
+#Eclipse
+.project
+
+#web
+web/css
+web/js
+
+
+
+
+
+
+
+
+

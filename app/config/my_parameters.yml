@@ -1,9 +1,10 @@
 parameters:
-    gos_web_socket.port: 1337
-    gos_web_socket.host: palantir.local
-    
-    app.locales_string: en|es
-    app.locales: 
-        - en 
-        - es
-    app.locale_default: en
+    mailer_user: jaimejesusserrano@gmail.com
+    gos_web_socket.port: 28081
+    gos_web_socket.host: 0.0.0.0
+
+    app.locale_default: en_EN
+    app.locales_string: en_EN|es_ES
+    app.locales:
+        - en_EN
+        - es_ES

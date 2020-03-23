@@ -7,7 +7,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
@@ -16,25 +16,48 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-        	new FOS\UserBundle\FOSUserBundle(),
-            new UserBundle\UserBundle(),
-        	new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
-        	new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
-        	new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
-        	new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new JJSR\Bundle\GamingPlatformBundle\GamingPlatformBundle(),
-            new JJSR\Bundle\GameSessionBundle\GameSessionBundle(),
-            new JJSR\Bundle\WebPlatformBundle\WebPlatformBundle(),
-        );
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new AppBundle\AppBundle(),
+            new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
+            new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle(),
+        ];
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+//        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+//            $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
+//            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+//            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+//            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+//        }
+
+        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+
+            if ('dev' === $this->getEnvironment()) {
+                $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+                $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
+            }
         }
 
         return $bundles;
+    }
+
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
+    public function getCacheDir()
+    {
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
+    }
+
+    public function getLogDir()
+    {
+        return dirname(__DIR__).'/var/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

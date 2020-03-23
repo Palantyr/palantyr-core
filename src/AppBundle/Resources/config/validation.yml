@@ -1,0 +1,162 @@
+AppBundle\Entity\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: email
+            message: email.in_use
+            groups: [My_registration, My_profile]
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: username
+            message: username.in_use
+            groups: [My_registration, My_profile]
+    properties:
+        id:
+            - IsNull:
+                groups: [My_registration]
+        username:
+            - NotBlank:
+                message: username.not_blank
+                groups: [My_registration]
+            - Length:
+                min: 5
+                max: 30
+                minMessage: username.minimum_characters
+                maxMessage: username.maximum_characters
+                groups: [My_registration, My_profile]
+        real_name:
+            - NotBlank:
+                message: real_name.not_blank
+                groups: [My_registration, My_profile]
+            - Length:
+                min: 2
+                max: 255
+                minMessage: real_name.minimum_characters
+                maxMessage: real_name.maximum_characters
+                groups: [My_registration, My_profile]
+        real_surname:
+            - NotBlank:
+                message: real_surname.not_blank
+                groups: [My_registration, My_profile]
+            - Length:
+                min: 2
+                max: 255
+                minMessage: real_surname.minimum_characters
+                maxMessage: real_surname.maximum_characters
+                groups: [My_registration, My_profile]
+        email:
+            - NotBlank:
+                message: email.not_blank
+                groups: [My_registration, My_profile]
+            - Email:
+                message: email.not_valid
+                checkMX: true
+                groups: [My_registration, My_profile]
+            - Length:
+                min: 4
+                max: 60
+                minMessage: email.minimum_characters
+                maxMessage: email.maximum_characters
+                groups: [My_registration, My_profile]
+        plainPassword:
+            - NotBlank:
+                message: plainPassword.not_blank
+                groups: [My_registration, My_change_password]
+            - Length:
+                min: 6
+                max: 4096
+                minMessage: plainPassword.minimum_characters
+                maxMessage: plainPassword.maximum_characters
+                groups: [My_registration, My_change_password]
+#        terms_accepted:
+#            - IsTrue:
+#                message: terms_accepted.is_true
+#                groups: [My_registration]
+
+AppBundle\Entity\GameSession:
+    properties:
+        id:
+            - IsNull:
+                groups: [Create]
+        name:
+            - NotBlank:
+                message: name.not_blank
+                groups: [Create]
+            - Length:
+                min: 5
+                max: 30
+                minMessage: name.minimum_characters
+                maxMessage: name.maximum_characters
+                groups: [Create]
+        owner:
+            - IsNull:
+                groups: [Create]
+        password:
+            - NotBlank:
+                message: plainPassword.not_blank
+                groups: [Create, Login]
+            - Length:
+                min: 6 
+                max: 30
+                minMessage: password.minimum_characters
+                maxMessage: password.maximum_characters
+                groups: [Create, Login]
+        start_date:
+            - IsNull:
+                groups: [Create]
+        rol_game:
+            - NotBlank:
+                message: rol_game.not_blank
+                groups: [Create]
+        language:
+            - NotBlank:
+                message: language.not_blank
+                groups: [Create]
+        comments:
+            - Length:
+                max: 200
+                maxMessage: comments.maximum_characters
+                groups: [Create]
+
+AppBundle\Entity\CharacterSheetTemplate:
+    properties:
+        id:
+            - IsNull:
+                groups: [Create]
+        name:
+            - NotBlank:
+                message: name.not_blank
+                groups: [Create, Update]
+            - Length:
+                min: 1
+                max: 255
+                minMessage: name.minimum_characters
+                maxMessage: name.maximum_characters
+                groups: [Create, Update]
+        rol_game:
+            - NotBlank:
+                message: rol_game.not_blank
+                groups: [Create, Update]
+        version:
+            - NotBlank:
+                message: version.not_blank
+                groups: [Create, Update]
+            - Regex:
+                pattern: '/\d/'
+                match:   true
+                message: version.must_be_integer
+                groups: [Create, Update]
+
+#JJSR\Bundle\GameSessionBundle\Entity\CharacterSheet:
+#    properties:
+#        id:
+#            - IsNull:
+#                groups: [Create]
+#        name:
+#            - NotBlank:
+#                message: name.not_blank
+#                groups: [Create, Update]
+#            - Length:
+#                min: 1
+#                max: 50
+#                minMessage: name.minimum_characters
+#                maxMessage: name.maximum_characters
+#                groups: [Create, Update]

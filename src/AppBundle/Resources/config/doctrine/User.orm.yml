@@ -1,0 +1,16 @@
+AppBundle\Entity\User:
+    type: entity
+    repositoryClass: AppBundle\Entity\UserRepository
+    table: fos_user
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        real_name:
+            type: string
+            length: 255
+        real_surname:
+            type: string
+            length: 255

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{{ game_session.getName() }}{% endblock %}</title>
+
+        {% block stylesheets %}
+        	{% stylesheets
+				'@bootstrap_css'
+				'bundles/app/css/*'
+            	'@game_session_css'
+				filter='cssrewrite' %}
+    			<link rel="stylesheet" href="{{ asset_url }}" type="text/css">
+            {% endstylesheets %}
+        {% endblock %}
+        
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+    	{% block main_menu %}
+    	
+	    	<div class="navbar-default header-menu">
+				<div class="container-fluid">
+					{# Brand and toggle get grouped for better mobile display #}
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a id="game_session_name" class="navbar-brand">{% block main_menu_name %}{{ game_session.getName() }}{% endblock %}</a>
+					</div>
+			
+					{# Collect the nav links, forms, and other content for toggling #}
+					<div class="collapse navbar-collapse" id="admin-navbar-collapse-1">
+                        {{ knp_menu_render('game_session_main_menu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
+                        {{ knp_menu_render('game_session_right_menu', {'currentClass': 'active', 'template': 'AppBundle:Menu:knp_menu.html.twig'}) }}
+					</div>
+				</div>
+			</div>
+		    {{ include('AppBundle:GameSession:navigation_sidebar.html.twig') }}
+		
+    	{% endblock %}
+
+    	{% block jquery_javascripts %}
+        	{% javascripts
+                '@bootstrap_js_and_jquery'
+        		'@game_session_js' %}
+    			<script src="{{ asset_url }}"></script>
+			{% endjavascripts %}
+        {% endblock %}
+        
+        <div id="main_container" class="main-container">
+			{% block body %}{% endblock %}
+    	</div>
+    </body>
+</html>

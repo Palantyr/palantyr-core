@@ -1,0 +1,202 @@
+homepage:
+    path: /
+    defaults:
+        _controller: AppBundle:Index:homepage
+
+administration_menu:
+    path:     /administration
+    defaults:
+        _controller: AppBundle:Administration:mainMenu
+
+insufficient_permissions:
+    path: /insufficient-permissions
+    defaults:
+        _controller: AppBundle:Administration:insufficientPermissions
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
+# GameSession
+create_game_session:
+    path:     /game/create-game-session
+    defaults:
+        _controller: AppBundle:GameSession:createGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_sessions:
+    path:     /game/sessions
+    defaults:
+        _controller: AppBundle:Connection:displayGameSessions
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
+# AdministrationController
+gaming_platform_administration_main_menu:
+    path:     /administration/gaming-platform-bundle
+    defaults:
+        _controller: AppBundle:Administration:gamingPlatformMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_administration_main_menu:
+    path:     /administration/game-session-bundle
+    defaults:
+        _controller: AppBundle:Administration:gameSessionMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_add_all_default_data:
+    path:     /administration/game-session-bundle/add-all-default-data
+    defaults:
+        _controller: AppBundle:Administration:addAllDefaultData
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_delete_all_default_data:
+    path:     /administration/game-session-bundle/delete-all-default-data
+    defaults:
+        _controller: AppBundle:Administration:deleteAllDefaultData
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+manage_character_sheet_templates:
+    path:     /administration/game-session-bundle/character-sheet-templates
+    defaults:
+        _controller: AppBundle:Administration:manageCharacterSheetTemplates
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+add_character_sheet_template:
+    path:     /administration/game-session-bundle/add-character-sheet-template
+    defaults:
+        _controller: AppBundle:Administration:addCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+remove_character_sheet_template:
+    path:     /administration/game-session-bundle/remove-character-sheet-template/{character_sheet_template_id}
+    defaults:
+        _controller: AppBundle:Administration:removeCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+edit_character_sheet_template:
+    path:     /administration/game-session-bundle/edit-character-sheet-template/{character_sheet_template_id}
+    defaults:
+        _controller: AppBundle:Administration:editCharacterSheetTemplate
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
+# CharacterSheetController
+add_character_sheet_menu:
+    path:     /game/add-character-sheet
+    defaults:
+        _controller: AppBundle:CharacterSheet:addCharacterSheetMenu
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+add_character_sheet:
+    path:     /game/add-character-sheet/{rol_game_name}/{character_sheet_template_name}
+    defaults:
+        _controller: AppBundle:CharacterSheet:addCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+delete_character_sheet:
+    path:     /game/delete-character-sheet/{character_sheet_id}
+    defaults:
+        _controller: AppBundle:CharacterSheet:deleteCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+character_sheets_list:
+    path:     /game/character-sheets-list
+    defaults:
+        _controller: AppBundle:CharacterSheet:characterSheetList
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+edit_character_sheet:
+    path:     /game/character-sheet/edit/{character_sheet_id}
+    defaults:
+        _controller: AppBundle:CharacterSheet:editCharacterSheet
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
+# ConnectionController
+login_game_session:
+    path:     /game/session/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:loginGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+
+delete_game_session:
+    path:     /game/session/delete/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:deleteGameSession
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_disconnected:
+    path:     /game/disconected/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:disconnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_already_connected:
+    path:     /game/already-connected/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:alreadyConnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_not_exist:
+    path:     /game/not-exist/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:gameSessionNotExist
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_without_permission:
+    path:     /game/without-permission/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:withoutPermission
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%
+
+game_session_already_users_connected:
+    path:     /game/already-users-connected/{game_session_id}
+    defaults:
+        _controller: AppBundle:Connection:alreadyUsersConnected
+        _locale: %app.locale_default%
+    requirements:
+        _locale: %app.locales_string%

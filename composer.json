@@ -1,73 +1,96 @@
 {
-	"name" : "symfony/framework-standard-edition",
-	"license" : "MIT",
-	"type" : "project",
-	"description" : "The \"Symfony Standard Edition\" distribution",
-	"autoload" : {
-		"psr-4" : {
-			"" : "src/",
-			"SymfonyStandard\\" : "app/SymfonyStandard/"
-		}
-	},
-	"require" : {
-		"php" : "7.*",
-		"symfony/symfony" : "2.8.13",
-		"doctrine/orm" : "2.4.8",
-		"doctrine/dbal" : "2.4.5",
-		"doctrine/doctrine-bundle" : "1.6.4",
-		"symfony/assetic-bundle" : "2.8.0",
-		"symfony/swiftmailer-bundle" : "2.4.0",
-		"symfony/monolog-bundle" : "2.11.1",
-		"sensio/distribution-bundle" : "4.0.12",
-		"sensio/framework-extra-bundle" : "3.0.16",
-		"incenteev/composer-parameter-handler" : "2.1.2",
-		"friendsofsymfony/user-bundle" : "~2.0@dev",
-		"gos/web-socket-bundle" : "1.8.4",
-		"braincrafted/bootstrap-bundle" : "2.2.0",
-		"oyejorge/less.php" : "1.7.0.10",
-		"components/jquery" : "2.2.4",
-		"twbs/bootstrap" : "3.3.7",
-		"knplabs/knp-menu-bundle" : "2.1.3",
-		"components/jqueryui": "1.12.1",
-		"drmonty/smartmenus": "1.0.1",
-		"phpunit/phpunit": "5.6.2",
-		"twig/twig": "1.27.0"
-	},
-	"require-dev" : {
-		"sensio/generator-bundle" : "~2.3"
-	},
-	"scripts" : {
-		"post-install-cmd" : [
-			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-		],
-		"post-update-cmd" : [
-			"Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-		]
-	},
-	"config" : {
-		"bin-dir" : "bin"
-	},
-	"extra" : {
-		"symfony-app-dir" : "app",
-		"symfony-web-dir" : "web",
-		"symfony-assets-install" : "relative",
-		"incenteev-parameters" : {
-			"file" : "app/config/parameters.yml"
-		},
-		"branch-alias" : {
-			"dev-master" : "2.7-dev"
-		}
-	}
+    "name": "root/palantir",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        },
+        "files": [
+            "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "jquery/jquery",
+                "version": "1.11.1",
+                "dist": {
+                    "url": "https://code.jquery.com/jquery-1.11.1.js",
+                    "type": "file"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": "7.0.*",
+        "doctrine/doctrine-bundle": "1.8.*",
+        "doctrine/doctrine-cache-bundle": "1.3.*",
+        "doctrine/orm": "2.5.*",
+        "incenteev/composer-parameter-handler": "2.1.*",
+        "sensio/distribution-bundle": "5.0.*",
+        "sensio/framework-extra-bundle": "5.0.*",
+        "symfony/monolog-bundle": "3.1.*",
+        "symfony/polyfill-apcu": "1.6.*",
+        "symfony/swiftmailer-bundle": "3.1.*",
+        "symfony/symfony": "3.3.*",
+        "twig/twig": "2.4.*",
+        "knplabs/knp-menu-bundle": "2.1.*",
+        "friendsofsymfony/user-bundle": "2.0.*",
+        "symfony/assetic-bundle": "2.8.*",
+        "twbs/bootstrap": "3.3.*",
+        "twbs/bootstrap-sass": "3.3.*",
+        "components/jquery": "3.2.*",
+        "components/jqueryui": "1.11.*",
+        "drmonty/smartmenus": "1.1.*",
+        "jquery/jquery":  "1.11.*",
+        "leafo/scssphp": "0.7.*",
+        "braincrafted/bootstrap-bundle": "2.2.*",
+        "gos/web-socket-bundle" : "1.8.*"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "3.1.*",
+        "symfony/phpunit-bridge": "3.3.*"
+    },
+    "scripts": {
+        "symfony-scripts": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "post-install-cmd": [
+            "@symfony-scripts"
+        ],
+        "post-update-cmd": [
+            "@symfony-scripts"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "var",
+        "symfony-web-dir": "web",
+        "symfony-tests-dir": "tests",
+        "symfony-assets-install": "relative",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "branch-alias": null
+    }
 }
