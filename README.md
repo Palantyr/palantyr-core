@@ -46,3 +46,7 @@ Palantir
     ```
      http://127.0.0.1:8000/es_ES/
     ```
+7. Register a user and set in DB SUPER_ADMIN role
+    ```
+        a:1:{i:0;s:16:"ROLE_SUPER_ADMIN";}
+    ```
