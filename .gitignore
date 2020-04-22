@@ -14,7 +14,10 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
+/web/assetic/
 /web/bundles/
+/web/fonts/
+/web/images/
 
 
 #/web/bundles/
